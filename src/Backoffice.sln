@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApiClient", "RestApiClient\RestApiClient.csproj", "{89F216FB-2EC3-4635-83C4-15386501FC7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{34008EBB-5FB1-4669-90BE-23CFCD878BC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackOfficeWebapp", "WebApplication2\BackOfficeWebapp.csproj", "{34008EBB-5FB1-4669-90BE-23CFCD878BC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
