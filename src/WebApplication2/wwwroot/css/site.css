@@ -1,18 +1,96 @@
-﻿*{box-sizing: border-box}
-.containter{
-    position: absolute;
-    padding: 15px
+﻿body {
+    max-width: 500px;
+    min-height:500px;
+    margin: auto;
+    background-color: #dcdcdc
 }
 
-.adminlogin{
-
+ /*Wrapping element 
+ Set some basic padding to keep content from hitting the edges*/
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
 }
-.pw{
-
+.wrapper {
+    position: relative;
+    width: 560px;
+    padding-top: 55px;
+    padding-bottom: 55px;
+    padding-right: 85px;
+    padding-left:85px;
+    border-radius:10px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+}.login-form{
+    width: 100%;
 }
-.loginbtn{
-
+.label-name {
+    margin-left: 3px;
+    padding-top: 10px;
+    font-size: 25px;
+    font-weight: normal;
 }
-.forgotpw{
-
+.input-username {
+    color: #555555;
+    line-height: 1.2;
+    font-size: 25px;
+    display: block;
+    width: 100%;
+    background: transparent;
+    height: 55px;
+    padding: 0 25px 0 25px;
 }
+.label-pw {
+    margin-left: 3px;
+    padding-top: 10px;
+    font-size: 25px;
+    font-weight: normal;
+}
+.input-psw {
+    color: #555555;
+    line-height: 1.2;
+    font-size: 25px;
+    display: block;
+    width: 100%;
+    background: transparent;
+    height: 55px;
+    padding: 0 25px 0 25px;
+}
+.btn-login {
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.2;
+    display: inline-block;
+    margin-left: 100px;
+    margin-top: 25px;
+    padding: 0 20px;
+    height: 55px;
+    background-color: #333333;
+    border-radius: 27px;
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+}
+.btn-login:hover{
+    background-color: #116313
+}
+.btn-forgot {
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.2;
+    display: inline-block;
+    margin-top: 25px;
+    padding: 0 20px;
+    height: 55px;
+    background-color: #333333;
+    border-radius: 27px;
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+}.btn-forgot:hover{
+    background-color: #116313
+}.btm-footer{
+    padding-top: 99%;
+}
