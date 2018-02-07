@@ -1,35 +1,66 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    text-align: center;
+    background-image: url('../images/vintage_admit_one_ticket__back_side_sjpg4143.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position-x: center;
+    background-position-y: top;
 }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+.wrapper{
+    width: 1900px;
+    margin: 0 auto;
 }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
+.btn-forgot {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #000000;
+    background-color: #FFFACD;
+    border: none;
+    border-radius: 15px;
 }
 
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-    width: 100%;
+.btn-forgot:hover {
+    background-color: #FF7F50;
 }
 
-/* QR code generator */
-#qrCode {
-    margin: 15px;
+.btn-forgot:active {
+    background-color: #ffd800;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }
 
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
+.btn-login {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #000000;
+    background-color: #FFFACD;
+    border: none;
+    border-radius: 15px;
 }
+
+.btn-login:hover {
+    background-color: #FF7F50;
+}
+
+.btn-login:active {
+    background-color: #ffd800;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
