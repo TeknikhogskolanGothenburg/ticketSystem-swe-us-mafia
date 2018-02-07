@@ -1,6 +1,6 @@
 using System;
 
-namespace WebApplication2.Models
+namespace BackOffice.Models
 {
     public class ErrorViewModel
     {
