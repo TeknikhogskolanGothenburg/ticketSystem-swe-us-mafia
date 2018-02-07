@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TicketSystem.DatabaseRepository;
+using TicketSystem.DatabaseRepository.Model;
 
 namespace RestApplication.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        TicketDatabase ticketDb = new TicketDatabase();
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<TicketEvent> Get()
         {
+            return ticketDb.
+
             return new string[] { "value1", "value2" };
         }
 
