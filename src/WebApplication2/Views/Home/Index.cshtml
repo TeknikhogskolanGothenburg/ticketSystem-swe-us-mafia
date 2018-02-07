@@ -2,76 +2,22 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-@*<div class="container">
-    <h1>Administration Log In</h1>
-    <p>Enter in credentials to log in.</p>
-    <form style="border:1px solid #ccc">
-        <label><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="username" required>
-        <label><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
-        <div class="formbuttons">
-            <button type="button" class="forgotpw">Forgot Password</button>
-            <button type="submit" class="loginbtn">Log In</button>
-        </div>
-    </form>
-</div>*@
-
-<div class="container">
-    <h1>Administration Log-in</h1>
-    <form style="border:1px solid #808080">
-        <div class="adminlogin">
-            <label><b>Username</b></label>
-            <input type="text" placeholder="Enter Username" name="username" required>
-        </div>
-        <div class="pw">
-            <label><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
-        </div>
-        <div><button type="submit" class="loginbtn">Log In</button></div>
-        <div><button type="button" class="forgotpw">Forgot Password</button></div>
-    </form>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@*<html>*@
-    @*<body>
-        <div class="container">
-            <form>
-                <h1>BackOffice Login</h1>
-                <label><b>Username:</b></label>
-                <input type="text" placeholder="Enter UserName" name="username" required>
-                <div class="lower">
-                <label><b>Password:</b></label>
-                <input type="password" placeholder="Enter Password" name="pw" required>
-                </div>
-                <div class="lowerlower">
-                    <button type="button" class="forgotpw">Forgot Password</button>
-                    <button type="submit" class="login">Log In</button>
-                </div>
-            </form>
-        </div>
-    </body>
-</html>*@
+<body>
+    <div class="wrapper">
+        <h1>Administration Log-In</h1>
+        <form class="login-form">
+            <div><label class="label-name">Username</label></div>
+            <input type="text" placeholder="Enter Username" class="input-username" required>
+            <div><label class="label-pw">Password</label></div>
+            <input type="password" placeholder="Enter Password" class="input-psw" required>
+            <div>
+                <button type="button" class="btn-forgot">Forgot Password</button>
+                <button type="submit" class="btn-login">Log In</button>
+            </div>
+            
+        </form>
+    </div>
+    <footer class="btm-footer">
+        <p>&copy; @DateTime.Now.Year - BackOffice</p>
+    </footer>
+</body>
