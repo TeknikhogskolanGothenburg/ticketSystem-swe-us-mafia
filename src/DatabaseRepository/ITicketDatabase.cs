@@ -25,10 +25,10 @@ namespace TicketSystem.DatabaseRepository
 
 
         /// <summary>
-        /// Find all venus matching the query
+        /// Find all venues matching the query
         /// </summary>
         /// <param name="query">A text which is user i looking for in the venues</param>
-        /// <returns>A list of venus matching the query</returns>
+        /// <returns>A list of venues matching the query</returns>
         List<Venue> VenuesFind(string query);
     }
 }
