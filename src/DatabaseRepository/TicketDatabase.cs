@@ -28,7 +28,7 @@ namespace TicketSystem.DatabaseRepository
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                connection.Query("insert into Venues([VenueName],[Address],[City],[Country]) values(@Name,@Address, @City, @Country)", new { Name = name, Address= address, City = city, Country = country });
+                connection.Query("insert into Venues([VenueName],[Address],[City],[Country]) values(@Name,@Address, @City, @Country)", new { Name = name, Address = address, City = city, Country = country });
                 var addedVenueQuery = connection.Query<int>("SELECT IDENT_CURRENT ('Venues') AS Current_Identity").First();
                 return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueID=@Id", new { Id = addedVenueQuery }).First();
             }
@@ -40,7 +40,7 @@ namespace TicketSystem.DatabaseRepository
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueName like '%"+query+ "%' OR Address like '%" + query + "%' OR City like '%" + query + "%' OR Country like '%" + query + "%'").ToList();
+                return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueName like '%" + query + "%' OR Address like '%" + query + "%' OR City like '%" + query + "%' OR Country like '%" + query + "%'").ToList();
             }
         }
 
@@ -69,11 +69,41 @@ namespace TicketSystem.DatabaseRepository
         /// a TicketEvent </returns>
         public TicketEvent SpecificEventFind(string query)
         {
+
             string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                return (TicketEvent)connection.Query<TicketEvent>("SELECT * FROM TicketEvent WHERE EventID like '%" + query + "%' OR EventName like '%" + query);
+                /*SqlCommand cmd = new SqlCommand("SELECT * FROM TicketEvent WHERE TicketEventID = @EventID OR EventName LIKE @EventName", connection);
+
+                SqlParameter idParam = new SqlParameter
+                {
+                    ParameterName = "@EventID",
+                    Value = query
+                };
+
+                SqlParameter nameParam = new SqlParameter
+                {
+                    ParameterName = "@EventName",
+                    Value = "%" + query + "%"
+                };
+                cmd.Parameters.Add(idParam);
+                cmd.Parameters.Add(nameParam);
+                var result = cmd.ExecuteReader();
+
+                List<TicketEvent> events = new List<TicketEvent>();
+                while (result.Read())
+                {
+                    var evt = new TicketEvent
+                    {
+                        TicketEventId = result["TicketEventID"],
+                        EventName = result["EventName"],
+                        EventHtmlDescription = result["EventHtmlDescription"]
+                    };
+                }*/
+
+                // NOTE: super-vulnerable to SQL injection! How to do it with parameterized queries and still keep convenient return value?
+                return connection.Query<TicketEvent>("SELECT * FROM TicketEvent WHERE EventID = @EventID" + query + "OR EventName like '%" + query + "%'").FirstOrDefault();
             }
 
         }
