@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TicketSystem.DatabaseRepository;
 using TicketSystem.DatabaseRepository.Model;
+using Newtonsoft.Json;
 
 namespace RestApplication.Controllers
 {
@@ -14,16 +15,16 @@ namespace RestApplication.Controllers
         TicketDatabase ticketDb = new TicketDatabase();
         // GET api/values
         [HttpGet]
-        public IEnumerable<TicketEvent> GetAllTickets()
+        public IEnumerable<TicketEvent> GetAllEvents()
         {
             return ticketDb.EventFind();
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{query}")]
+        public string GetSpecificEvent(string query)
         {
-            return "value";
+            return JsonConvert.SerializeObject(ticketDb.SpecificEventFind(query));
         }
 
         // POST api/values
