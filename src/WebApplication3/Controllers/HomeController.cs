@@ -12,21 +12,21 @@ namespace TicketShop.Controllers
     {
         public IActionResult Login()
         {
-            return View();
+            return View("Login");
         }
 
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
 
-            return View();
+            return View("About");
         }
 
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
 
-            return View();
+            return View("Contact");
         }
 
         public IActionResult Error()
