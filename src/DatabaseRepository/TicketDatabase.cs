@@ -43,5 +43,15 @@ namespace TicketSystem.DatabaseRepository
                 return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueName like '%"+query+ "%' OR Address like '%" + query + "%' OR City like '%" + query + "%' OR Country like '%" + query + "%'").ToList();
             }
         }
+
+        public List<TicketEvent> EventFind(string query)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                return connection.Query<TicketEvent>("SELECT * FROM Venues WHERE VenueName like '%" + query + "%' OR Address like '%" + query + "%' OR City like '%" + query + "%' OR Country like '%" + query + "%'").ToList();
+            }
+        }
     }
 }
