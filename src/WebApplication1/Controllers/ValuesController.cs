@@ -14,11 +14,9 @@ namespace RestApplication.Controllers
         TicketDatabase ticketDb = new TicketDatabase();
         // GET api/values
         [HttpGet]
-        public IEnumerable<TicketEvent> Get()
+        public IEnumerable<TicketEvent> GetAllTickets()
         {
-            return ticketDb.
-
-            return new string[] { "value1", "value2" };
+            return ticketDb.EventFind();
         }
 
         // GET api/values/5
