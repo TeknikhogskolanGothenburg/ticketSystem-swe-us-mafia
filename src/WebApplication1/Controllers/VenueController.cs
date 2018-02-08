@@ -22,7 +22,7 @@ namespace RESTapi.Controllers
         }
 
         // GET: api/Venue/query
-        [HttpGet("{query}", Name = "Get")]
+        [HttpGet("{query}")]
         public IEnumerable<Venue> Get(string query)
         {
             return database.VenuesFind(query);
