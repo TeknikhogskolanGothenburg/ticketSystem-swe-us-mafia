@@ -21,7 +21,7 @@ namespace RESTapi.Controllers
             return database.AllVenues();
         }
 
-        // GET: api/Venue/5
+        // GET: api/Venue/query
         [HttpGet("{query}", Name = "Get")]
         public IEnumerable<Venue> Get(string query)
         {
@@ -35,10 +35,12 @@ namespace RESTapi.Controllers
             database.VenueAdd(name, address, city, country);
         }
         
-        // PUT: api/Venue/5
+        // PUT: api/Venue/id
+        // based on id of venue, change values
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]string name, string address, string city, string country)
         {
+            database.UpdateVenue(id, name, address, city, country);
         }
         
         // DELETE: api/ApiWithActions/5
