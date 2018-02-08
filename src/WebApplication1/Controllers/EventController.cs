@@ -29,8 +29,9 @@ namespace RestApplication.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]string id, string eventName, string htmlDescription)
         {
+            ticketDb.CreateEvent(id, eventName, htmlDescription);
         }
 
         // PUT api/values/5

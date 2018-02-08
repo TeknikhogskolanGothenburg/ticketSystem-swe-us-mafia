@@ -65,7 +65,6 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
-
         /// <summary>
         /// Method that is used to get all existing events from the database as a list,
         /// represented as a list of TicketEvent objects.
