@@ -8,30 +8,30 @@ using Microsoft.AspNetCore.Mvc;
 namespace RESTapi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/VenueAdministration")]
-    public class VenueAdministrationController : Controller
+    [Route("api/Venue")]
+    public class VenueController : Controller
     {
-        // GET: api/VenueAdministration
+        // GET: api/Venue
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/VenueAdministration/5
+        // GET: api/Venue/5
         [HttpGet("{id}", Name = "Get")]
         public string Get(int id)
         {
             return "value";
         }
         
-        // POST: api/VenueAdministration
+        // POST: api/Venue
         [HttpPost]
         public void Post([FromBody]string value)
         {
         }
         
-        // PUT: api/VenueAdministration/5
+        // PUT: api/Venue/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
