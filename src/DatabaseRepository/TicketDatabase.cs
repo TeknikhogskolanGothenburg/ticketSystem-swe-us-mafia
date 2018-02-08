@@ -44,6 +44,19 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        public TicketEvent CreateEvent(string id, string eventName, string htmlDescription)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                connection.Query("insert into Venues([VenueName],[Address],[City],[Country]) values(@Name,@Address, @City, @Country)", new { Name = name, Address = address, City = city, Country = country });
+                var addedVenueQuery = connection.Query<int>("SELECT IDENT_CURRENT ('Venues') AS Current_Identity").First();
+                return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueID=@Id", new { Id = addedVenueQuery }).First();
+            }
+        }
+
+
         /// <summary>
         /// Method that is used to get all existing events from the database as a list,
         /// represented as a list of TicketEvent objects.
