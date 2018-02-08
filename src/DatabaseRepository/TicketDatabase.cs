@@ -44,6 +44,15 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        public List<Venue> AllVenues()
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                return connection.Query<Venue>("SELECT * FROM Venues").ToList();
+            }
+        }
         public TicketEvent CreateEvent(string id, string eventName, string htmlDescription)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;

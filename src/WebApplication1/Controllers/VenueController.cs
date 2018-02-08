@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TicketSystem.DatabaseRepository;
+using TicketSystem.DatabaseRepository.Model;
 
 namespace RESTapi.Controllers
 {
@@ -11,11 +13,12 @@ namespace RESTapi.Controllers
     [Route("api/Venue")]
     public class VenueController : Controller
     {
+        TicketDatabase database = new TicketDatabase();
         // GET: api/Venue
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
+        public IEnumerable<Venue> Get()
+        {           
+            return database.AllVenues();
         }
 
         // GET: api/Venue/5
