@@ -15,6 +15,11 @@ namespace TicketShop.Controllers
             return View("Login");
         }
 
+        public IActionResult Register()
+        {
+            return View("Register");
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "The amazing ticket shop- search for culture events made easy.";
