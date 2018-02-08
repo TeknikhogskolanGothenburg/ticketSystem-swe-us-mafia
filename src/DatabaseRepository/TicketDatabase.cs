@@ -65,6 +65,24 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        public void ChangeEvent(string id, string eventName, string htmlDescription)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+
+                connection.Open();
+                if (eventName != null)
+                {
+                    connection.Query("UPDATE TicketEvents SET EventName =\"" + eventName + "\"WHERE EventID =" + id);
+                }
+                if (htmlDescription != null)
+                {
+                    connection.Query("UPDATE TicketEvents Set HtmlDescription =\"" + htmlDescription + "\"WHERE EventID =" + id);
+                }
+            }
+        }
+
         /// <summary>
         /// Method that is used to get all existing events from the database as a list,
         /// represented as a list of TicketEvent objects.
