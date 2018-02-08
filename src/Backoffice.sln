@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestApiClient", "RestApiClient\RestApiClient.csproj", "{89F216FB-2EC3-4635-83C4-15386501FC7C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackOfficeWebapp", "WebApplication2\BackOfficeWebapp.csproj", "{34008EBB-5FB1-4669-90BE-23CFCD878BC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackofficeWeb", "BackofficeWeb\BackofficeWeb.csproj", "{82235CAD-CB7D-4506-974D-6E8293CD9F6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{89F216FB-2EC3-4635-83C4-15386501FC7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89F216FB-2EC3-4635-83C4-15386501FC7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89F216FB-2EC3-4635-83C4-15386501FC7C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{34008EBB-5FB1-4669-90BE-23CFCD878BC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{34008EBB-5FB1-4669-90BE-23CFCD878BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{34008EBB-5FB1-4669-90BE-23CFCD878BC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{34008EBB-5FB1-4669-90BE-23CFCD878BC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82235CAD-CB7D-4506-974D-6E8293CD9F6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82235CAD-CB7D-4506-974D-6E8293CD9F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82235CAD-CB7D-4506-974D-6E8293CD9F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82235CAD-CB7D-4506-974D-6E8293CD9F6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
