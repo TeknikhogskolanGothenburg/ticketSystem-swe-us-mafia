@@ -24,14 +24,14 @@ namespace TicketShopWeb.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "The amazing ticket shop- search for culture events made easy.";
 
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "Contact page for Amazing ticketshop.";
 
             return View();
         }
