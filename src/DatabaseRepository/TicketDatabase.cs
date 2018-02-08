@@ -53,6 +53,35 @@ namespace TicketSystem.DatabaseRepository
                 return connection.Query<Venue>("SELECT * FROM Venues").ToList();
             }
         }
+
+        // update venue method here
+
+        public void UpdateVenue(int id, string name, string address, string city, string country)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                if (name != null)
+                {
+                    connection.Query("UPDATE Venues SET VenueName = " + name + " WHERE VenueID =" + id);
+                }
+                if (address != null)
+                {
+                    connection.Query("UPDATE Venues SET VenueName = " + address + " WHERE VenueID =" + id);
+                }
+                if (city != null)
+                {
+                    connection.Query("UPDATE Venues SET VenueName = " + city + " WHERE VenueID =" + id);
+                }
+                if (country != null)
+                {
+                    connection.Query("UPDATE Venues SET VenueName = " + country + " WHERE VenueID =" + id);
+                }
+
+            }
+        }
+
         public TicketEvent CreateEvent(string id, string eventName, string htmlDescription)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;
