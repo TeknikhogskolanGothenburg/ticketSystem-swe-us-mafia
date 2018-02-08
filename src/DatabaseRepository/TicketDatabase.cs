@@ -12,6 +12,7 @@ namespace TicketSystem.DatabaseRepository
         //test comment
         public TicketEvent EventAdd(string name, string description)
         {
+
             string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
@@ -46,7 +47,8 @@ namespace TicketSystem.DatabaseRepository
 
         public List<Venue> AllVenues()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;
+            // string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;
+            string connectionString = "Server=(local)\\SqlExpress; Database=TicketSystem; Trusted_connection=true";
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
