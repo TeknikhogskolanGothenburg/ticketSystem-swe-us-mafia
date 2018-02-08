@@ -30,8 +30,9 @@ namespace RESTapi.Controllers
         
         // POST: api/Venue
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]string name, string address, string city, string country)
         {
+            database.VenueAdd(name, address, city, country);
         }
         
         // PUT: api/Venue/5
