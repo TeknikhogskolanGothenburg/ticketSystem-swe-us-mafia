@@ -9,27 +9,29 @@
     padding-left: 15px;
     padding-right: 15px;
 }
-
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
+.container {
+    justify-content: center;
 }
-
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-    width: 100%;
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:25px;
 }
-
-/* QR code generator */
-#qrCode {
-    margin: 15px;
+h1, h2, h3, h4, address, strong{
+    text-align: center;
 }
-
+p{
+    text-align: center;
+}
+hr {
+    position: absolute;
+    bottom: 20px;
+}
+footer{
+    position: absolute;
+    bottom: 0;
+}
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
 }
