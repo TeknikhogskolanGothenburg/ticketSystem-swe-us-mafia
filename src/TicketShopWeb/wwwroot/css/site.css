@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #8c8c8c;
 }
 
 /* Wrapping element */
@@ -25,6 +26,67 @@
 #qrCode {
     margin: 15px;
 }
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25px;
+}
+
+h1, h2, h3, h4, address, strong {
+    text-align: center;
+}
+
+p {
+    text-align: center;
+}
+
+hr {
+    position: absolute;
+    bottom: 20px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+}
+
+.btn-default{
+    color: #fff;
+    border-radius: 4px;
+    padding: 15px 30px;
+    border: none;
+    background-color: #2ECC71;
+    border-bottom: 1px solid #27AE60;
+    margin-bottom: 20px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: medium;
+}
+
+
+.col-md-4 {
+    border-radius: 10px;
+    margin: 0 auto;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .5);
+    text-align: center;
+    max-width : 300px;
+    background-color: white;
+}
+
+.col-md-4 img{
+    width: 200px;
+    height: 200px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.form-control{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 18px;
+    text-align: center;
+}
+
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
