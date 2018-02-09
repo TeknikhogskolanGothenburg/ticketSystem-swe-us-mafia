@@ -10,6 +10,7 @@
         <img src="~/images/skarri.png" />
         <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
             <h4>Create a new account.</h4>
+            <div asp-validation-summary="All" class="text-danger"></div>
             <hr />
             <div class="form-group">
                 <input asp-for="Email" class="form-control" placeholder="Enter Email" />
