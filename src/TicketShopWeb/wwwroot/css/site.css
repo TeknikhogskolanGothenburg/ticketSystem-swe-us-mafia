@@ -96,6 +96,63 @@ footer {
     background-color: white;
 }
 
+#container {
+    width: 500px;
+    padding: 1px 1px 2px 2px;
+    background-color: white;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+#container ::-webkit-scrollbar{
+    width: 10px
+}
+
+#container img {
+        width: 100px;
+        height: 100px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+}
+
+#table tbody{
+    /*tryed this to get a scrollbar inside either container or table*/
+    height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.cartButton {
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px 14px;
+    border: none;
+    background-color: #2ECC71;
+    border-bottom: 1px solid #27AE60;
+    margin-bottom: 20px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: medium;
+}
+
+.cartButton:after {
+    content: "";
+    background: #f1f1f1;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px !important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+}
+
+.cartButton:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
