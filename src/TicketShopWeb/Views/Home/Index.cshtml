@@ -1,21 +1,58 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
 
-<h1>HEJ</h1>
-
-<div class="gCol3 gCol6m">
-    <div class="tile bMag3">
-        <h3 class="t m pbl txt">Tickets</h3>
-        <ul>
-            <li class="Database">
-                <a href="" class="">Elton John</a>
-            </li>
-        </ul>
-        <ul>
-            <li class="Database">
-                <a href="" class="">The tallest man on earth</a>
-            </li>
-        </ul>
-    </div>
+<div class="container" id="container">
+    <h2>Tickets</h2>
+    <table class="table" id="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Info</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><img src="~/images/skarri.png" /></td>
+                <td>Elton John</td>
+                <td>500kr</td>
+                <td><button type="submit" class="cartButton">Add to cart</button></td>
+            </tr>
+            <tr>
+                <td><img src="~/images/skarri.png" /></td>
+                <td>The tallest man on earth</td>
+                <td>360kr</td>
+                <td><button type="submit" class="cartButton">Add to cart</button></td>
+            </tr>
+            <tr>
+                <td><img src="~/images/skarri.png" /></td>
+                <td>Iron Maiden</td>
+                <td>700kr</td>
+                <td><button type="submit" class="cartButton">Add to cart</button></td>
+            </tr>
+            <tr>
+                <td><img src="~/images/skarri.png" /></td>
+                <td>In Flames</td>
+                <td>1000kr</td>
+                <td><button type="submit" class="cartButton">Add to cart</button></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+
+</body>
+</html>
+
