@@ -11,16 +11,6 @@ namespace TicketSystem.DatabaseRepository
     {
         private const string CONNECTION_STRING = "Server=(local)\\SqlExpress; Database=TicketSystem; Trusted_connection=true";
         //test comment
-        public TicketEvent EventAdd(string name, string description)
-        {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                connection.Open();
-                connection.Query("insert into TicketEvents(EventName, EventHtmlDescription) values(@Name, @Description)", new { Name = name, Description = description });
-                var addedEventQuery = connection.Query<int>("SELECT IDENT_CURRENT ('TicketEvents') AS Current_Identity").First();
-                return connection.Query<TicketEvent>("SELECT * FROM TicketEvents WHERE TicketEventID=@Id", new { Id = addedEventQuery }).First();
-            }
-        }
 
         public Venue VenueAdd(string name, string address, string city, string country)
         {
@@ -33,26 +23,35 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
-        public List<Venue> VenuesFind(string query)
+        /// <summary>
+        /// Method that fetches a list of venues from the database table Venues, matching a query
+        /// based on either VenueID, VenueName, Address, City or Country.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>A list of Venue objects.</returns>
+        public IEnumerable<Venue> VenuesFind(string query)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueName like '%" + query + "%' OR Address like '%" + query + "%' OR City like '%" + query + "%' OR Country like '%" + query + "%'").ToList();
+
+                connection.Open();
+                int id = -1;
+                int.TryParse(query, out id);
+                return connection.Query<Venue>("SELECT * FROM [Venues] WHERE VenueID LIKE @ID OR VenueName LIKE @Query OR Address LIKE @Query OR City LIKE @Query OR Country LIKE @Query", new { ID = id, Query = $"%{query}%" });
+                //return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueName like '%" + query + "%' OR Address like '%" + query + "%' OR City like '%" + query + "%' OR Country like '%" + query + "%'").ToList();
             }
         }
 
         public List<Venue> AllVenues()
         {
-            // string connectionString = ConfigurationManager.ConnectionStrings["TicketSystem"].ConnectionString;
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
                 return connection.Query<Venue>("SELECT * FROM Venues").ToList();
             }
         }
-
-       
+  
         /// <summary>
         /// Method that updates a venue in the database table Venues, depending on
         /// which parameters are sent in when calling the method, all or some of
@@ -89,13 +88,26 @@ namespace TicketSystem.DatabaseRepository
         }
 
         /// <summary>
+        /// Method that deletes a specific Venue from the Venues database table.
+        /// </summary>
+        /// <param name="id"></param>
+        public void DeleteVenue(int id)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                connection.Query<Venue>("DELETE FROM [Venues] WHERE VenueID = @ID", new { ID = id }).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
         /// Method that creates a new TicketEvent in the database table TicketEvents.
         /// ID is automatically generated, thus not given as parameter in method.
         /// </summary>
         /// <param name="eventName"></param>
         /// <param name="htmlDescription"></param>
         /// <returns>A TicketEvent object.</returns>
-        public TicketEvent CreateEvent(string eventName, string htmlDescription)
+        public TicketEvent EventAdd(string eventName, string htmlDescription)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
@@ -192,12 +204,17 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
-        public TicketEvent FindVenueByID(int id)
+        /// <summary>
+        /// Method used to get a venue from the database based on a specific ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Venue FindVenueByID(int id)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                return connection.Query<TicketEvent>("SELECT * FROM [Venues] WHERE VenueID = @ID", new { ID = id }).FirstOrDefault();
+                return connection.Query<Venue>("SELECT * FROM [Venues] WHERE VenueID = @ID", new { ID = id }).FirstOrDefault();
             }
         }
     }
