@@ -26,8 +26,6 @@ namespace RestApplication.Controllers
         {
             return JsonConvert.SerializeObject(ticketDb.SpecificEventFind(query));
         }
-
-
         // POST api/values
         [HttpPost]
         public void Post([FromBody]TicketEvent ticketEvent)
@@ -54,12 +52,16 @@ namespace RestApplication.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(string query)
+        public void Delete(int id)
         {
-            /*if (GetSpecificEvent(query).Contains(query))
+            if (ticketDb.FindEventByID(id) == null)
             {
-
-            }*/
+                Response.StatusCode = 404;
+            }
+            else
+            {
+                ticketDb.DeleteEvent(id);
+            }
         }
     }
 }
