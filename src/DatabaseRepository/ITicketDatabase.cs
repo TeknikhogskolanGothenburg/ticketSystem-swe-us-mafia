@@ -29,6 +29,6 @@ namespace TicketSystem.DatabaseRepository
         /// </summary>
         /// <param name="query">A text which is user i looking for in the venues</param>
         /// <returns>A list of venues matching the query</returns>
-        List<Venue> VenuesFind(string query);
+        IEnumerable<Venue> VenuesFind(string query);
     }
 }

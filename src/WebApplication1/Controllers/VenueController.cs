@@ -24,11 +24,19 @@ namespace RESTapi.Controllers
 
         // GET: api/Venue/query
         [HttpGet("{query}")]
-        public string GetSpecificVenue(string query)
+        public IEnumerable<Venue> FindVenues (string query)
         {
-            return JsonConvert.SerializeObject(database.VenuesFind(query));
+            return database.VenuesFind(query);
         }
-        
+
+        // GET Venue/5
+        [HttpGet("{id}")]
+        public Venue GetSpecificVenue(int id)
+        {
+            return database.FindVenueByID(id);
+        }
+
+
         // POST: api/Venue
         [HttpPost]
         public void Post([FromBody]Venue venue)
@@ -36,7 +44,7 @@ namespace RESTapi.Controllers
             database.VenueAdd(venue.VenueName, venue.Address, venue.City, venue.Country);
         }
         
-        // PUT: api/Venue/id
+        // PUT: api/Venue/5
         // based on id of venue, change values
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]Venue venue)
@@ -51,10 +59,18 @@ namespace RESTapi.Controllers
             }    
         }
         
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/Venue/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            if (database.FindVenueByID(id) == null)
+            {
+                Response.StatusCode = 404;
+            }
+            else
+            {
+                database.DeleteVenue(id);
+            }
         }
     }
 }

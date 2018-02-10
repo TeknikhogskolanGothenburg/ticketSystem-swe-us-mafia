@@ -13,7 +13,7 @@ namespace RestApplication.Controllers
     public class EventController : Controller
     {
         TicketDatabase ticketDb = new TicketDatabase();
-        // GET api/values
+        // GET /events
         [HttpGet]
         public IEnumerable<TicketEvent> GetAllEvents()
         {
@@ -27,21 +27,21 @@ namespace RestApplication.Controllers
             return ticketDb.FindEvents(query);
         }
 
-        // GET event/5
+        // GET events/5
         [HttpGet("{id}")]
         public TicketEvent GetSpecificEvent(int id)
         {
             return ticketDb.FindEventByID(id);
         }
 
-        // POST api/values
+        // POST /events
         [HttpPost]
         public void Post([FromBody]TicketEvent ticketEvent)
         {      
-            ticketDb.CreateEvent(ticketEvent.EventName, ticketEvent.EventHtmlDescription);
+            ticketDb.EventAdd(ticketEvent.EventName, ticketEvent.EventHtmlDescription);
         }
 
-        // PUT api/values/5
+        // PUT /events/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]TicketEvent ticketEvent)
         {
@@ -56,7 +56,7 @@ namespace RestApplication.Controllers
             }
         }
 
-        // DELETE api/values/5
+        // DELETE /events/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
