@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TicketSystem.DatabaseRepository;
 using TicketSystem.DatabaseRepository.Model;
 
@@ -16,31 +17,38 @@ namespace RESTapi.Controllers
         TicketDatabase database = new TicketDatabase();
         // GET: api/Venue
         [HttpGet]
-        public IEnumerable<Venue> Get()
+        public IEnumerable<Venue> GetAllVenues()
         {           
             return database.AllVenues();
         }
 
         // GET: api/Venue/query
         [HttpGet("{query}")]
-        public IEnumerable<Venue> Get(string query)
+        public string GetSpecificVenue(string query)
         {
-            return database.VenuesFind(query);
+            return JsonConvert.SerializeObject(database.VenuesFind(query));
         }
         
         // POST: api/Venue
         [HttpPost]
-        public void Post([FromBody]string name, string address, string city, string country)
+        public void Post([FromBody]Venue venue)
         {
-            database.VenueAdd(name, address, city, country);
+            database.VenueAdd(venue.VenueName, venue.Address, venue.City, venue.Country);
         }
         
         // PUT: api/Venue/id
         // based on id of venue, change values
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string name, string address, string city, string country)
+        public void Put(int id, [FromBody]Venue venue)
         {
-            database.UpdateVenue(id, name, address, city, country);
+            if (database.FindVenueByID(id) == null)
+            {
+                Response.StatusCode = 404;
+            }
+            else
+            {
+                database.UpdateVenue(id, venue.VenueName, venue.Address, venue.City,venue.Country);
+            }    
         }
         
         // DELETE: api/ApiWithActions/5
