@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace RestApplication.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class EventController : Controller
     {
         TicketDatabase ticketDb = new TicketDatabase();
@@ -27,23 +27,39 @@ namespace RestApplication.Controllers
             return JsonConvert.SerializeObject(ticketDb.SpecificEventFind(query));
         }
 
+
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string id, string eventName, string htmlDescription)
+        public void Post([FromBody]TicketEvent ticketEvent)
         {
-            ticketDb.CreateEvent(id, eventName, htmlDescription);
+            //TicketEvent ticketEvent = JsonConvert.DeserializeObject<TicketEvent>(body);
+            
+            ticketDb.CreateEvent(ticketEvent.EventName, ticketEvent.EventHtmlDescription);
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]TicketEvent ticketEvent)
         {
+            if(ticketDb.FindEventByID(id) == null)
+            {
+                Response.StatusCode = 404;
+                return;
+            }
+            else
+            {
+                ticketDb.UpdateEvent(id, ticketEvent.EventName, ticketEvent.EventHtmlDescription);
+            }
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public void Delete(string query)
         {
+            /*if (GetSpecificEvent(query).Contains(query))
+            {
+
+            }*/
         }
     }
 }
