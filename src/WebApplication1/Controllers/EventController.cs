@@ -20,18 +20,24 @@ namespace RestApplication.Controllers
             return ticketDb.EventFind();
         }
 
-        // GET api/values/5
-        [HttpGet("{query}")]
-        public string GetSpecificEvent(string query)
+        // GET event/search/ark
+        [HttpGet("search/{query}")]
+        public IEnumerable<TicketEvent> FindEvents (string query)
         {
-            return JsonConvert.SerializeObject(ticketDb.SpecificEventFind(query));
+            return ticketDb.FindEvents(query);
         }
+
+        // GET event/5
+        [HttpGet("{id}")]
+        public TicketEvent GetSpecificEvent(int id)
+        {
+            return ticketDb.FindEventByID(id);
+        }
+
         // POST api/values
         [HttpPost]
         public void Post([FromBody]TicketEvent ticketEvent)
-        {
-            //TicketEvent ticketEvent = JsonConvert.DeserializeObject<TicketEvent>(body);
-            
+        {      
             ticketDb.CreateEvent(ticketEvent.EventName, ticketEvent.EventHtmlDescription);
         }
 

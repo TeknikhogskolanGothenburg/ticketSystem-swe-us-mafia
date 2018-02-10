@@ -52,8 +52,18 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
-        // update venue method here
-
+       
+        /// <summary>
+        /// Method that updates a venue in the database table Venues, depending on
+        /// which parameters are sent in when calling the method, all or some of
+        /// the attributes for a venue will be changed. ID can't be changed since
+        /// it is primary key.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="address"></param>
+        /// <param name="city"></param>
+        /// <param name="country"></param>
         public void UpdateVenue(int id, string name, string address, string city, string country)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -61,24 +71,30 @@ namespace TicketSystem.DatabaseRepository
                 connection.Open();
                 if (name != null)
                 {
-                    connection.Query("UPDATE Venues SET VenueName = " + name + " WHERE VenueID =" + id);
+                    connection.Query("UPDATE Venues SET [VenueName] = @VenueName WHERE [VenueID] = @VenueID; ", new { VenueName = name, VenueID = id });
                 }
                 if (address != null)
                 {
-                    connection.Query("UPDATE Venues SET VenueName = " + address + " WHERE VenueID =" + id);
+                    connection.Query("UPDATE Venues SET [Address] = @Address WHERE [VenueID] = @VenueID; ", new { Address = address, VenueID = id });
                 }
                 if (city != null)
                 {
-                    connection.Query("UPDATE Venues SET VenueName = " + city + " WHERE VenueID =" + id);
+                    connection.Query("UPDATE Venues SET [City] = @City WHERE [VenueID] = @VenueID; ", new { City = city, VenueID = id });
                 }
                 if (country != null)
                 {
-                    connection.Query("UPDATE Venues SET VenueName = " + country + " WHERE VenueID =" + id);
+                    connection.Query("UPDATE Venues SET [Country] = @Country WHERE [VenueID] = @VenueID; ", new { Country = country, VenueID = id });
                 }
-
             }
         }
 
+        /// <summary>
+        /// Method that creates a new TicketEvent in the database table TicketEvents.
+        /// ID is automatically generated, thus not given as parameter in method.
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="htmlDescription"></param>
+        /// <returns>A TicketEvent object.</returns>
         public TicketEvent CreateEvent(string eventName, string htmlDescription)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -91,6 +107,15 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        /// <summary>
+        /// Method that updates a TicketEvent in the TicketEvents database table, 
+        /// the content of the update depends on which parameters that are given 
+        /// new values when the method is called. ID can't be changed, just used
+        /// to look up the event in the database that we want to update.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="eventName"></param>
+        /// <param name="htmlDescription"></param>
         public void UpdateEvent(int id, string eventName, string htmlDescription)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -108,6 +133,10 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        /// <summary>
+        /// Method that deletes a specific TicketEvent from the TicketEvents database table.
+        /// </summary>
+        /// <param name="id"></param>
         public void DeleteEvent(int id)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -118,11 +147,11 @@ namespace TicketSystem.DatabaseRepository
         }
 
         /// <summary>
-        /// Method that is used to get all existing events from the database as a list,
+        /// Method that is used to get all existing events from the database,
         /// represented as a list of TicketEvent objects.
         /// </summary>
         /// <param name="query"></param>
-        /// <returns>A list consisting of Ticket Event objects.</returns>
+        /// <returns>A list consisting of TicketEvent objects.</returns>
         public List<TicketEvent> EventFind()
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -133,47 +162,19 @@ namespace TicketSystem.DatabaseRepository
         }
 
         /// <summary>
-        /// Method that fetches a specific event from the database table TicketEvent,
+        /// Method that fetches a list of events matching a query from the database table TicketEvent,
         /// based on either EventID or EventName.
         /// </summary>
         /// <param name="query"></param>
-        /// <returns>A string with the database value that is cast as
-        /// a TicketEvent </returns>
-        public TicketEvent SpecificEventFind(string query)
+        /// <returns>A list of TicketEvent objects.</returns>
+        public IEnumerable<TicketEvent> FindEvents(string query)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                /*SqlCommand cmd = new SqlCommand("SELECT * FROM TicketEvent WHERE TicketEventID = @EventID OR EventName LIKE @EventName", connection);
-
-                SqlParameter idParam = new SqlParameter
-                {
-                    ParameterName = "@EventID",
-                    Value = query
-                };
-
-                SqlParameter nameParam = new SqlParameter
-                {
-                    ParameterName = "@EventName",
-                    Value = "%" + query + "%"
-                };
-                cmd.Parameters.Add(idParam);
-                cmd.Parameters.Add(nameParam);
-                var result = cmd.ExecuteReader();
-
-                List<TicketEvent> events = new List<TicketEvent>();
-                while (result.Read())
-                {
-                    var evt = new TicketEvent
-                    {
-                        TicketEventId = result["TicketEventID"],
-                        EventName = result["EventName"],
-                        EventHtmlDescription = result["EventHtmlDescription"]
-                    };
-                }*/
-
-                // NOTE: super-vulnerable to SQL injection! How to do it with parameterized queries and still keep convenient return value?
-                return connection.Query<TicketEvent>("SELECT * FROM [TicketEvents] WHERE TicketEventID = @ID OR EventName like @Query", new { ID = query, Query = $"%{query}%" }).FirstOrDefault();
+                int id = -1;
+                int.TryParse(query, out id);
+                return connection.Query<TicketEvent>("SELECT * FROM [TicketEvents] WHERE TicketEventID = @ID OR EventName like @Query", new { ID = id, Query = $"%{query}%" });
             }
         }
 
@@ -188,6 +189,15 @@ namespace TicketSystem.DatabaseRepository
             {
                 connection.Open();
                 return connection.Query<TicketEvent>("SELECT * FROM [TicketEvents] WHERE TicketEventID = @ID", new { ID = id }).FirstOrDefault();
+            }
+        }
+
+        public TicketEvent FindVenueByID(int id)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<TicketEvent>("SELECT * FROM [Venues] WHERE VenueID = @ID", new { ID = id }).FirstOrDefault();
             }
         }
     }
