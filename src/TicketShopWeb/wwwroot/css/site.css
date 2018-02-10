@@ -108,6 +108,7 @@ footer {
     width: 10px
 }
 
+
 #container img {
         width: 100px;
         height: 100px;
@@ -122,16 +123,20 @@ footer {
     overflow-x: hidden;
 }
 
-.cartButton {
+#cartButton {
     color: #fff;
     border-radius: 4px;
-    padding: 10px 14px;
+    padding: 5px 14px;
     border: none;
-    background-color: #2ECC71;
+    background-color: #4CAF50;
     border-bottom: 1px solid #27AE60;
     margin-bottom: 20px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: medium;
+}
+
+#cartButton:hover {
+    background-color: #3e8e41;
 }
 
 
