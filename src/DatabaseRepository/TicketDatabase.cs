@@ -108,6 +108,15 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        public void DeleteEvent(int id)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                connection.Query<TicketEvent>("DELETE FROM [TicketEvents] WHERE TicketEventID = @ID", new { ID = id }).FirstOrDefault();
+            }
+        }
+
         /// <summary>
         /// Method that is used to get all existing events from the database as a list,
         /// represented as a list of TicketEvent objects.
@@ -168,11 +177,17 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        /// <summary>
+        /// Separate method used to get an event from the database based on a specific ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>The event that has the specified ID</returns>
         public TicketEvent FindEventByID(int id)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
-                return connection.Query<TicketEvent>("SELECT * FROM [TicketEvents] WHERE TicketEventID = @ID", new { ID = id}).FirstOrDefault();
+                connection.Open();
+                return connection.Query<TicketEvent>("SELECT * FROM [TicketEvents] WHERE TicketEventID = @ID", new { ID = id }).FirstOrDefault();
             }
         }
     }
