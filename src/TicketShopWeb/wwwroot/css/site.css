@@ -48,8 +48,7 @@ hr {
 }
 
 footer {
-    position: absolute;
-    bottom: 0;
+    position: page;
 }
 
 .btn-default{
@@ -167,7 +166,7 @@ footer {
 }
 
 .ticket-footer {
-    padding: 0.75rem 1.25rem;
+    padding: 1.25rem 1.25rem;
     background-color: rgba(0, 0, 0, 0.03);
     border-top: 1px solid rgba(0, 0, 0, 0.125);
 }
@@ -183,9 +182,8 @@ footer {
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
-    /*JUST TRYD SOME SHIT*/
 }
 
 #container ::-webkit-scrollbar{
