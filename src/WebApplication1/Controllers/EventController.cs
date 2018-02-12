@@ -17,7 +17,7 @@ namespace RestApplication.Controllers
         [HttpGet]
         public IEnumerable<TicketEvent> GetAllEvents()
         {
-            return ticketDb.EventFind();
+            return ticketDb.FindAllEvents();
         }
 
         // GET event/search/ark
