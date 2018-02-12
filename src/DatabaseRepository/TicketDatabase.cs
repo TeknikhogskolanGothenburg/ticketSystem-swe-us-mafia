@@ -241,5 +241,23 @@ namespace TicketSystem.DatabaseRepository
                     "WHERE TicketTransactions.BuyerFirstName = @Query OR TicketTransactions.BuyerEmailAddress = @Query", new { Query = $"%{query}%" });
             }
         }
+
+        public Order FindCustomerOrderByID (int id)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<Order>("SELECT TicketsToTransactions.TransactionID, TicketsToTransactions.TicketID, TicketTransactions.BuyerFirstName, TicketTransactions.BuyerLastName," +
+                   "TicketTransactions.BuyerAddress, TicketTransactions.BuyerCity, TicketTransactions.PaymentReferenceID, TicketTransactions.PaymentStatus, TicketEventDates.EventStartDateTime," +
+                   "Tickets.SeatID, TicketEvents.EventName FROM [TicketsToTransactions] " +
+                   "INNER JOIN [TicketTransactions] ON TicketsToTransactions.TransactionID = TicketTransactions.TransactionID " +
+                   "INNER JOIN [Tickets] ON TicketsToTransactions.TicketID = Tickets.TicketID " +
+                   "INNER JOIN [SeatsAtEventDate] ON Tickets.SeatID = SeatsAtEventDate.SeatID" +
+                   "INNER JOIN [TicketEventDates] ON SeatsAtEventDate.TicketEventDateID = TicketEventDates.TicketEventDateID" +
+                   "INNER JOIN [TicketEvents] ON TicketEventDates.TicketEventID = TicketEvents.TicketEventID" +
+                   "INNER JOIN Venues ON TicketEventDates.VenueID = Venues.VenueID" +
+                   "WHERE TicketTransactions.TransactionID = @ID", new { ID = id }).FirstOrDefault();
+            }
+        }
     }
 }
