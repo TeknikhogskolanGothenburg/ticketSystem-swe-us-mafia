@@ -39,7 +39,7 @@ namespace RESTapi.Controllers
 
         // POST: api/Venue
         [HttpPost]
-        public void Post([FromBody]Venue venue)
+        public void AddNewVenue([FromBody]Venue venue)
         {
             database.VenueAdd(venue.VenueName, venue.Address, venue.City, venue.Country);
         }
@@ -47,7 +47,7 @@ namespace RESTapi.Controllers
         // PUT: api/Venue/5
         // based on id of venue, change values
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]Venue venue)
+        public void UpdateVenue(int id, [FromBody]Venue venue)
         {
             if (database.FindVenueByID(id) == null)
             {
@@ -61,7 +61,7 @@ namespace RESTapi.Controllers
         
         // DELETE: api/Venue/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void DeleteVenue(int id)
         {
             if (database.FindVenueByID(id) == null)
             {

@@ -218,15 +218,27 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
-        //seats and which event it is- need to be given back + all info in tickettransactions
-        public IEnumerable<Order> FindCustomerTickets(string query)
+        /// <summary>
+        /// Method that fetches a list of Orders belonging to a specific customer, matches the query against table
+        /// TicketTransactions, orders can be found either through buyer name or buyer email address.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>A list of Order objects.</returns>
+        public IEnumerable<Order> FindCustomerOrders(string query)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                return connection.Query<Order>("SELECT [TicketsToTransactions.TransactionID], [TicketsToTransactions.TicketID] FROM [TicketToTransactions] " +
-                    "INNER JOIN TicketTransactions ON [TicketsToTransactions.TransactionID] = [TicketTransactions.TransactionID] WHERE [TicketTransactions.BuyerFirstName] = @Query " +
-                    "OR TicketTransactions.BuyerEmailAddress like @Query", new { Query = $"%{query}%" });
+                return connection.Query<Order>("SELECT TicketsToTransactions.TransactionID, TicketsToTransactions.TicketID, TicketTransactions.BuyerFirstName, TicketTransactions.BuyerLastName," +
+                    "TicketTransactions.BuyerAddress, TicketTransactions.BuyerCity, TicketTransactions.PaymentReferenceID, TicketTransactions.PaymentStatus, TicketEventDates.EventStartDateTime," +
+                    "Tickets.SeatID, TicketEvents.EventName FROM [TicketsToTransactions] " +
+                    "INNER JOIN [TicketTransactions] ON TicketsToTransactions.TransactionID = TicketTransactions.TransactionID " +
+                    "INNER JOIN [Tickets] ON TicketsToTransactions.TicketID = Tickets.TicketID " +
+                    "INNER JOIN [SeatsAtEventDate] ON Tickets.SeatID = SeatsAtEventDate.SeatID" +
+                    "INNER JOIN [TicketEventDates] ON SeatsAtEventDate.TicketEventDateID = TicketEventDates.TicketEventDateID" +
+                    "INNER JOIN [TicketEvents] ON TicketEventDates.TicketEventID = TicketEvents.TicketEventID" +
+                    "INNER JOIN Venues ON TicketEventDates.VenueID = Venues.VenueID"+
+                    "WHERE TicketTransactions.BuyerFirstName = @Query OR TicketTransactions.BuyerEmailAddress = @Query", new { Query = $"%{query}%" });
             }
         }
     }
