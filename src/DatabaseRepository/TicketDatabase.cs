@@ -217,5 +217,17 @@ namespace TicketSystem.DatabaseRepository
                 return connection.Query<Venue>("SELECT * FROM [Venues] WHERE VenueID = @ID", new { ID = id }).FirstOrDefault();
             }
         }
+
+        //seats and which event it is- need to be given back + all info in tickettransactions
+        public IEnumerable<Order> FindCustomerTickets(string query)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<Order>("SELECT [TicketsToTransactions.TransactionID], [TicketsToTransactions.TicketID] FROM [TicketToTransactions] " +
+                    "INNER JOIN TicketTransactions ON [TicketsToTransactions.TransactionID] = [TicketTransactions.TransactionID] WHERE [TicketTransactions.BuyerFirstName] = @Query " +
+                    "OR TicketTransactions.BuyerEmailAddress like @Query", new { Query = $"%{query}%" });
+            }
+        }
     }
 }
