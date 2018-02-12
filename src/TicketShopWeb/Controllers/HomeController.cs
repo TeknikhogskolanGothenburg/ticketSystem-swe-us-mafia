@@ -22,6 +22,19 @@ namespace TicketShopWeb.Controllers
             }
         }
 
+        public IActionResult Cart()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "The amazing ticket shop- search for culture events made easy.";
