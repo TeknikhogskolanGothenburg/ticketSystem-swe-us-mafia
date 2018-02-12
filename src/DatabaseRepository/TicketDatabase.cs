@@ -315,7 +315,7 @@ namespace TicketSystem.DatabaseRepository
                 int.TryParse(query, out id);
                 return connection.Query<TicketEventDate>("SELECT TicketEventDates.TicketEventDateID, TicketEventDates.TicketEventID, TicketEventDates.VenueID, TicketEventDates.EventStartDateTime, Venues.VenueName" +
                     "TicketEvents.EventName FROM [TicketEventDates] INNER JOIN [Venues] ON TicketEventDates.VenueID = Venues.VenueID INNER JOIN TicketEvents ON TicketEventDates.TicketEventID = TicketEvents.TicketEventID" +
-                    " WHERE TicketEventDateID = @ID OR TicketEventID = @Query OR VenueID = @Query", new { ID = id, Query = query });
+                    " WHERE TicketEventDateID = @ID OR TicketEventID = @Query OR VenueID = @Query OR Venues.VenueName = @Query", new { ID = id, Query = query });
             }
         }
 
