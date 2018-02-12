@@ -100,6 +100,7 @@ label {
     text-align: center;
     display: inline-block;
     overflow: auto;
+    float: right;
 }
 .col-md-customer {
     border-radius: 10px;

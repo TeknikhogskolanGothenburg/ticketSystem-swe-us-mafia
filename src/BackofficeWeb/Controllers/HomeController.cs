@@ -33,6 +33,13 @@ namespace BackofficeWeb.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
+        
+        //[HttpPost]
+        //public IActionResult Venue(VenueModel ven)
+        //{
+        //    VenueModel venData = ven;
+        //    return View();
+        //}
 
         public IActionResult About()
         {
