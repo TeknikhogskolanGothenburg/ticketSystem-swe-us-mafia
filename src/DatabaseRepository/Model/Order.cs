@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TicketSystem.DatabaseRepository.Model
 {
-    class Order
+    public class Order
     {
         public int TransactionID { get; set; }
         public string BuyerLastName { get; set; }
