@@ -18,7 +18,7 @@ namespace RESTapi.Controllers
     {
         TicketDatabase ticketDb = new TicketDatabase();
         // GET: api/TicketEventDate
-        [HttpGet]
+        [HttpGet("search/{query}")]
         public IEnumerable<TicketEventDate> FindTicketEventDates(string query)
         {
             return ticketDb.FindTicketEventDates(query);
@@ -35,10 +35,10 @@ namespace RESTapi.Controllers
         [HttpPost]
         public void AddNewTicketEventDate([FromBody]TicketEventDate ticketEventDate)
         {
-            ticketDb.AddTicketEventDate(ticketEventDate.TicketEventID, ticketEventDate.VenueId, ticketEventDate.EventStartDateTime);
+            ticketDb.AddTicketEventDate(ticketEventDate.TicketEventID, ticketEventDate.VenueId, ticketEventDate.EventStartDateTime, ticketEventDate.NumberOfSeats);
         }
 
-        // PUT: /ticketeventdates/5
+        // PUT: /ticketeventdate/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]TicketEventDate ticketEventDate)
         {
