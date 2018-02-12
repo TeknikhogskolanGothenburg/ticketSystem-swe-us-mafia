@@ -96,12 +96,96 @@ footer {
     background-color: white;
 }
 
+.col-md-8, .col-lg-3 {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.col-md-8 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+.col-lg-3 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 25%;
+}
+
+.ticket {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+}
+
+.ticket-img-top {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 150px;
+    width: 150px;
+}
+
+.ticket-body {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}
+
+.ticket-title{
+    margin-bottom: 0.75rem;
+}
+
+.ticket-info:last-child {
+    margin-bottom: 0;
+}
+
+.ticket-price:last-child{
+    margin-bottom: 0;
+}
+
+.ticket-footer {
+    padding: 0.75rem 1.25rem;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.ticket-footer:last-child{
+    border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
+}
+
 #container {
-    width: 500px;
-    padding: 1px 1px 2px 2px;
-    background-color: white;
-    overflow-y:auto;
-    overflow-x:hidden;
+    width: auto;
+    display: inline-block;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    /*JUST TRYD SOME SHIT*/
 }
 
 #container ::-webkit-scrollbar{
@@ -109,21 +193,7 @@ footer {
 }
 
 
-#container img {
-        width: 100px;
-        height: 100px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-}
-
-#table tbody{
-    /*tryed this to get a scrollbar inside either container or table*/
-    height: 100px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-#cartButton {
+#btn-cart {
     color: #fff;
     border-radius: 4px;
     padding: 5px 14px;
@@ -135,7 +205,7 @@ footer {
     font-size: medium;
 }
 
-#cartButton:hover {
+#btn-cart:hover {
     background-color: #3e8e41;
 }
 
