@@ -101,14 +101,50 @@ label {
     display: inline-block;
     overflow: auto;
 }
+.col-md-customer {
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+    margin-top: 50px;
+    background-color: #dcdcdc;
+    width: 1000px;
+    height: 750px;
+    text-align: center;
+    display: inline-block;
+    overflow: auto;
+}
 .col-md-test {
     border-radius: 10px;
     background-color: #ffffff;
     box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
     text-align: center;
     float: left;
-    width: 33.33%;
+    width: 305px;
     margin: 10px;
+}
+.picture {
+    text-align: center;
+    color: #555555;
+    background: transparent;
+    width: 250px;
+    height: 144px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.venueimg{
+    max-width: 250px;
+    min-height: 144px;
+    max-height: 144px;
+    height: 144px;
+}
+.customnav {
+    text-align: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+    float: left;
+    padding: 0px;
 }
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {

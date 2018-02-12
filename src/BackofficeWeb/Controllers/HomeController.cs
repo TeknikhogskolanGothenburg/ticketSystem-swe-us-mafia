@@ -22,6 +22,18 @@ namespace BackofficeWeb.Controllers
             }
         }
 
+        public IActionResult Customer()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
