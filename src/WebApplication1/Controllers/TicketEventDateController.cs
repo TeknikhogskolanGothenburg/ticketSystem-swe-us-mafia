@@ -13,7 +13,8 @@ namespace RESTapi.Controllers
     /// Här får vi hantera att lägga in ett event på ett specifikt datum och en specifik venue tror jag.
     /// </summary>
     [Produces("application/json")]
-    [Route("[controller]")]
+    //[Route("[controller]")]
+    [Route("api/TicketEventDate")]
     public class TicketEventDateController : Controller
     {
         TicketDatabase ticketDb = new TicketDatabase();

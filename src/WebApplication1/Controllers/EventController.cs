@@ -9,11 +9,12 @@ using Newtonsoft.Json;
 
 namespace RestApplication.Controllers
 {
-    [Route("[controller]")]
+    //[Route("[controller]")]
+    [Route("api/Event")]
     public class EventController : Controller
     {
         TicketDatabase ticketDb = new TicketDatabase();
-        // GET /events
+        // GET /event
         [HttpGet]
         public IEnumerable<TicketEvent> GetAllEvents()
         {
