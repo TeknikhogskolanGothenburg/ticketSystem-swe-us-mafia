@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TicketSystem.DatabaseRepository.Model;
 using TicketSystem.DatabaseRepository;
+using TicketSystemEngine;
 
 namespace RESTapi.Controllers
 {
