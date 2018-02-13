@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TicketSystem.DatabaseRepository.Model;
+using TicketSystem.DatabaseRepository;
 
 namespace RESTapi.Controllers
 {
@@ -11,39 +13,58 @@ namespace RESTapi.Controllers
     /// Här får vi hantera att lägga in ett event på ett specifikt datum och en specifik venue tror jag.
     /// </summary>
     [Produces("application/json")]
-    [Route("api/TicketEventDate")]
+    [Route("[controller]")]
     public class TicketEventDateController : Controller
     {
+        TicketDatabase ticketDb = new TicketDatabase();
         // GET: api/TicketEventDate
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("search/{query}")]
+        public IEnumerable<TicketEventDate> FindTicketEventDates(string query)
         {
-            return new string[] { "value1", "value2" };
+            return ticketDb.FindTicketEventDates(query);
         }
 
         // GET: api/TicketEventDate/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}")]
+        public TicketEventDate GetSpecificEventDate(int id)
         {
-            return "value";
+            return ticketDb.FindTicketEventDateByID(id);
         }
-        
-        // POST: api/TicketEventDate
+
+        // POST: /ticketEventDates
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void AddNewTicketEventDate([FromBody]TicketEventDate ticketEventDate)
         {
+            ticketDb.AddTicketEventDate(ticketEventDate.TicketEventID, ticketEventDate.VenueId, ticketEventDate.EventStartDateTime, ticketEventDate.NumberOfSeats);
         }
-        
-        // PUT: api/TicketEventDate/5
+
+        // PUT: /ticketeventdate/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(int id, [FromBody]TicketEventDate ticketEventDate)
         {
+            if (ticketDb.FindTicketEventDateByID(id) == null)
+            {
+                Response.StatusCode = 404;
+                return;
+            }
+            else
+            {
+                ticketDb.UpdateTicketEventDate(id, ticketEventDate.TicketEventID, ticketEventDate.VenueId, ticketEventDate.EventStartDateTime);
+            }
         }
-        
-        // DELETE: api/ApiWithActions/5
+
+        // DELETE: /ticketeventdates/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            if (ticketDb.FindTicketEventDateByID(id) == null)
+            {
+                Response.StatusCode = 404;
+            }
+            else
+            {
+                ticketDb.DeleteTicketEventDate(id);
+            }
         }
     }
 }
