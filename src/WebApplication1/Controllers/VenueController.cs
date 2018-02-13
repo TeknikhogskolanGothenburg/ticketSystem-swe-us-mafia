@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TicketSystem.DatabaseRepository;
-using TicketSystem.DatabaseRepository.Model;
 using TicketSystemEngine;
 
 namespace RESTapi.Controllers
