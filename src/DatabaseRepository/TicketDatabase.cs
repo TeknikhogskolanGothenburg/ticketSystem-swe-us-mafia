@@ -4,7 +4,8 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
-using TicketSystem.DatabaseRepository.Model;
+using TicketSystemEngine;
+using TicketSystem.DatabaseRepository;
 
 namespace TicketSystem.DatabaseRepository
 {
@@ -280,156 +281,192 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
-        /// <summary>
-        /// Method used to add a new TicketEventDate and numberOfSeats for the particular Event.
-        /// </summary>
-        /// <param name="ticketEventID"></param>
-        /// <param name="venueID"></param>
-        /// <param name="eventDateTime"></param>
-        /// <param name="numberOfSeats"></param>
-        /// <returns>A new TicketEventDate object.</returns>
-        public TicketEventDate AddTicketEventDate(int ticketEventID, int venueID, DateTime eventDateTime, int numberOfSeats)
+        public void UpdateCustomerOrder(int transactionID, string paymentStatus, string buyerLastName,
+            string buyerFirstName, string buyerAddress, string buyerCity)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                var createdEventID = connection.ExecuteScalar<int>("INSERT INTO TicketEventDates([TicketEventID],[VenueID],[EventStartDateTime]) VALUES(@TicketEventID, @VenueID, @EventStartDateTime); SELECT SCOPE_IDENTITY();", new { TicketEventID = ticketEventID, VenueID = venueID, EventStartDateTime = eventDateTime });
-                var seatQuery = "INSERT INTO SeatsAtEventDate([TicketEventDateID]) VALUES(@ID)";
-                var parameters = new { ID = createdEventID };
-                for (int i = 0; i < numberOfSeats; i++)
+                if (paymentStatus != null)
                 {
-                    connection.Query(seatQuery, parameters);
+                    connection.Query("Update TicketTransactions SET [PaymentStatus] = @PaymentStatus WHERE [TransactionID] = @TransactionID; ", new { PaymentStatus = paymentStatus, TransactionID = transactionID, });
                 }
-                return connection.Query<TicketEventDate>("SELECT * FROM TicketEventDates WHERE TicketEventDateID=@Id", parameters).First();
-            }
-        }
-
-        /// <summary>
-        /// Method used for updating TicketEventDates, any of the attributes or all of the attributes,
-        /// except primary key of the database table.
-        /// </summary>
-        /// <param name="ticketEventDateID"></param>
-        /// <param name="ticketEventID"></param>
-        /// <param name="venueID"></param>
-        /// <param name="eventDateTime"></param>
-        public void UpdateTicketEventDate(int ticketEventDateID, int ticketEventID, int venueID, DateTime eventDateTime)
-        {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                connection.Open();
-                if (ticketEventID != 0)
+                if (buyerLastName != null)
                 {
-                    connection.Query("UPDATE TicketEventDates SET [TicketEventID] = @TicketEventID WHERE [TicketEventDateID] = @TicketEventDateID; ", new { TicketEventID = ticketEventID, TicketEventDateID = ticketEventDateID });
+                    connection.Query("UPDATE TicketTransactions SET [BuyerLastName] = @BuyerLastName WHERE [TransactionID] = @TransactionID; ", new { BuyerLastName = buyerLastName, TransactionID = transactionID});
                 }
-                if (venueID != 0)
+                if (buyerFirstName != null)
                 {
-                    connection.Query("UPDATE TicketEventDates SET [VenueID] = @VenueID WHERE [TicketEventDateID] = @TicketEventDateID; ", new { VenueID = venueID, TicketEventDateID = ticketEventDateID });
+                    connection.Query("UPDATE TicketTransactions SET [BuyerFirstName] = @BuyerFirstName WHERE [TransactionID] = @TransactionID; ", new { BuyerFirstName = buyerFirstName, TransactionID = transactionID });
                 }
-                if (eventDateTime != DateTime.MinValue)
+                if (buyerCity != null)
                 {
-                    connection.Query("UPDATE TicketEventDates SET [EventStartDateTime] = @EventStartDateTime WHERE [TicketEventDateID] = @TicketEventDateID; ", new { EventStartDateTime = eventDateTime, TicketEventDateID = ticketEventDateID });
+                    connection.Query("UPDATE TicketTransactions SET [BuyerCity] = @BuyerCity WHERE [TransactionID] = @TransactionID; ", new { BuyerCity = buyerCity, TransactionID = transactionID });
                 }
             }
         }
+    /*public void DeleteCustomerOrder(int ticketID, int seatID )
+    {
 
-        /// <summary>
-        /// Method that gets data on a specific Ticket.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>A Ticket object</returns>
-        public Ticket FindTicketByTicketID(int id)
+    }*/
+
+    /// <summary>
+    /// Method used to add a new TicketEventDate and numberOfSeats for the particular Event.
+    /// </summary>
+    /// <param name="ticketEventID"></param>
+    /// <param name="venueID"></param>
+    /// <param name="eventDateTime"></param>
+    /// <param name="numberOfSeats"></param>
+    /// <returns>A new TicketEventDate object.</returns>
+    public TicketEventDate AddTicketEventDate(int ticketEventID, int venueID, DateTime eventDateTime, int numberOfSeats)
+    {
+        using (var connection = new SqlConnection(CONNECTION_STRING))
         {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
+            connection.Open();
+            var createdEventID = connection.ExecuteScalar<int>("INSERT INTO TicketEventDates([TicketEventID],[VenueID],[EventStartDateTime]) VALUES(@TicketEventID, @VenueID, @EventStartDateTime); SELECT SCOPE_IDENTITY();", new { TicketEventID = ticketEventID, VenueID = venueID, EventStartDateTime = eventDateTime });
+            var seatQuery = "INSERT INTO SeatsAtEventDate([TicketEventDateID]) VALUES(@ID)";
+            var parameters = new { ID = createdEventID };
+            for (int i = 0; i < numberOfSeats; i++)
             {
-                connection.Open();
-                return connection.Query<Ticket>("SELECT Tickets.*, Venues.VenueName AS VenueName, TicketEventDates.EventStartDateTime AS EventStartDateTime, " +
-                    "TicketEvents.TicketEventPrice AS TicketEventPrice, TicketEvents.EventName AS EventName " +
-                    "FROM Tickets " +
-                    "INNER JOIN SeatsAtEventDate ON SeatsAtEventDate.SeatID = Tickets.SeatID " +
-                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID " +
-                    "INNER JOIN TicketEvents ON TicketEvents.TicketEventID = TicketEventDates.TicketEventID " +
-                    "INNER JOIN Venues on Venues.VenueID = TicketEventDates.VenueID " +
-                    "WHERE Tickets.TicketID = @ID", new { ID = id }).FirstOrDefault();
+                connection.Query(seatQuery, parameters);
             }
+            return connection.Query<TicketEventDate>("SELECT * FROM TicketEventDates WHERE TicketEventDateID=@Id", parameters).First();
         }
+    }
 
-        public IEnumerable<Ticket> FindTickets(string query)
+    /// <summary>
+    /// Method used for updating TicketEventDates, any of the attributes or all of the attributes,
+    /// except primary key of the database table.
+    /// </summary>
+    /// <param name="ticketEventDateID"></param>
+    /// <param name="ticketEventID"></param>
+    /// <param name="venueID"></param>
+    /// <param name="eventDateTime"></param>
+    public void UpdateTicketEventDate(int ticketEventDateID, int ticketEventID, int venueID, DateTime eventDateTime)
+    {
+        using (var connection = new SqlConnection(CONNECTION_STRING))
         {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
+            connection.Open();
+            if (ticketEventID != 0)
             {
-                connection.Open();
-                connection.Open();
-                int id = -1;
-                int.TryParse(query, out id);
-                return connection.Query<Ticket>(("TicketTransac = @Query OR TicketTransactions.BuyerEmailAddress = @Query"), new { Query = query });
+                connection.Query("UPDATE TicketEventDates SET [TicketEventID] = @TicketEventID WHERE [TicketEventDateID] = @TicketEventDateID; ", new { TicketEventID = ticketEventID, TicketEventDateID = ticketEventDateID });
             }
-        }
-
-        /// <summary>
-        /// Method used to search for a specific TicketEventDate 
-        /// by it's ID.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>A TicketEventDate Object.</returns>
-        public TicketEventDate FindTicketEventDateByID(int id)
-        {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
+            if (venueID != 0)
             {
-                connection.Open();
-                return connection.Query<TicketEventDate>("SELECT TicketEventDates.*, Venues.VenueName, TicketEvents.EventName, innerTable.seats AS NumberOfSeats " +
-                    "FROM TicketEventDates " +
-                    "INNER JOIN " +
-                        "(SELECT SeatsAtEventDate.TicketEventDateID AS id, COUNT(*) AS seats FROM SeatsAtEventDate GROUP BY SeatsAtEventDate.TicketEventDateID) innerTable " +
-                    "ON TicketEventDates.TicketEventDateID = innerTable.id " +
-                    "INNER JOIN [Venues] ON TicketEventDates.VenueID = Venues.VenueID " +
-                    "INNER JOIN [TicketEvents] ON TicketEventDates.TicketEventID = TicketEvents.TicketEventID " +
-                    "WHERE TicketEventDates.TicketEventDateID = @ID", new { ID = id }).FirstOrDefault();
+                connection.Query("UPDATE TicketEventDates SET [VenueID] = @VenueID WHERE [TicketEventDateID] = @TicketEventDateID; ", new { VenueID = venueID, TicketEventDateID = ticketEventDateID });
             }
-        }
-
-        /// <summary>
-        /// Method that search in the database for TicketEventDates,
-        /// one can search on eventname, eventdateid, eventid, venuename.
-        /// Method joins TicketEventDates table with Venues, TicketEvents,
-        /// and also has a subquery that makes it possible to show how many
-        /// seats a specific eventdate have.
-        /// </summary>
-        /// <param name="query"></param>
-        /// <returns>A list of TicketEventDates, TicketEventName, VenueName and Number of seats.</returns>
-        public IEnumerable<TicketEventDate> FindTicketEventDates(string query)
-        {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
+            if (eventDateTime != DateTime.MinValue)
             {
-                connection.Open();
-                int id = -1;
-                int.TryParse(query, out id);
-                return connection.Query<TicketEventDate>(
-                    "SELECT TicketEventDates.*, Venues.VenueName, TicketEvents.EventName, innerTable.seats AS NumberOfSeats " +
-                    "FROM TicketEventDates " +
-                    "INNER JOIN " +
-                        "(SELECT SeatsAtEventDate.TicketEventDateID AS id, COUNT(*) AS seats FROM SeatsAtEventDate GROUP BY SeatsAtEventDate.TicketEventDateID) innerTable " +
-                    "ON TicketEventDates.TicketEventDateID = innerTable.id " +
-                    "INNER JOIN [Venues] ON TicketEventDates.VenueID = Venues.VenueID " +
-                    "INNER JOIN [TicketEvents] ON TicketEventDates.TicketEventID = TicketEvents.TicketEventID " +
-                    "WHERE TicketEventDates.TicketEventDateID = @ID OR TicketEvents.TicketEventID = @ID OR Venues.VenueID = @ID OR Venues.VenueName LIKE @Query OR TicketEvents.EventName LIKE @Query;",
-                    new { ID = id, Query = $"%{query}%" }
-                );
-            }
-        }
-
-        /// <summary>
-        /// Method that deletes a specific TicketEventDate. First we need to delete the seats
-        /// connected to the TicketEventDateID in table SeatsAtEventDate.
-        /// </summary>
-        /// <param name="id"></param>
-        public void DeleteTicketEventDate(int id)
-        {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                connection.Open();
-                connection.Query("DELETE FROM SeatsAtEventDate WHERE TicketEventDateID = @ID", new { ID = id }).FirstOrDefault();
-                connection.Query<TicketEventDate>("DELETE FROM [TicketEventDates] WHERE TicketEventDateID = @ID", new { ID = id }).FirstOrDefault();
+                connection.Query("UPDATE TicketEventDates SET [EventStartDateTime] = @EventStartDateTime WHERE [TicketEventDateID] = @TicketEventDateID; ", new { EventStartDateTime = eventDateTime, TicketEventDateID = ticketEventDateID });
             }
         }
     }
+
+    /// <summary>
+    /// Method that gets data on a specific Ticket.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>A Ticket object</returns>
+    public Ticket FindTicketByTicketID(int id)
+    {
+        using (var connection = new SqlConnection(CONNECTION_STRING))
+        {
+            connection.Open();
+            return connection.Query<Ticket>("SELECT Tickets.*, Venues.VenueName AS VenueName, TicketEventDates.EventStartDateTime AS EventStartDateTime, " +
+                "TicketEvents.TicketEventPrice AS TicketEventPrice, TicketEvents.EventName AS EventName " +
+                "FROM Tickets " +
+                "INNER JOIN SeatsAtEventDate ON SeatsAtEventDate.SeatID = Tickets.SeatID " +
+                "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID " +
+                "INNER JOIN TicketEvents ON TicketEvents.TicketEventID = TicketEventDates.TicketEventID " +
+                "INNER JOIN Venues on Venues.VenueID = TicketEventDates.VenueID " +
+                "WHERE Tickets.TicketID = @ID", new { ID = id }).FirstOrDefault();
+        }
+    }
+
+    /*public IEnumerable<Ticket> FindTickets(string query)
+    {
+        using (var connection = new SqlConnection(CONNECTION_STRING))
+        {
+            connection.Open();
+            connection.Open();
+            int id = -1;
+            int.TryParse(query, out id);
+            return connection.Query<Ticket>(("SELECT Tickets.*, Venues.VenueName AS VenueName, TicketEventDates.EventStartDateTime AS EventStartDateTime, " +
+                "TicketEvents.TicketEventPrice AS TicketEventPrice, TicketEvents.EventName AS EventName " +
+                "FROM Tickets " +
+                "INNER JOIN SeatsAtEventDate ON SeatsAtEventDate.SeatID = Tickets.SeatID " +
+                "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID " +
+                "INNER JOIN TicketEvents ON TicketEvents.TicketEventID = TicketEventDates.TicketEventID " +
+                "INNER JOIN Venues on Venues.VenueID = TicketEventDates.VenueID " +
+                "WHERE Tickets.ticketID = @Query OR TicketTransactions.BuyerEmailAddress = @Query"), new { Query = query });
+        }
+    }*/
+
+    /// <summary>
+    /// Method used to search for a specific TicketEventDate 
+    /// by it's ID.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>A TicketEventDate Object.</returns>
+    public TicketEventDate FindTicketEventDateByID(int id)
+    {
+        using (var connection = new SqlConnection(CONNECTION_STRING))
+        {
+            connection.Open();
+            return connection.Query<TicketEventDate>("SELECT TicketEventDates.*, Venues.VenueName, TicketEvents.EventName, innerTable.seats AS NumberOfSeats " +
+                "FROM TicketEventDates " +
+                "INNER JOIN " +
+                    "(SELECT SeatsAtEventDate.TicketEventDateID AS id, COUNT(*) AS seats FROM SeatsAtEventDate GROUP BY SeatsAtEventDate.TicketEventDateID) innerTable " +
+                "ON TicketEventDates.TicketEventDateID = innerTable.id " +
+                "INNER JOIN [Venues] ON TicketEventDates.VenueID = Venues.VenueID " +
+                "INNER JOIN [TicketEvents] ON TicketEventDates.TicketEventID = TicketEvents.TicketEventID " +
+                "WHERE TicketEventDates.TicketEventDateID = @ID", new { ID = id }).FirstOrDefault();
+        }
+    }
+
+    /// <summary>
+    /// Method that search in the database for TicketEventDates,
+    /// one can search on eventname, eventdateid, eventid, venuename.
+    /// Method joins TicketEventDates table with Venues, TicketEvents,
+    /// and also has a subquery that makes it possible to show how many
+    /// seats a specific eventdate have.
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns>A list of TicketEventDates, TicketEventName, VenueName and Number of seats.</returns>
+    public IEnumerable<TicketEventDate> FindTicketEventDates(string query)
+    {
+        using (var connection = new SqlConnection(CONNECTION_STRING))
+        {
+            connection.Open();
+            int id = -1;
+            int.TryParse(query, out id);
+            return connection.Query<TicketEventDate>(
+                "SELECT TicketEventDates.*, Venues.VenueName, TicketEvents.EventName, innerTable.seats AS NumberOfSeats " +
+                "FROM TicketEventDates " +
+                "INNER JOIN " +
+                    "(SELECT SeatsAtEventDate.TicketEventDateID AS id, COUNT(*) AS seats FROM SeatsAtEventDate GROUP BY SeatsAtEventDate.TicketEventDateID) innerTable " +
+                "ON TicketEventDates.TicketEventDateID = innerTable.id " +
+                "INNER JOIN [Venues] ON TicketEventDates.VenueID = Venues.VenueID " +
+                "INNER JOIN [TicketEvents] ON TicketEventDates.TicketEventID = TicketEvents.TicketEventID " +
+                "WHERE TicketEventDates.TicketEventDateID = @ID OR TicketEvents.TicketEventID = @ID OR Venues.VenueID = @ID OR Venues.VenueName LIKE @Query OR TicketEvents.EventName LIKE @Query;",
+                new { ID = id, Query = $"%{query}%" }
+            );
+        }
+    }
+
+    /// <summary>
+    /// Method that deletes a specific TicketEventDate. First we need to delete the seats
+    /// connected to the TicketEventDateID in table SeatsAtEventDate.
+    /// </summary>
+    /// <param name="id"></param>
+    public void DeleteTicketEventDate(int id)
+    {
+        using (var connection = new SqlConnection(CONNECTION_STRING))
+        {
+            connection.Open();
+            connection.Query("DELETE FROM SeatsAtEventDate WHERE TicketEventDateID = @ID", new { ID = id }).FirstOrDefault();
+            connection.Query<TicketEventDate>("DELETE FROM [TicketEventDates] WHERE TicketEventDateID = @ID", new { ID = id }).FirstOrDefault();
+        }
+    }
 }
+    }

@@ -5,16 +5,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BackofficeWeb.Models;
-
+using TicketSystemEngine;
+using TicketSystem.RestApiClient;
 namespace BackofficeWeb.Controllers
 {
     public class HomeController : Controller
     {
+        VenueApi venueApi = new VenueApi();
         public IActionResult Index()
         {
+            List<Venue> venueList = new List<Venue> { };
+            venueList = venueApi.VenueGet();
             if (User.Identity.IsAuthenticated)
             {
-                return View();
+                return View(venueList);
             }
             else
             {

@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 using RestSharp;
-using TicketSystem.RestApiClient.Model;
+using TicketSystemEngine;
 
 namespace TicketSystem.RestApiClient
 {
-    class VenueApi
+    public class VenueApi
     {
-        // Venue is supposed to refer to a Model in a class library
+        // Venue Data Type is supposed to refer to a Model in a class library
         public List<Venue> VenueGet()
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient(/*must fix, but have your local host in*/"http://localhost:52176/");
             var request = new RestRequest("Venue", Method.GET);
             var response = client.Execute<List<Venue>>(request);
             return response.Data;
@@ -36,9 +36,21 @@ namespace TicketSystem.RestApiClient
         {
             var client = new RestClient("http://localhost:18001/");
             var request = new RestRequest("Venue", Method.POST);
+            var response = client.Execute(request);           
+        }
+
+        public void UpdateVenue()
+        {
+            var client = new RestClient("http://localhost:18001/");
+            var request = new RestRequest("Venue", Method.PUT);
             var response = client.Execute(request);
-            // how to get parameters in?
-           // return response.Data;
+        }
+
+        public void DeleteVenueAtId()
+        {
+            var client = new RestClient("http://localhost:18001/");
+            var request = new RestRequest("Venue", Method.DELETE);
+            var response = client.Execute(request);
         }
 
     }

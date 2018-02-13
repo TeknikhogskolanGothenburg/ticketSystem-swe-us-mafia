@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TicketSystem.DatabaseRepository.Model;
+using TicketSystemEngine;
 using TicketSystem.DatabaseRepository;
 using Newtonsoft.Json;
 

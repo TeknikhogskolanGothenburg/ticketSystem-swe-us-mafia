@@ -10,4 +10,12 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicketSystemEngine\TicketSystemEngine.csproj" />
+  </ItemGroup>
+
 </Project>

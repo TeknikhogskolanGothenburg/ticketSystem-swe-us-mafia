@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TicketSystem.RestApiClient.Model;
+using TicketSystemEngine;
 
 namespace TicketSystem.RestApiClient
 {

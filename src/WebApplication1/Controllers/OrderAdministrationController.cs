@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TicketSystem.DatabaseRepository;
 using Newtonsoft.Json;
-using TicketSystem.DatabaseRepository.Model;
+using TicketSystemEngine;
 
 
 namespace RESTapi.Controllers
@@ -38,17 +38,17 @@ namespace RESTapi.Controllers
         {
             return ticketDB.FindCustomerOrderByID(id);
         }
-
-        // POST: api/Ticket
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
         
-        // PUT: api/Ticket/5
+        // PUT: orderadministration/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]Order order)
         {
+            if (ticketDB.FindEventByID(id) == null)
+            {
+                Response.StatusCode = 404;
+                return;
+            }
+            ticketDB.UpdateCustomerOrder(id, order.PaymentStatus, order.BuyerLastName, order.BuyerFirstName, order.BuyerAddress, order.BuyerCity);
         }
         
         // DELETE: api/ApiWithActions/5
