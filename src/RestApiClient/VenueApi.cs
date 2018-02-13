@@ -9,9 +9,10 @@ namespace TicketSystem.RestApiClient
     public class VenueApi
     {
         // Venue Data Type is supposed to refer to a Model in a class library
+        // localhost address must be equal to RestApi window address
         public List<Venue> VenueGet()
         {
-            var client = new RestClient(/*must fix, but have your local host in*/"http://localhost:52176/");
+            var client = new RestClient(/*must fix, but have your local host in*/"http://localhost:51775/");
             var request = new RestRequest("Venue", Method.GET);
             var response = client.Execute<List<Venue>>(request);
             return response.Data;
@@ -19,7 +20,7 @@ namespace TicketSystem.RestApiClient
 
         public Venue VenueGetByID(int VenueId)
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient("http://localhost:51775/");
             var request = new RestRequest("Venue/{id}", Method.GET);
             request.AddUrlSegment("id", VenueId);
             var response = client.Execute<Venue>(request);
@@ -34,21 +35,21 @@ namespace TicketSystem.RestApiClient
 
         public void AddNewVenue()
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient("http://localhost:51775/");
             var request = new RestRequest("Venue", Method.POST);
             var response = client.Execute(request);           
         }
 
         public void UpdateVenue()
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient("http://localhost:51775/");
             var request = new RestRequest("Venue", Method.PUT);
             var response = client.Execute(request);
         }
 
         public void DeleteVenueAtId()
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient("http://localhost:51775/");
             var request = new RestRequest("Venue", Method.DELETE);
             var response = client.Execute(request);
         }
