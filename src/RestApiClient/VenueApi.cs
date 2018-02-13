@@ -6,12 +6,12 @@ using TicketSystemEngine;
 
 namespace TicketSystem.RestApiClient
 {
-    class VenueApi
+    public class VenueApi
     {
         // Venue Data Type is supposed to refer to a Model in a class library
         public List<Venue> VenueGet()
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient(/*must fix, but have your local host in*/"http://localhost:52176/");
             var request = new RestRequest("Venue", Method.GET);
             var response = client.Execute<List<Venue>>(request);
             return response.Data;
