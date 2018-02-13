@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using RestSharp;
 using TicketSystem.RestApiClient.Model;
+using TicketSystemEngine;
 
 namespace TicketSystem.RestApiClient
 {
