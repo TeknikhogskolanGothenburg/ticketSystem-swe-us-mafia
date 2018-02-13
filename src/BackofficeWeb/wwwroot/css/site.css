@@ -38,8 +38,9 @@ hr {
     bottom: 20px;
 }
 footer{
-    position: absolute;
     bottom: 0;
+    position: fixed;
+    text-align: center;
 }
 .col-md-4 {
     border-radius: 10px;
@@ -100,6 +101,7 @@ label {
     text-align: center;
     display: inline-block;
     overflow: auto;
+    float: right;
 }
 .col-md-customer {
     border-radius: 10px;

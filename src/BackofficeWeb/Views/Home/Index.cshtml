@@ -3,10 +3,14 @@
 }
 
 <h2>Venues List</h2>
+
+@*<button type="submit" class="btn btn-default" onclick="location.href='@Url.Action("VenueAdd", "Home")">Add Venue(s)</button>*@
+
+
 <div class="col-md-venues" column-count="3">
     <div class="col-md-test">
         <section>
-            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="loginform">
+            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
                 <div class="form-group">
                     <label>SlothVenueName1</label>
                     <div class="picture">
@@ -20,7 +24,7 @@
         </section>
     </div><div class="col-md-test">
     <section>
-        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="loginform">
+        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
             <div class="form-group">
                 <label>SlothVenueName2</label>
                 <div class="picture">
@@ -34,7 +38,7 @@
     </section>
 </div><div class="col-md-test">
     <section>
-        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="loginform">
+        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
             <div class="form-group">
                 <label>SlothVenueName3</label>
                 <div class="picture">
@@ -48,7 +52,7 @@
     </section>
 </div><div class="col-md-test">
     <section>
-        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="loginform">
+        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
             <div class="form-group">
                 <label>SlothVenueName4</label>
                 <div class="picture">
@@ -62,7 +66,7 @@
     </section>
 </div><div class="col-md-test">
     <section>
-        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="loginform">
+        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
             <div class="form-group">
                 <label>SlothVenueName5</label>
                 <div class="picture">
@@ -76,7 +80,7 @@
     </section>
 </div><div class="col-md-test">
     <section>
-        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="loginform">
+        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
             <div class="form-group">
                 <label>SlothVenueName6</label>
                 <div class="picture">
@@ -91,7 +95,7 @@
 </div>
     <div class="col-md-test">
         <section>
-            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="loginform">
+            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
                 <div class="form-group">
                     <label>SlothVenueName7</label>
                     <div class="picture">
@@ -105,7 +109,7 @@
         </section>
     </div><div class="col-md-test">
     <section>
-        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="loginform">
+        <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
             <div class="form-group">
                 <label>SlothVenueName8</label>
                 <div class="picture">

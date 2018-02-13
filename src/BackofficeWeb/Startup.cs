@@ -60,6 +60,9 @@ namespace BackofficeWeb
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                    name: "Venue",
+                    template: "{controller=Home}/{action=Venue}/{id?}");
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
