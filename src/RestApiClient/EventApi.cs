@@ -7,7 +7,7 @@ using TicketSystemEngine;
 
 namespace TicketSystem.RestApiClient
 {
-    class EventApi
+    public class EventApi
     {
         // TicketEvent refers to a model in class library
         public List<TicketEvent> GetAllEvents()

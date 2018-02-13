@@ -9,6 +9,7 @@ namespace TicketSystem.RestApiClient
     public class VenueApi
     {
         // Venue Data Type is supposed to refer to a Model in a class library
+        // localhost address must be equal to RestApi window address
         public List<Venue> VenueGet()
         {
             var client = new RestClient(/*must fix, but have your local host in*/"http://localhost:51775/");
