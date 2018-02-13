@@ -11,26 +11,25 @@ using TicketSystem.DatabaseRepository.Model;
 namespace RESTapi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Venue")]
-    // [Route("[controller]")]
+    [Route("[controller]")]
     public class VenueController : Controller
     {
         TicketDatabase database = new TicketDatabase();
-        // GET: api/Venue
+        // GET: /venue
         [HttpGet]
         public IEnumerable<Venue> GetAllVenues()
         {           
             return database.AllVenues();
         }
 
-        // GET: api/Venue/query
-        [HttpGet("{query}")]
+        // GET: venue/search/query
+        [HttpGet("search/{query}")]
         public IEnumerable<Venue> FindVenues (string query)
         {
             return database.VenuesFind(query);
         }
 
-        // GET Venue/5
+        // GET venue/5
         [HttpGet("{id}")]
         public Venue GetSpecificVenue(int id)
         {
@@ -38,14 +37,14 @@ namespace RESTapi.Controllers
         }
 
 
-        // POST: api/Venue
+        // POST: /venue
         [HttpPost]
         public void AddNewVenue([FromBody]Venue venue)
         {
             database.VenueAdd(venue.VenueName, venue.Address, venue.City, venue.Country);
         }
         
-        // PUT: api/Venue/5
+        // PUT: /venue/5
         // based on id of venue, change values
         [HttpPut("{id}")]
         public void UpdateVenue(int id, [FromBody]Venue venue)

@@ -42,8 +42,6 @@ namespace TicketSystem.DatabaseRepository
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-
-                connection.Open();
                 int id = -1;
                 int.TryParse(query, out id);
                 return connection.Query<Venue>("SELECT * FROM [Venues] WHERE VenueID LIKE @ID OR VenueName LIKE @Query OR Address LIKE @Query OR City LIKE @Query OR Country LIKE @Query", new { ID = id, Query = $"%{query}%" });
@@ -344,24 +342,28 @@ namespace TicketSystem.DatabaseRepository
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                return connection.Query<Ticket>("SELECT Tickets.*, Venues.VenueName, TicketEvents.EventStartDateTime, TicketEvents.TicketEventPrice " +
+                return connection.Query<Ticket>("SELECT Tickets.*, Venues.VenueName AS VenueName, TicketEventDates.EventStartDateTime AS EventStartDateTime, " +
+                    "TicketEvents.TicketEventPrice AS TicketEventPrice, TicketEvents.EventName AS EventName " +
                     "FROM Tickets " +
                     "INNER JOIN SeatsAtEventDate ON SeatsAtEventDate.SeatID = Tickets.SeatID " +
-                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDateID.TicketEventDateID " +
+                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID " +
                     "INNER JOIN TicketEvents ON TicketEvents.TicketEventID = TicketEventDates.TicketEventID " +
                     "INNER JOIN Venues on Venues.VenueID = TicketEventDates.VenueID " +
                     "WHERE Tickets.TicketID = @ID", new { ID = id }).FirstOrDefault();
             }
         }
 
-        /*public IEnumerable<Ticket> FindTickets(string query)
+        public IEnumerable<Ticket> FindTickets(string query)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                return connection.Query<Ticket>(TicketEventDateQuery("TicketTransac = @Query OR TicketTransactions.BuyerEmailAddress = @Query"), new { Query = query });
+                connection.Open();
+                int id = -1;
+                int.TryParse(query, out id);
+                return connection.Query<Ticket>(("TicketTransac = @Query OR TicketTransactions.BuyerEmailAddress = @Query"), new { Query = query });
             }
-        }*/
+        }
 
         /// <summary>
         /// Method used to search for a specific TicketEventDate 

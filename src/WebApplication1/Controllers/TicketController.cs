@@ -4,13 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TicketSystem.DatabaseRepository.Model;
+using TicketSystem.DatabaseRepository;
+using Newtonsoft.Json;
 
 namespace RESTapi.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Ticket")]
+    [Route("[controller]")]
     public class TicketController : Controller
     {
+        TicketDatabase db = new TicketDatabase();
         // GET: api/Ticket
         [HttpGet]
         public IEnumerable<string> Get()
@@ -19,10 +23,10 @@ namespace RESTapi.Controllers
         }
 
         // GET: api/Ticket/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}")]
+        public Ticket Get(int id)
         {
-            return "value";
+            return db.FindTicketByTicketID(id);
         }
         
         // POST: api/Ticket
