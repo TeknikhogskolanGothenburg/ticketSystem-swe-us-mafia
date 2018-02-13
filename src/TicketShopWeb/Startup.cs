@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using TicketShopWeb.Data;
 using TicketShopWeb.Models;
 using TicketShopWeb.Services;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace TicketShopWeb
 {
@@ -26,6 +28,25 @@ namespace TicketShopWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLocalization(opts => { opts.ResourcesPath = "Resourcees"; });
+            services.AddMvc()
+                .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix, opts => { opts.ResourcesPath = "Resources"; })
+                .AddDataAnnotationsLocalization();
+
+            services.Configure<RequestLocalizationOptions>(
+                options =>
+                {
+                    var supportedCultures = new List<CultureInfo>
+                    {
+                        new CultureInfo(""),
+                        new CultureInfo(""),
+                    };
+
+                    options.DefaultRequestCulture = new RequestCulture("");
+                    options.SupportedCultures = supportedCultures;
+                    options.SupportedUICultures = supportedCultures;
+                });
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
