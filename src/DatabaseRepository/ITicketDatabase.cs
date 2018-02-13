@@ -1,5 +1,6 @@
 ﻿using TicketSystem.DatabaseRepository.Model;
 using System.Collections.Generic;
+using TicketSystemEngine;
 
 namespace TicketSystem.DatabaseRepository
 {

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RestApiClient\RestApiClient.csproj" />
+    <ProjectReference Include="..\TicketSystemEngine\TicketSystemEngine.csproj" />
   </ItemGroup>
 
 </Project>

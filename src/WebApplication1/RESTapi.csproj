@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DatabaseRepository\DatabaseRepository.csproj" />
     <ProjectReference Include="..\PaymentProvider\PaymentProvider.csproj" />
+    <ProjectReference Include="..\TicketSystemEngine\TicketSystemEngine.csproj" />
   </ItemGroup>
 
 </Project>
