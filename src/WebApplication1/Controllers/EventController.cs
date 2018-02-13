@@ -9,7 +9,8 @@ using Newtonsoft.Json;
 
 namespace RestApplication.Controllers
 {
-    [Route("[controller]")]
+    //[Route("[controller]")]
+    [Route("api/Event")]
     public class EventController : Controller
     {
         TicketDatabase ticketDb = new TicketDatabase();
