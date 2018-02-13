@@ -13,7 +13,7 @@ namespace RestApplication.Controllers
     public class EventController : Controller
     {
         TicketDatabase ticketDb = new TicketDatabase();
-        // GET /events
+        // GET /event
         [HttpGet]
         public IEnumerable<TicketEvent> GetAllEvents()
         {

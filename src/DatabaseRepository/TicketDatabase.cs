@@ -11,8 +11,15 @@ namespace TicketSystem.DatabaseRepository
     public class TicketDatabase : ITicketDatabase
     {
         private const string CONNECTION_STRING = "Server=(local)\\SqlExpress; Database=TicketSystem; Trusted_connection=true";
-        //test comment
 
+        /// <summary>
+        /// Method used to add a new venue to the database table Venues.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="address"></param>
+        /// <param name="city"></param>
+        /// <param name="country"></param>
+        /// <returns>A Venue object.</returns>
         public Venue VenueAdd(string name, string address, string city, string country)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -44,6 +51,10 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        /// <summary>
+        /// Method that fetches all existing venues from the database table Venues.
+        /// </summary>
+        /// <returns>A list of Venues.</returns>
         public List<Venue> AllVenues()
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -147,7 +158,8 @@ namespace TicketSystem.DatabaseRepository
         }
 
         /// <summary>
-        /// Method that deletes a specific TicketEvent from the TicketEvents database table.
+        /// Method that deletes a TicketEvent from the TicketEvents database table
+        /// based on the id provided as parameter when calling method.
         /// </summary>
         /// <param name="id"></param>
         public void DeleteEvent(int id)
@@ -234,6 +246,14 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        /// <summary>
+        /// Method that defines a query to be re-used in similar 
+        /// individual methods that fetches data about TicketEventDates
+        /// from the database.
+        /// </summary>
+        /// <param name="wherePart"></param>
+        /// <returns>A specified query with varying where-statement
+        /// depending on the result wanted.</returns>
         private string TicketEventDateQuery(string wherePart)
         {
             return "SELECT TicketsToTransactions.TransactionID AS TransactionID, TicketsToTransactions.TicketID AS TicketID, " +
@@ -313,6 +333,35 @@ namespace TicketSystem.DatabaseRepository
                 }
             }
         }
+
+        /// <summary>
+        /// Method that gets data on a specific Ticket.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A Ticket object</returns>
+        public Ticket FindTicketByTicketID(int id)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<Ticket>("SELECT Tickets.*, Venues.VenueName, TicketEvents.EventStartDateTime, TicketEvents.TicketEventPrice " +
+                    "FROM Tickets " +
+                    "INNER JOIN SeatsAtEventDate ON SeatsAtEventDate.SeatID = Tickets.SeatID " +
+                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDateID.TicketEventDateID " +
+                    "INNER JOIN TicketEvents ON TicketEvents.TicketEventID = TicketEventDates.TicketEventID " +
+                    "INNER JOIN Venues on Venues.VenueID = TicketEventDates.VenueID " +
+                    "WHERE Tickets.TicketID = @ID", new { ID = id }).FirstOrDefault();
+            }
+        }
+
+        /*public IEnumerable<Ticket> FindTickets(string query)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<Ticket>(TicketEventDateQuery("TicketTransac = @Query OR TicketTransactions.BuyerEmailAddress = @Query"), new { Query = query });
+            }
+        }*/
 
         /// <summary>
         /// Method used to search for a specific TicketEventDate 
