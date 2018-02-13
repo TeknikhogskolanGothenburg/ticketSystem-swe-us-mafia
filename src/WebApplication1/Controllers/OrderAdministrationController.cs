@@ -12,7 +12,8 @@ using TicketSystem.DatabaseRepository.Model;
 namespace RESTapi.Controllers
 {
     [Produces("application/json")]
-    [Route("[controller]")]
+    //[Route("[controller]")]
+    [Route("api/OrderAdministration")]
     public class OrderAdministrationController : Controller
     {
         TicketDatabase ticketDB = new TicketDatabase();

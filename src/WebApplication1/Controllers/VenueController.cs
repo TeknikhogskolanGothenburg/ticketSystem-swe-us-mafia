@@ -11,8 +11,8 @@ using TicketSystem.DatabaseRepository.Model;
 namespace RESTapi.Controllers
 {
     [Produces("application/json")]
-    //[Route("api/Venue")]
-    [Route("[controller]")]
+    [Route("api/Venue")]
+    // [Route("[controller]")]
     public class VenueController : Controller
     {
         TicketDatabase database = new TicketDatabase();
