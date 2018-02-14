@@ -38,6 +38,18 @@ namespace BackofficeWeb.Controllers
             }
         }
         
+        public IActionResult VenueAdd()
+        {
+            Venue venue = new Venue();
+            if (User.Identity.IsAuthenticated)
+            {
+                return View(venue);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
         //[HttpPost]
         //public IActionResult Venue(VenueModel ven)
         //{
