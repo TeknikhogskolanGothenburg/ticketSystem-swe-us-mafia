@@ -9,8 +9,7 @@ using Newtonsoft.Json;
 
 namespace RestApplication.Controllers
 {
-    //[Route("[controller]")]
-    [Route("api/Event")]
+    [Route("[controller]")]
     public class EventController : Controller
     {
         TicketDatabase ticketDb = new TicketDatabase();
@@ -39,7 +38,7 @@ namespace RestApplication.Controllers
         [HttpPost]
         public void Post([FromBody]TicketEvent ticketEvent)
         {      
-            ticketDb.EventAdd(ticketEvent.EventName, ticketEvent.EventHtmlDescription);
+            ticketDb.EventAdd(ticketEvent.EventName, ticketEvent.EventHtmlDescription, ticketEvent.TicketEventPrice);
         }
 
         // PUT /events/5
@@ -53,7 +52,7 @@ namespace RestApplication.Controllers
             }
             else
             {
-                ticketDb.UpdateEvent(id, ticketEvent.EventName, ticketEvent.EventHtmlDescription);
+                ticketDb.UpdateEvent(id, ticketEvent.EventName, ticketEvent.EventHtmlDescription, ticketEvent.TicketEventPrice);
             }
         }
 
