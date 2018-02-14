@@ -54,7 +54,7 @@ namespace RESTapi.Controllers
             }
             else
             {
-                database.UpdateVenue(id, venue.VenueName, venue.Address, venue.City,venue.Country);
+                database.UpdateVenue(id, venue.VenueName, venue.Address, venue.City, venue.Country);
             }    
         }
         
