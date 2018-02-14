@@ -12,18 +12,17 @@ using TicketSystemEngine;
 namespace RESTapi.Controllers
 {
     [Produces("application/json")]
-    //[Route("[controller]")]
-    [Route("api/OrderAdministration")]
+    [Route("[controller]")]
     public class OrderController : Controller
     {
         TicketDatabase ticketDB = new TicketDatabase();
  
         // GET: api/Ticket
         [HttpGet]
-        /*public IEnumerable<Order> Get()
+        public IEnumerable<Order> GetAllCustomerOrders()
         {
-            
-        }*/
+            return ticketDB.FindAllCustomerOrder();
+        }
 
         // GET: Ticket/customername
         [HttpGet("search/{query}")]
@@ -55,6 +54,12 @@ namespace RESTapi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            if(ticketDB.FindCustomerOrderByID(id) == null)
+            {
+                Response.StatusCode = 404;
+                return;
+            }
+            ticketDB.DeleteCustomerOrder(id);
         }
     }
 }

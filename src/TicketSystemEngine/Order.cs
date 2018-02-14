@@ -14,7 +14,6 @@ namespace TicketSystemEngine
         public string PaymentStatus { get; set; }
         public string PaymentReferenceID { get; set; }
         public int TicketID { get; set; }
-        public int SeatID { get; set; }
         public string BuyerEmailAddress { get; set; }
         public DateTime EventStartDateTime { get; set; }
         public string EventName { get; set; }
