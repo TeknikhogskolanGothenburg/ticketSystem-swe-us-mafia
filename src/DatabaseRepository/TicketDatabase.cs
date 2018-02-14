@@ -21,14 +21,13 @@ namespace TicketSystem.DatabaseRepository
         /// <param name="city"></param>
         /// <param name="country"></param>
         /// <returns>A Venue object.</returns>
-        public void VenueAdd(string name, string address, string city, string country)
+        public Venue VenueAdd(string name, string address, string city, string country)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                var result = connection.Query("insert into Venues([VenueName],[Address],[City],[Country]) values(@Name,@Address, @City, @Country); SELECT SCOPE_IDENTITY();", new { Name = name, Address = address, City = city, Country = country });
-                var addedVenueQuery = result.First();
-                //return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueID=@Id", new { Id = addedVenueQuery }).First();
+                var result = connection.ExecuteScalar<int>("insert into Venues([VenueName],[Address],[City],[Country]) values(@Name,@Address, @City, @Country); SELECT SCOPE_IDENTITY();", new { Name = name, Address = address, City = city, Country = country });
+                return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueID=@Id", new { Id = result }).First();
             }
         }
 
@@ -270,7 +269,7 @@ namespace TicketSystem.DatabaseRepository
             return "SELECT TicketsToTransactions.TransactionID AS TransactionID, TicketsToTransactions.TicketID AS TicketID, " +
                     "TicketTransactions.BuyerFirstName AS BuyerFirstName, TicketTransactions.BuyerLastName AS BuyerLastName, TicketTransactions.BuyerAddress " +
                     "AS BuyerAddress, TicketTransactions.BuyerCity AS BuyerCity, TicketTransactions.PaymentReferenceID AS PaymentReference, TicketTransactions.PaymentStatus " +
-                    "AS PaymentStatus, TicketEventDates.EventStartDateTime AS EventStartDateTime, Tickets.SeatID AS SeatID, TicketEvents.EventName AS EventName, TicketTransactions.BuyerEmailAddress " +
+                    "AS PaymentStatus, TicketEventDates.EventStartDateTime AS EventStartDateTime, TicketEvents.EventName AS EventName, TicketTransactions.BuyerEmailAddress " +
                     "AS BuyerEmailAddress FROM [TicketsToTransactions] " +
                     "INNER JOIN TicketTransactions ON TicketsToTransactions.TransactionID = TicketTransactions.TransactionID " +
                     "INNER JOIN Tickets ON TicketsToTransactions.TicketID = Tickets.TicketID " +
@@ -282,17 +281,7 @@ namespace TicketSystem.DatabaseRepository
 
         private string FindCustomerOrdersQuery()
         {
-            return "SELECT TicketsToTransactions.TransactionID AS TransactionID, TicketsToTransactions.TicketID AS TicketID, " +
-                    "TicketTransactions.BuyerFirstName AS BuyerFirstName, TicketTransactions.BuyerLastName AS BuyerLastName, TicketTransactions.BuyerAddress " +
-                    "AS BuyerAddress, TicketTransactions.BuyerCity AS BuyerCity, TicketTransactions.PaymentReferenceID AS PaymentReference, TicketTransactions.PaymentStatus " +
-                    "AS PaymentStatus, TicketEventDates.EventStartDateTime AS EventStartDateTime, Tickets.SeatID AS SeatID, TicketEvents.EventName AS EventName, TicketTransactions.BuyerEmailAddress " +
-                    "AS BuyerEmailAddress FROM [TicketsToTransactions] " +
-                    "INNER JOIN TicketTransactions ON TicketsToTransactions.TransactionID = TicketTransactions.TransactionID " +
-                    "INNER JOIN Tickets ON TicketsToTransactions.TicketID = Tickets.TicketID " +
-                    "INNER JOIN SeatsAtEventDate ON Tickets.SeatID = SeatsAtEventDate.SeatID " +
-                    "INNER JOIN TicketEventDates ON SeatsAtEventDate.TicketEventDateID = TicketEventDates.TicketEventDateID " +
-                    "INNER JOIN TicketEvents ON TicketEventDates.TicketEventID = TicketEvents.TicketEventID " +
-                    "INNER JOIN Venues ON TicketEventDates.VenueID = Venues.VenueID WHERE ";
+            return FindCustomerOrdersQuery("1 = 1");
         }
         /// <summary>
         /// Method used to find an order from the database based on transactionID.
@@ -348,26 +337,81 @@ namespace TicketSystem.DatabaseRepository
         /// </summary>
         /// <param name="transactionID"></param>
         /// <param name="ticketID"></param>
-       /* public void DeleteCustomerOrder(int transactionID, int ticketID)
+       public void DeleteCustomerOrder(int transactionID)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                var seatIDThatIsChangedToFree = connection.Query("SELECT Tickets.SeatID From Tickets " +
+                /*
+                var seatIDsThatAreChangedToAvailable = connection.Query("SELECT Tickets.SeatID From Tickets " +
                     "INNER JOIN TicketsToTransactions ON TicketsToTransactions.TicketID = Tickets.TicketID " +
                     "INNER JOIN TicketTransactions ON TicketTransactions.TransactionID = TicketsToTransactions.TransactionID " +
                     "WHERE TicketTransactions.TransactionID =  @TransactionID", new { TransactionID = transactionID }).FirstOrDefault();
-                var orderTicketEventDateID = connection.Query("Select TicketEventDates.TicketEventDateID From TicketEventDates " +
+
+                var orderTicketID = connection.Query("SELECT Tickets.TicketID From Tickets " +
+                    "INNER JOIN TicketsToTransactions ON TicketsToTransactions.TicketID = Tickets.TicketID " +
+                    "INNER JOIN TicketTransactions ON TicketTransactions.TransactionID = TicketsToTransactions.TransactionID " +
+                    "WHERE TicketTransactions.TransactionID = @TransactionID", new { TransactionID = transactionID }).FirstOrDefault();
+
+                var orderTicketEventDateID = connection.ExecuteScalar<int>("Select TicketEventDates.TicketEventDateID From TicketEventDates " +
                     "INNER JOIN SeatsAtEventDate ON SeatsAtEventDate.TicketEventDateID = TicketEventDates.TicketEventDateID " +
                     "INNER JOIN Tickets ON Tickets.SeatID = SeatsAtEventDate.SeatID " +
-                    "INNER JOIN TicketsToTransactions ON TicketsToTransactions.TicketID = Tickets.TicketID WHERE TicketID = @TicketID", new { TicketID = ticketID }).FirstOrDefault();
-                connection.Query<TicketsToTransaction>("DELETE FROM TicketsToTransaction WHERE TransactionID = @ID", new { ID = transactionID }).FirstOrDefault();
-                connection.Query<Order>("DELETE FROM TicketTransactions WHERE TransactionID = @ID ", new { ID = transactionID }).FirstOrDefault();
-                connection.Query<Ticket>("DELETE FROM Tickets WHERE TicketID = @TicketID ", new { TicketID = ticketID }).FirstOrDefault();
-                connection.Query("INSERT INTO SeatsAtEventDate([SeatID],[TicketEventDateID]) VALUES(@SeatID, @TicketEventDateID); SELECT SCOPE_IDENTITY();", new { SeatID = seatIDThatIsChangedToFree, TicketEventDateID = orderTicketEventDateID  });
+                    "INNER JOIN TicketsToTransactions ON TicketsToTransactions.TicketID = Tickets.TicketID WHERE TicketID = @TicketID", new { TicketID = orderTicketID });
+                */
+                var tickets = connection.Query<int>("SELECT TicketID FROM TicketsToTransaction WHERE TransactionID = @ID", new { ID = transactionID });
+                connection.Execute("DELETE FROM TicketsToTransaction WHERE TransactionID = @ID", new { ID = transactionID });
+                connection.Execute("DELETE FROM TicketTransactions WHERE TransactionID = @ID ", new { ID = transactionID });
+                foreach (var ticket in tickets)
+                {
+                    connection.Execute("DELETE FROM Tickets WHERE TicketID = @TicketID", new { TicketID = ticket });
+                }
             }
-        }*/
+        }
 
+
+        // TODO: dokumentera att returvärdet är ett transaktions-ID!
+        // TODO: flera tickets per order i mån av tid?
+        /// <summary>
+        /// Method that returns a transactionID that represents a customer order.
+        /// </summary>
+        /// <param name="buyerFirstName"></param>
+        /// <param name="buyerLastName"></param>
+        /// <param name="buyerAddress"></param>
+        /// <param name="buyerCity"></param>
+        /// <param name="paymentStatus"></param>
+        /// <param name="paymentReferenceID"></param>
+        /// <param name="ticketID"></param>
+        /// <param name="buyerEmailAddress"></param>
+        /// <returns>A transactionID that represents a customerOrder</returns>
+        public int AddCustomerOrder(string buyerFirstName, string buyerLastName, string buyerAddress, string buyerCity, string paymentStatus, string paymentReferenceID,
+                                      int ticketID, string buyerEmailAddress)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                string query = "INSERT INTO TicketTransactions " +
+                    "(BuyerLastName, BuyerFirstName, BuyerAddress, BuyerCity, BuyerEmailAddress, PaymentStatus, PaymentReferenceId) " +
+                    "VALUES (@ln, @fn, @addr, @city, @email, @status, @refid); SELECT SCOPE_IDENTITY();";
+                var transactionParams = new
+                {
+                    fn = buyerFirstName,
+                    ln = buyerLastName,
+                    addr = buyerAddress,
+                    city = buyerCity,
+                    email = buyerEmailAddress,
+                    status = paymentStatus,
+                    refid = paymentReferenceID
+                };
+                int transactionId = connection.ExecuteScalar<int>(query, transactionParams);
+                var ticketParams = new
+                {
+                    ticket = ticketID,
+                    transaction = transactionId
+                };
+                connection.Execute("INSERT INTO TicketsToTransactions (TicketID, TransactionID) VALUES (@ticket, @transaction);", ticketParams);
+                return transactionId;
+            }
+        }
         /// <summary>
         /// Method used to add a new TicketEventDate and numberOfSeats for the particular Event.
         /// </summary>
@@ -421,10 +465,13 @@ namespace TicketSystem.DatabaseRepository
         }
 
         /// <summary>
-        /// Method that gets data on a specific Ticket.
+        /// Method that gets data on a specific Ticket: TicketID, SeatID from table
+        /// Tickets. To get other relevant information we join with Venues, TicketEventDates, 
+        /// TicketEvents tables. Represents a ticket that a customer should be able to view
+        /// in her shopping basket when added.
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>A Ticket object</returns>
+        /// <returns>A Ticket object.</returns>
         public Ticket FindTicketByTicketID(int id)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -441,6 +488,30 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        /*
+         * var result = connection.Query("insert into Venues([VenueName],[Address],[City],[Country]) values(@Name,@Address, @City, @Country); SELECT SCOPE_IDENTITY();", new { Name = name, Address = address, City = city, Country = country });
+                var addedVenueQuery = result.First();
+                return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueID=@Id", new { Id = addedVenueQuery }).First();
+         */
+        /// <summary>
+        /// Method that is just used to create a Ticket in the database table Tickets.
+        /// </summary>
+        /// <param name="seatID"></param>
+        /// <returns></returns>
+        public Ticket CreateTicket(int seatID)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+
+                var ticketID = connection.ExecuteScalar<int>("INSERT INTO Tickets VALUES (@SeatID); SElECT SCOPE_IDENTITY();", new { SeatID = seatID });
+
+                return FindTicketByTicketID(ticketID);
+            }
+
+            // insert into tickets (SeatID) values (seatID)
+            //throw new Exception("IMPLEMENT ME PLZ");
+        }
         /*public IEnumerable<Ticket> FindTickets(string query)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))

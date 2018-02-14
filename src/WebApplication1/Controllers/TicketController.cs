@@ -22,26 +22,27 @@ namespace RESTapi.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/Ticket/5
+        // GET: /ticket/5
         [HttpGet("{id}")]
         public Ticket Get(int id)
         {
             return db.FindTicketByTicketID(id);
         }
         
-        // POST: api/Ticket
-        [HttpPost]
-        public void Post([FromBody]string value)
+        // POST: /ticket
+        [HttpPost("{id}")]
+        public void CreateTicket(int id)
         {
+            db.CreateTicket(id);
         }
         
-        // PUT: api/Ticket/5
+        // PUT: /ticket/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
         
-        // DELETE: api/ApiWithActions/5
+        // DELETE: ticket/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
