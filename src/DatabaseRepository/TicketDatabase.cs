@@ -21,14 +21,14 @@ namespace TicketSystem.DatabaseRepository
         /// <param name="city"></param>
         /// <param name="country"></param>
         /// <returns>A Venue object.</returns>
-        public Venue VenueAdd(string name, string address, string city, string country)
+        public void VenueAdd(string name, string address, string city, string country)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
                 var result = connection.Query("insert into Venues([VenueName],[Address],[City],[Country]) values(@Name,@Address, @City, @Country); SELECT SCOPE_IDENTITY();", new { Name = name, Address = address, City = city, Country = country });
                 var addedVenueQuery = result.First();
-                return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueID=@Id", new { Id = addedVenueQuery }).First();
+                //return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueID=@Id", new { Id = addedVenueQuery }).First();
             }
         }
 

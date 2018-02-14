@@ -27,20 +27,26 @@
                     <input class="form-control" id="CountryTxt"/>
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-default" id="AddVenueBtn">Add Venue</button>
+                    <button type="button" class="AddVenueBtn" id="AddVenueBtn" name="AddVenueBtn">Add Venue</button>
                 </div>
             </form>
         </section>
     </div>
 </div>
 
-@section scripts {
+@section Scripts {
     <script>
-        $("#AddVenueBtn").click(function () {
-            $.ajax({
+        $("#ConfirmBtn").on('click', function (){
+            $.ajax({               
                 type: "POST",
-                url: "localhost:51775/venue/",
-                data: { VenueName = Model.VenueName, Address = Model.Address, City = Model.City, Country = Model.Country }
+                url: "http://localhost:51775/venue/",
+                data: {
+                    VenueName : $("#NameTxt").val(),
+                    Address : $("#AddressTxt").val(),
+                    City : $("#CityTxt").val(),
+                    Country : $("#CountryTxt").val()
+                },
+                contentType: "application/json"
             });
         });
     </script>
