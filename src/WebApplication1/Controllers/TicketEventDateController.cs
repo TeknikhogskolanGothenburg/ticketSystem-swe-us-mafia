@@ -35,7 +35,14 @@ namespace RESTapi.Controllers
         [HttpPost]
         public void AddNewTicketEventDate([FromBody]TicketEventDate ticketEventDate)
         {
-            ticketDb.AddTicketEventDate(ticketEventDate.TicketEventID, ticketEventDate.VenueId, ticketEventDate.EventStartDateTime, ticketEventDate.NumberOfSeats);
+            try
+            {
+                ticketDb.AddTicketEventDate(ticketEventDate.TicketEventID, ticketEventDate.VenueId, ticketEventDate.EventStartDateTime, ticketEventDate.NumberOfSeats);
+            }
+            catch(ArgumentException e)
+            {
+                Response.StatusCode = 403;
+            }
         }
 
         // PUT: /ticketeventdate/5

@@ -11,6 +11,8 @@ namespace TicketSystem.DatabaseRepository
 {
     public class TicketDatabase : ITicketDatabase
     {
+        private readonly DateTime SQL_MIN_DATETIME = DateTime.Parse("1753-01-01 12:00:00");
+        private readonly DateTime SQL_MAX_DATETIME = DateTime.Parse("9999-12-31 11:59:59");
         private const string CONNECTION_STRING = "Server=(local)\\SqlExpress; Database=TicketSystem; Trusted_connection=true";
 
         /// <summary>
@@ -111,21 +113,35 @@ namespace TicketSystem.DatabaseRepository
         }
 
         /// <summary>
+        /// Method used to get a venue from the database based on a specific ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>A specific venue.</returns>
+        public Venue FindVenueByID(int id)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<Venue>("SELECT * FROM [Venues] WHERE VenueID = @ID", new { ID = id }).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
         /// Method that creates a new TicketEvent in the database table TicketEvents.
         /// ID is automatically generated, thus not given as parameter in method.
         /// </summary>
         /// <param name="eventName"></param>
         /// <param name="htmlDescription"></param>
         /// <returns>A TicketEvent object.</returns>
-        public TicketEvent EventAdd(string eventName, string htmlDescription)
+        public TicketEvent EventAdd(string eventName, string htmlDescription, int ticketEventprice)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                var result = connection.Query<int>("insert into TicketEvents([EventName],[EventHtmlDescription]) values(@EventName, @EventHtmlDescription); SELECT SCOPE_IDENTITY();", new { EventName = eventName, EventHtmlDescription = htmlDescription });
+                var result = connection.Query<int>("insert into TicketEvents([EventName],[EventHtmlDescription],[TicketEventPrice]) values(@EventName, @EventHtmlDescription, @TicketEventPrice); SELECT SCOPE_IDENTITY();", new { EventName = eventName, EventHtmlDescription = htmlDescription, TicketEventPrice = ticketEventprice });
                 var createdEventQuery = result.First();
                 //var createdEventQuery = connection.Query<int>("SELECT IDENT_CURRENT ('TicketEvents') AS Current_Identity").First();
-                return connection.Query<TicketEvent>("SELECT * FROM TicketEvents WHERE EventID=@Id", new { Id = createdEventQuery }).First();
+                return connection.Query<TicketEvent>("SELECT * FROM TicketEvents WHERE TicketEventID=@Id", new { Id = createdEventQuery }).First();
             }
         }
 
@@ -138,7 +154,7 @@ namespace TicketSystem.DatabaseRepository
         /// <param name="id"></param>
         /// <param name="eventName"></param>
         /// <param name="htmlDescription"></param>
-        public void UpdateEvent(int id, string eventName, string htmlDescription)
+        public void UpdateEvent(int id, string eventName, string htmlDescription, int ticketeventPrice)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
@@ -151,6 +167,10 @@ namespace TicketSystem.DatabaseRepository
                 if (htmlDescription != null)
                 {
                     connection.Query("UPDATE TicketEvents SET [EventHtmlDescription] = @EventHtmlDescription WHERE [TicketEventID] = @TicketEventID; ", new { EventHtmlDescription = htmlDescription, TicketEventID = id });
+                }
+                if (ticketeventPrice != 0 && ticketeventPrice >= 150)
+                {
+                    connection.Query("UPDATE TicketEvents SET [TicketEventPrice] = @TicketEventPrice WHERE [TicketEventID] = @TicketEventID; ", new { TicketEventPrice = ticketeventPrice, TicketEventID = id });
                 }
             }
         }
@@ -216,20 +236,6 @@ namespace TicketSystem.DatabaseRepository
         }
 
         /// <summary>
-        /// Method used to get a venue from the database based on a specific ID.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>A specific venue.</returns>
-        public Venue FindVenueByID(int id)
-        {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                connection.Open();
-                return connection.Query<Venue>("SELECT * FROM [Venues] WHERE VenueID = @ID", new { ID = id }).FirstOrDefault();
-            }
-        }
-
-        /// <summary>
         /// Method that fetches a list of Orders belonging to a specific customer, matches the query against table
         /// TicketTransactions, orders can be found either through buyer name or buyer email address.
         /// </summary>
@@ -240,7 +246,9 @@ namespace TicketSystem.DatabaseRepository
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                return connection.Query<Order>(FindCustomerOrdersQuery("TicketTransactions.BuyerFirstName = @Query OR TicketTransactions.BuyerLastName OR TicketTransactions.BuyerEmailAddress = @Query"), new { Query = query });
+                int id = -1;
+                int.TryParse(query, out id);
+                return connection.Query<Order>(FindCustomerOrdersQuery("TicketTransactions.BuyerFirstName LIKE @Query OR TicketTransactions.BuyerLastName Like @Query OR TicketTransactions.BuyerEmailAddress LIKE @Query"), new { ID = id, Query = $"%{query}%" });
             }
         }
 
@@ -321,6 +329,10 @@ namespace TicketSystem.DatabaseRepository
                 {
                     connection.Query("UPDATE TicketTransactions SET [BuyerLastName] = @BuyerLastName WHERE [TransactionID] = @TransactionID; ", new { BuyerLastName = buyerLastName, TransactionID = transactionID });
                 }
+                if (buyerAddress != null)
+                {
+                    connection.Query("UPDATE TicketTransactions SET[BuyerAddress] = @BuyerAddress WHERE[TransactionID] = @TransactionID; ", new { BuyerAddress = buyerAddress, TransactionID = transactionID });
+                }
                 if (buyerFirstName != null)
                 {
                     connection.Query("UPDATE TicketTransactions SET [BuyerFirstName] = @BuyerFirstName WHERE [TransactionID] = @TransactionID; ", new { BuyerFirstName = buyerFirstName, TransactionID = transactionID });
@@ -334,10 +346,12 @@ namespace TicketSystem.DatabaseRepository
 
         /// <summary>
         /// Method that Deletes a customer Order 
+        /// It deletes a row from table TicketsToTransactions
+        /// and a row from table TicketTransactions.
         /// </summary>
         /// <param name="transactionID"></param>
         /// <param name="ticketID"></param>
-       public void DeleteCustomerOrder(int transactionID)
+        public void DeleteCustomerOrder(int transactionID)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
@@ -358,8 +372,8 @@ namespace TicketSystem.DatabaseRepository
                     "INNER JOIN Tickets ON Tickets.SeatID = SeatsAtEventDate.SeatID " +
                     "INNER JOIN TicketsToTransactions ON TicketsToTransactions.TicketID = Tickets.TicketID WHERE TicketID = @TicketID", new { TicketID = orderTicketID });
                 */
-                var tickets = connection.Query<int>("SELECT TicketID FROM TicketsToTransaction WHERE TransactionID = @ID", new { ID = transactionID });
-                connection.Execute("DELETE FROM TicketsToTransaction WHERE TransactionID = @ID", new { ID = transactionID });
+                var tickets = connection.Query<int>("SELECT TicketsToTransactions.TicketID FROM TicketsToTransactions WHERE TicketsToTransactions.TransactionID = @ID", new { ID = transactionID });
+                connection.Execute("DELETE FROM TicketsToTransactions WHERE TicketsToTransactions.TransactionID = @ID", new { ID = transactionID });
                 connection.Execute("DELETE FROM TicketTransactions WHERE TransactionID = @ID ", new { ID = transactionID });
                 foreach (var ticket in tickets)
                 {
@@ -413,7 +427,7 @@ namespace TicketSystem.DatabaseRepository
             }
         }
         /// <summary>
-        /// Method used to add a new TicketEventDate and numberOfSeats for the particular Event.
+        /// Method used to add a new TicketEventDate and seats for that ticketeventdate.
         /// </summary>
         /// <param name="ticketEventID"></param>
         /// <param name="venueID"></param>
@@ -422,10 +436,16 @@ namespace TicketSystem.DatabaseRepository
         /// <returns>A new TicketEventDate object.</returns>
         public TicketEventDate AddTicketEventDate(int ticketEventID, int venueID, DateTime eventDateTime, int numberOfSeats)
         {
+            
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
+                if (!DateTimeIsValid(eventDateTime))
+                {
+                    throw new ArgumentException("Datetime out of range.");
+                }
                 var createdEventID = connection.ExecuteScalar<int>("INSERT INTO TicketEventDates([TicketEventID],[VenueID],[EventStartDateTime]) VALUES(@TicketEventID, @VenueID, @EventStartDateTime); SELECT SCOPE_IDENTITY();", new { TicketEventID = ticketEventID, VenueID = venueID, EventStartDateTime = eventDateTime });
+
                 var seatQuery = "INSERT INTO SeatsAtEventDate([TicketEventDateID]) VALUES(@ID)";
                 var parameters = new { ID = createdEventID };
                 for (int i = 0; i < numberOfSeats; i++)
@@ -457,11 +477,21 @@ namespace TicketSystem.DatabaseRepository
                 {
                     connection.Query("UPDATE TicketEventDates SET [VenueID] = @VenueID WHERE [TicketEventDateID] = @TicketEventDateID; ", new { VenueID = venueID, TicketEventDateID = ticketEventDateID });
                 }
-                if (eventDateTime != DateTime.MinValue)
+                if (DateTimeIsValid(eventDateTime))
                 {
                     connection.Query("UPDATE TicketEventDates SET [EventStartDateTime] = @EventStartDateTime WHERE [TicketEventDateID] = @TicketEventDateID; ", new { EventStartDateTime = eventDateTime, TicketEventDateID = ticketEventDateID });
                 }
             }
+        }
+
+        /// <summary>
+        /// Method that checks that defined datetimes is in the intervall of sql min datetime and sql max datetime.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns>true if the date is ok, otherwise false.</returns>
+        private bool DateTimeIsValid(DateTime t)
+        {
+            return t != null && t >= SQL_MIN_DATETIME && t <= SQL_MAX_DATETIME;
         }
 
         /// <summary>
@@ -488,16 +518,11 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
-        /*
-         * var result = connection.Query("insert into Venues([VenueName],[Address],[City],[Country]) values(@Name,@Address, @City, @Country); SELECT SCOPE_IDENTITY();", new { Name = name, Address = address, City = city, Country = country });
-                var addedVenueQuery = result.First();
-                return connection.Query<Venue>("SELECT * FROM Venues WHERE VenueID=@Id", new { Id = addedVenueQuery }).First();
-         */
         /// <summary>
         /// Method that is just used to create a Ticket in the database table Tickets.
         /// </summary>
         /// <param name="seatID"></param>
-        /// <returns></returns>
+        /// <returns>A ticket from the database with a ticketid and a seatid.</returns>
         public Ticket CreateTicket(int seatID)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -508,9 +533,22 @@ namespace TicketSystem.DatabaseRepository
 
                 return FindTicketByTicketID(ticketID);
             }
+        }
 
-            // insert into tickets (SeatID) values (seatID)
-            //throw new Exception("IMPLEMENT ME PLZ");
+        /// <summary>
+        /// Method used to delete a ticket from Ticket table in database.
+        /// Ticket can only be deleted once the transaction connected to 
+        /// the ticket has been deleted as well as the ticket to transaction
+        /// row in tickestotransactions table.
+        /// </summary>
+        /// <param name="ticketID"></param>
+        public void DeleteTicket(int ticketID)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                connection.Query("DELETE FROM [Tickets] WHERE TicketID = @ID", new { ID = ticketID });
+            }
         }
         /*public IEnumerable<Ticket> FindTickets(string query)
         {

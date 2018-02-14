@@ -46,6 +46,14 @@ namespace RESTapi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            if (db.FindTicketByTicketID(id) == null)
+            {
+                Response.StatusCode = 404;
+            }
+            else
+            {
+                db.DeleteTicket(id);
+            }
         }
     }
 }
