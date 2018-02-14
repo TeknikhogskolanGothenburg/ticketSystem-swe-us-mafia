@@ -40,7 +40,7 @@ namespace TicketShopWeb
                     var supportedCultures = new List<CultureInfo>
                     {
                         new CultureInfo("en"),
-                        new CultureInfo("sv-SE"),
+                        new CultureInfo("sv"),
                     };
 
                     options.DefaultRequestCulture = new RequestCulture("en");
