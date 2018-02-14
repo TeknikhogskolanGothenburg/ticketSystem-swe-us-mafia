@@ -78,8 +78,16 @@
                 url: "http://localhost:51775/venue/",
                 dataType: 'application/json',
                 contentType: dataType,
-                data: JSON.stringify(datalist)
+                data: JSON.stringify(datalist),
+                success: alertFunction()
             });
+
+            document.getElementById("addvenue").reset();
         };
+</script>
+<script>
+        function alertFunction() {
+            alert("Venue Created");
+        }
 </script>
 }
