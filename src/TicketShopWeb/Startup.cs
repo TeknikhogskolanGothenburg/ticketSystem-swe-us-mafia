@@ -39,11 +39,11 @@ namespace TicketShopWeb
                 {
                     var supportedCultures = new List<CultureInfo>
                     {
-                        new CultureInfo("en-US"),
-                        new CultureInfo("sv-SE"),
+                        new CultureInfo("en"),
+                        new CultureInfo("sv"),
                     };
 
-                    options.DefaultRequestCulture = new RequestCulture("en-US");
+                    options.DefaultRequestCulture = new RequestCulture("en");
                     options.SupportedCultures = supportedCultures;
                     options.SupportedUICultures = supportedCultures;
                 });

@@ -6,7 +6,7 @@ using TicketSystemEngine;
 
 namespace TicketSystem.RestApiClient
 {
-    class TicketEventDateApi
+    public class TicketEventDateApi
     {
         public TicketEventDate GetTicketEventDates(string query)
         {
@@ -36,6 +36,27 @@ namespace TicketSystem.RestApiClient
             }
 
             return response.Data;
+        }
+
+        public void AddNewTicketEventDate()
+        {
+            var client = new RestClient("http://localhost:51775/");
+            var request = new RestRequest("TicketEventDate", Method.POST);
+            var response = client.Execute(request);
+        }
+
+        public void UpdateTicketEventDate()
+        {
+            var client = new RestClient("http://localhost:51775/");
+            var request = new RestRequest("TicketEventDate", Method.PUT);
+            var response = client.Execute(request);
+        }
+
+        public void DeleteTicketEventDate()
+        {
+            var client = new RestClient("http://localhost:51775/");
+            var request = new RestRequest("TicketEventDate", Method.DELETE);
+            var response = client.Execute(request);
         }
 
     }
