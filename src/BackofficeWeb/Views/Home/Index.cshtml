@@ -5,12 +5,14 @@
 }
 <h2>Venues List</h2>
 
-<button type="submit" class="btn btn-default" onclick="location.href='@Url.Action("VenueAdd", "Home")">Add Venue(s)</button>
+<button type="button" class="btn btn-default" onclick="location.href='/Home/VenueAdd'">Add Venue(s)</button>
 
 
 <div class="col-md-venues" column-count="3">
-    @foreach (Venue venue in Model)
-    {
+    @if (Model != null)
+     {
+        foreach (Venue venue in Model)
+        {
         <div class="col-md-test">
             <section>
                 <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
@@ -27,7 +29,8 @@
             </section>
         </div>
 
-    }
+        }
+     }
 </div>
 
 
