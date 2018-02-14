@@ -9,8 +9,10 @@
 
 
 <div class="col-md-venues" column-count="3">
-    @foreach (Venue venue in Model)
-    {
+    @if (Model != null)
+     {
+        foreach (Venue venue in Model)
+        {
         <div class="col-md-test">
             <section>
                 <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
@@ -27,7 +29,8 @@
             </section>
         </div>
 
-    }
+        }
+     }
 </div>
 
 
