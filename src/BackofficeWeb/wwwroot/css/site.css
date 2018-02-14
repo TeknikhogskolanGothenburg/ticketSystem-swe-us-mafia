@@ -148,6 +148,23 @@ label {
     float: left;
     padding: 0px;
 }
+.AddVenueBtn {
+    border-radius: 27px;
+    color: #fff;
+    line-height: 1.2;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    height: 35px;
+    width: 200px;
+    background-color: #333333;
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+    padding-bottom: 25px;
+    text-align: center;
+    justify-content: center;
+}
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
 }

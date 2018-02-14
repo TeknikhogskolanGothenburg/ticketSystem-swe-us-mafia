@@ -43,10 +43,6 @@ namespace BackofficeWeb.Controllers
             Venue venue = new Venue();
             if (User.Identity.IsAuthenticated)
             {
-                venue.VenueName = Request.Form["NameTxt"];
-                venue.Address = Request.Form["AddressTxt"];
-                venue.City = Request.Form["CityTxt"];
-                venue.Country = Request.Form["CountryTxt"];
                 return View(venue);
             }
             else
