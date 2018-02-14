@@ -16,7 +16,7 @@ namespace TicketSystemEngine
         public int TicketID { get; set; }
         public int SeatID { get; set; }
         public string BuyerEmailAddress { get; set; }
-        public DateTime EventDateTime { get; set; }
+        public DateTime EventStartDateTime { get; set; }
         public string EventName { get; set; }
 
     }
