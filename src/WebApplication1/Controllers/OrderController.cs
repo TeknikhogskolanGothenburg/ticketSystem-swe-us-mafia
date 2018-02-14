@@ -14,16 +14,16 @@ namespace RESTapi.Controllers
     [Produces("application/json")]
     //[Route("[controller]")]
     [Route("api/OrderAdministration")]
-    public class OrderAdministrationController : Controller
+    public class OrderController : Controller
     {
         TicketDatabase ticketDB = new TicketDatabase();
  
         // GET: api/Ticket
         [HttpGet]
-        public IEnumerable<string> Get()
+        /*public IEnumerable<Order> Get()
         {
-            return new string[] { "value1", "value2" };
-        }
+            
+        }*/
 
         // GET: Ticket/customername
         [HttpGet("search/{query}")]
@@ -32,7 +32,7 @@ namespace RESTapi.Controllers
             return ticketDB.FindCustomerOrders(query);
         }
 
-        // GET: Ticket/5
+        // GET: orderadministration/5
         [HttpGet("{id}")]
         public Order GetSpecificOrder(int id)
         {

@@ -11,7 +11,7 @@ namespace TicketSystem.RestApiClient
         // Venue Data Type is supposed to refer to a Model in a class library
         public List<Venue> VenueGet()
         {
-            var client = new RestClient(/*must fix, but have your local host in*/"http://localhost:52176/");
+            var client = new RestClient(/*must fix, but have your local host in*/"http://localhost:51775/");
             var request = new RestRequest("Venue", Method.GET);
             var response = client.Execute<List<Venue>>(request);
             return response.Data;
