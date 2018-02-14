@@ -8,26 +8,26 @@
 <div class="row">
     <div class="col-md-4">
         <section>
-            <form id="addvenue">
-                <div class="form-group">
+            <form id="addvenue" method="post">
+                <div class="form-group" method="post">
                     <label>Name</label>
-                    <input class="form-control" id="NameTxt" />
+                    <input class="form-control" id="NameTxt" required/>
                 </div>
-                <div class="form-group">
+                <div class="form-group" method="post">
                     <label>Address</label>
-                    <input class="form-control" id="AddressTxt"/>
+                    <input class="form-control" id="AddressTxt" required/>
                 </div>
                 
-                <div class="form-group">
+                <div class="form-group" method="post">
                     <label>City</label>
-                    <input class="form-control" id="CityTxt"/>
+                    <input class="form-control" id="CityTxt" required/>
                 </div>
-                <div class="form-group">
+                <div class="form-group" method="post">
                     <label>Country</label>
-                    <input class="form-control" id="CountryTxt"/>
+                    <input class="form-control" id="CountryTxt" required/>
                 </div>
-                <div class="form-group">
-                    <button type="button" class="AddVenueBtn" id="AddVenueBtn" name="AddVenueBtn">Add Venue</button>
+                <div class="form-group" method="post">
+                    <button type="button" class="AddVenueBtn" id="AddVenueBtn" name="AddVenueBtn" onclick="myFunction()">Add Venue</button>
                 </div>
             </form>
         </section>
@@ -35,19 +35,51 @@
 </div>
 
 @section Scripts {
-    <script>
-        $("#ConfirmBtn").on('click', function (){
-            $.ajax({               
+    @*<script>
+        function myFunction() {
+            var name = $("#NameTxt").val();
+            var address = $("#AddressTxt").val();
+            var city = $("#CityTxt").val();
+            var country = $("#CountryTxt").val();
+            // Returns successful data submission message when the entered information is stored in database.
+            var dataString = JSON.stringify('VenueName=' + name + '&Address=' + address + '&City=' + city + '&Country=' + country);
+            if (name === '' || address === '' || city === '' || country === '') {
+                alert("Please Fill All Fields");
+            } else {
+                // AJAX code to submit form.
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:51775/venue",
+                    data: dataString,
+                    contentType: 'application/json',
+                    cache: false,
+                    success: function (html) {
+                        alert(html);
+                    }
+                });
+            }
+            return false;
+        }
+    </script>*@
+               
+<script>
+        function myFunction() {
+            var dataType = 'application/json'
+            
+            var datalist = {
+                VenueName: $("#NameTxt").val(),
+                Address: $("#AddressTxt").val(),
+                City: $("#CityTxt").val(),
+                Country: $("#CountryTxt").val()
+            }
+
+            $.ajax({
                 type: "POST",
                 url: "http://localhost:51775/venue/",
-                data: {
-                    VenueName : $("#NameTxt").val(),
-                    Address : $("#AddressTxt").val(),
-                    City : $("#CityTxt").val(),
-                    Country : $("#CountryTxt").val()
-                },
-                contentType: "application/json"
+                dataType: 'application/json',
+                contentType: dataType,
+                data: JSON.stringify(datalist)
             });
-        });
-    </script>
+        };
+</script>
 }
