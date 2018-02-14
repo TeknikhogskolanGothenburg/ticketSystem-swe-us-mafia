@@ -7,12 +7,12 @@ using TicketSystemEngine;
 
 namespace TicketSystem.RestApiClient
 {
-    class EventApi
+    public class EventApi
     {
         // TicketEvent refers to a model in class library
         public List<TicketEvent> GetAllEvents()
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient("http://localhost:51775/");
             var request = new RestRequest("Event", Method.GET);
             var response = client.Execute<List<TicketEvent>>(request);
             return response.Data;
@@ -20,7 +20,7 @@ namespace TicketSystem.RestApiClient
 
         public TicketEvent GetEventByQuery(string query)
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient("http://localhost:51775/");
             var request = new RestRequest("Venue/{query}", Method.GET);
             request.AddUrlSegment("query", query);
             var response = client.Execute<TicketEvent>(request);
@@ -35,7 +35,7 @@ namespace TicketSystem.RestApiClient
 
         public TicketEvent GetEventById(int EventId)
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient("http://localhost:51775/");
             var request = new RestRequest("Event/{id}", Method.GET);
             request.AddUrlSegment("id", EventId);
             var response = client.Execute<TicketEvent>(request);
@@ -50,21 +50,21 @@ namespace TicketSystem.RestApiClient
 
         public void AddNewEvent()
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient("http://localhost:51775/");
             var request = new RestRequest("Event", Method.POST);
             var response = client.Execute(request);
         }
 
         public void UpdateEvent()
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient("http://localhost:51775/");
             var request = new RestRequest("Venue", Method.PUT);
             var response = client.Execute(request);
         }
 
         public void DeleteEvent()
         {
-            var client = new RestClient("http://localhost:18001/");
+            var client = new RestClient("http://localhost:51775/");
             var request = new RestRequest("Event", Method.DELETE);
             var response = client.Execute(request);
         }
