@@ -16,8 +16,6 @@ namespace RESTapi.Controllers
     public class OrderController : Controller
     {
         TicketDatabase ticketDB = new TicketDatabase();
-        Payment payment;
-        PaymentProvider paymentProvider;
 
         // GET: /order
         [HttpGet]
@@ -41,14 +39,26 @@ namespace RESTapi.Controllers
         }
 
         // POST: /order
+        /// <summary>
+        /// Attempts to receive payment for an order, and creates the order if successful.
+        /// Currently, all orders are discounted to 150 SEK. Yay!
+        /// </summary>
+        /// <param name="order">The order to be placed.</param>
+        /// <returns>The transaction identifier of the newly created order if payment successful. Otherwise, the PaymentStatus received upon payment failure, negated.</returns>
         [HttpPost]
         public int CreateOrder([FromBody] Order order)
         {
             PaymentProvider paymentProvider = new PaymentProvider();
-            var payment = paymentProvider.Pay(0, "SEK", order.TransactionID.ToString());
-            var paymentStatus = payment.PaymentStatus;
-            var paymentReferenceID = payment.PaymentReference;
-            return ticketDB.AddCustomerOrder(order.BuyerFirstName, order.BuyerLastName, order.BuyerAddress, order.BuyerCity, paymentStatus, paymentReferenceID, order.TicketID, order.BuyerEmailAddress);
+            var payment = paymentProvider.Pay(150, "SEK", order.TransactionID.ToString());
+            if (payment.PaymentStatus == PaymentStatus.PaymentApproved)
+            {
+                return ticketDB.AddCustomerOrder(order.BuyerFirstName, order.BuyerLastName, order.BuyerAddress, order.BuyerCity, payment.PaymentStatus, payment.PaymentReference, order.TicketIDs, order.BuyerEmailAddress);
+            }
+            else
+            {
+                Response.StatusCode = 403;
+                return -(int)payment.PaymentStatus;
+            }
         }
 
         // PUT: order/5
