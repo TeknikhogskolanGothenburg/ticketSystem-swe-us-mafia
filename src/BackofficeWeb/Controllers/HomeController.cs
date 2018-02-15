@@ -13,6 +13,7 @@ namespace BackofficeWeb.Controllers
     {
         VenueApi venueApi = new VenueApi();
         EventApi eventApi = new EventApi();
+        OrderAdministratorApi orderApi = new OrderAdministratorApi();
         public IActionResult Index()
         {
             List<Venue> venueList = new List<Venue> { };
