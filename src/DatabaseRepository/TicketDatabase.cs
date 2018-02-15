@@ -531,6 +531,10 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        /*public List <int> GetAvailableSeats (int ticketEventDateID)
+        {
+
+        }*/
         /// <summary>
         /// Method that is just used to create a Ticket in the database table Tickets.
         /// </summary>

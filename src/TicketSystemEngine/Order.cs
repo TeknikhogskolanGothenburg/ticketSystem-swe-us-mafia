@@ -12,7 +12,7 @@ namespace TicketSystemEngine
         public string BuyerFirstName { get; set; }
         public string BuyerAddress { get; set; }
         public string BuyerCity { get; set; }
-        public PaymentStatus PaymentStatus { get; set; }
+        public string PaymentStatus { get; set; }
         public string PaymentReferenceID { get; set; }
         public int TicketID { get; set; }
         public string BuyerEmailAddress { get; set; }
