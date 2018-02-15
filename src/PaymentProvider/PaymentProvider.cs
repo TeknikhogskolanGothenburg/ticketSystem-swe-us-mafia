@@ -35,7 +35,7 @@ namespace TicketSystem.PaymentProvider
             }
             return new Payment()
             {
-                Valuta = valuta,
+                Currency = valuta,
                 PaymentStatus = status,
                 OrderReference = orderReference,
                 TotalAmount = amountToPay,

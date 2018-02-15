@@ -6,6 +6,7 @@ using System.Linq;
 using Dapper;
 using TicketSystemEngine;
 using TicketSystem.DatabaseRepository;
+using TicketSystem.PaymentProvider;
 
 namespace TicketSystem.DatabaseRepository
 {
@@ -536,13 +537,31 @@ namespace TicketSystem.DatabaseRepository
         }
 
         /// <summary>
-        /// Method used to delete a ticket from Ticket table in database.
-        /// Ticket can only be deleted once the transaction connected to 
-        /// the ticket has been deleted as well as the ticket to transaction
-        /// row in tickestotransactions table.
+        /// Methods that updates an existing Ticket in the Ticket database table.
+        /// Only SeatID can be changed, method also checks that the seat number
+        /// one tries to change into actually exists for the specific ticketeventdate.
+        /// TO FIX: the above!
         /// </summary>
         /// <param name="ticketID"></param>
-        public void DeleteTicket(int ticketID)
+        /// <param name="seatID"></param>
+        public void UpdateTicket(int ticketID, int seatID)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                var seatExists = connection.Query("SELECT SeatsAtEventDate.SeatID FROM SeatsAtEventDate WHERE SeatsAtEventDate.SeatID = @SeatID", new { SeatID = seatID });
+
+                connection.Query("UPDATE TicketEvents SET [SeatID] = @SeatID WHERE [TicketID] = @TicketID; ", new { SeatID = seatID, TicketID = ticketID });
+            }
+        }
+            /// <summary>
+            /// Method used to delete a ticket from Ticket table in database.
+            /// Ticket can only be deleted once the transaction connected to 
+            /// the ticket has been deleted as well as the ticket to transaction
+            /// row in tickestotransactions table.
+            /// </summary>
+            /// <param name="ticketID"></param>
+            public void DeleteTicket(int ticketID)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
@@ -633,6 +652,17 @@ namespace TicketSystem.DatabaseRepository
                 connection.Open();
                 connection.Query("DELETE FROM SeatsAtEventDate WHERE TicketEventDateID = @ID", new { ID = id }).FirstOrDefault();
                 connection.Query<TicketEventDate>("DELETE FROM [TicketEventDates] WHERE TicketEventDateID = @ID", new { ID = id }).FirstOrDefault();
+            }
+        }
+
+        public void UpdatePaymentStatus(int transactionID, PaymentStatus status)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+
+                connection.Query("UPDATE TicketTransactions SET TicketTransactions.PaymentStatus = @Status WHERE TransactionID = @TransactionID", 
+                    new { Status = status, TransactionID = transactionID });
             }
         }
     }
