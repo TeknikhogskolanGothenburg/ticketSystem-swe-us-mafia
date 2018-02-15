@@ -13,10 +13,7 @@ namespace TicketSystemEngine
         public string BuyerCity { get; set; }
         public string PaymentStatus { get; set; }
         public string PaymentReferenceID { get; set; }
-        public int TicketID { get; set; }
+        public int[] TicketIDs { get; set; }
         public string BuyerEmailAddress { get; set; }
-        public DateTime EventStartDateTime { get; set; }
-        public string EventName { get; set; }
-
     }
 }

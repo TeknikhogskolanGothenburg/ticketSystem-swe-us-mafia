@@ -249,49 +249,40 @@ namespace TicketSystem.DatabaseRepository
                 connection.Open();
                 int id = -1;
                 int.TryParse(query, out id);
-                return connection.Query<Order>(FindCustomerOrdersQuery("TicketTransactions.BuyerFirstName LIKE @Query OR TicketTransactions.BuyerLastName Like @Query OR TicketTransactions.BuyerEmailAddress LIKE @Query"), new { ID = id, Query = $"%{query}%" });
+                return FindOrdersSuchThat("TicketTransactions.BuyerFirstName LIKE @Query OR TicketTransactions.BuyerLastName Like @Query OR TicketTransactions.BuyerEmailAddress LIKE @Query", new { ID = id, Query = $"%{query}%" });
             }
         }
 
         /// <summary>
-        /// Method that fetches all customer orders from the database, based on joins between different tables.
+        /// Method that fetches all customer orders from the database table TicketTransactions.
         /// </summary>
         /// <returns>A list of all customer orders.</returns>
         public IEnumerable<Order> FindAllCustomerOrder()
         {
+            return FindOrdersSuchThat("1 = 1", new { });
+        }
+
+        /// <summary>
+        /// Metod that is used to return Orders (tickettransactions) from the
+        /// database based on the sent in parameters.
+        /// </summary>
+        /// <param name="wherePart"></param>
+        /// <param name="parameters"></param>
+        /// <returns>A list of Orders.</returns>
+        private IEnumerable<Order> FindOrdersSuchThat(string wherePart, object parameters)
+        {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                return connection.Query<Order>(FindCustomerOrdersQuery()).ToList();
+                var tempOrders = connection.Query<Order>("SELECT TicketTransactions.* FROM TicketTransactions WHERE " + wherePart, parameters);
+                foreach(var order in tempOrders)
+                {
+                    order.TicketIDs = FindTicketsByTransactionID(order.TransactionID).ToArray();
+                }
+                return tempOrders;
             }
         }
-        /// <summary>
-        /// Method that defines a query to be re-used in similar 
-        /// individual methods that fetches data about TicketEventDates
-        /// from the database.
-        /// </summary>
-        /// <param name="wherePart"></param>
-        /// <returns>A specified query with varying where-statement
-        /// depending on the result wanted.</returns>
-        private string FindCustomerOrdersQuery(string wherePart)
-        {
-            return "SELECT TicketsToTransactions.TransactionID AS TransactionID, TicketsToTransactions.TicketID AS TicketID, " +
-                    "TicketTransactions.BuyerFirstName AS BuyerFirstName, TicketTransactions.BuyerLastName AS BuyerLastName, TicketTransactions.BuyerAddress " +
-                    "AS BuyerAddress, TicketTransactions.BuyerCity AS BuyerCity, TicketTransactions.PaymentReferenceID AS PaymentReference, TicketTransactions.PaymentStatus " +
-                    "AS PaymentStatus, TicketEventDates.EventStartDateTime AS EventStartDateTime, TicketEvents.EventName AS EventName, TicketTransactions.BuyerEmailAddress " +
-                    "AS BuyerEmailAddress FROM [TicketsToTransactions] " +
-                    "INNER JOIN TicketTransactions ON TicketsToTransactions.TransactionID = TicketTransactions.TransactionID " +
-                    "INNER JOIN Tickets ON TicketsToTransactions.TicketID = Tickets.TicketID " +
-                    "INNER JOIN SeatsAtEventDate ON Tickets.SeatID = SeatsAtEventDate.SeatID " +
-                    "INNER JOIN TicketEventDates ON SeatsAtEventDate.TicketEventDateID = TicketEventDates.TicketEventDateID " +
-                    "INNER JOIN TicketEvents ON TicketEventDates.TicketEventID = TicketEvents.TicketEventID " +
-                    "INNER JOIN Venues ON TicketEventDates.VenueID = Venues.VenueID WHERE " + wherePart;
-        }
 
-        private string FindCustomerOrdersQuery()
-        {
-            return FindCustomerOrdersQuery("1 = 1");
-        }
         /// <summary>
         /// Method used to find an order from the database based on transactionID.
         /// </summary>
@@ -299,11 +290,7 @@ namespace TicketSystem.DatabaseRepository
         /// <returns>A specific customer order.</returns>
         public Order FindCustomerOrderByID(int id)
         {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                connection.Open();
-                return connection.Query<Order>(FindCustomerOrdersQuery("TicketTransactions.TransactionID = @ID"), new { ID = id }).FirstOrDefault();
-            }
+            return FindOrdersSuchThat("TicketTransactions.TransactionID = @ID", new { ID = id }).FirstOrDefault();
         }
 
         /// <summary>
@@ -322,11 +309,11 @@ namespace TicketSystem.DatabaseRepository
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-               /* if (paymentStatus != null)
-                {
-                    connection.Query("Update TicketTransactions SET [PaymentStatus] = @PaymentStatus WHERE [TransactionID] = @TransactionID; ", new { PaymentStatus = paymentStatus, TransactionID = transactionID, });
-                }
-                */
+                /* if (paymentStatus != null)
+                 {
+                     connection.Query("Update TicketTransactions SET [PaymentStatus] = @PaymentStatus WHERE [TransactionID] = @TransactionID; ", new { PaymentStatus = paymentStatus, TransactionID = transactionID, });
+                 }
+                 */
                 if (buyerLastName != null)
                 {
                     connection.Query("UPDATE TicketTransactions SET [BuyerLastName] = @BuyerLastName WHERE [TransactionID] = @TransactionID; ", new { BuyerLastName = buyerLastName, TransactionID = transactionID });
@@ -400,7 +387,7 @@ namespace TicketSystem.DatabaseRepository
         /// <param name="buyerEmailAddress"></param>
         /// <returns>A transactionID that represents a customerOrder</returns>
         public int AddCustomerOrder(string buyerFirstName, string buyerLastName, string buyerAddress, string buyerCity, PaymentStatus paymentStatus, string paymentReferenceID,
-                                      int ticketID, string buyerEmailAddress)
+                                      int[] ticketIDs, string buyerEmailAddress)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
@@ -428,12 +415,11 @@ namespace TicketSystem.DatabaseRepository
                     connection.Query(seatQuery, parameters);
                 }
                  */
-                var ticketParams = new
+
+                foreach (int tID in ticketIDs)
                 {
-                    ticket = ticketID,
-                    transaction = transactionId
-                };
-                connection.Execute("INSERT INTO TicketsToTransactions (TicketID, TransactionID) VALUES (@ticket, @transaction);", ticketParams);
+                    connection.Execute($"INSERT INTO TicketsToTransactions (TicketID, TransactionID) VALUES ({tID}, {transactionId});");
+                }
                 return transactionId;
             }
         }
@@ -449,7 +435,7 @@ namespace TicketSystem.DatabaseRepository
         /// <returns>A new TicketEventDate object.</returns>
         public TicketEventDate AddTicketEventDate(int ticketEventID, int venueID, DateTime eventDateTime, int numberOfSeats)
         {
-            
+
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
@@ -531,9 +517,22 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
-        /*public List <int> GetAvailableSeats (int ticketEventDateID)
+        /*public List<int> GetAvailableSeatsAtTicketEventDate(int ticketEventDateID)
         {
-
+            List<int> seatIDs = new List<int>();
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                var seatAtEventQuery = connection.ExecuteScalar("SELECT SeatsAtEventDate.SeatID FROM SeatsAtEventDate " +
+                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID" +
+                    "WHERE TicketEventDates.TicketEventDateID = 1");
+                
+                foreach (int s in seatAtEventQuery)
+                {
+                    seatIDs.Add(s);
+                }
+                
+            }
         }*/
         /// <summary>
         /// Method that is just used to create a Ticket in the database table Tickets.
@@ -553,6 +552,19 @@ namespace TicketSystem.DatabaseRepository
         }
 
         /// <summary>
+        /// Method that finds all ticketIDs that are connected to one specific order (tickettransaction).
+        /// </summary>
+        /// <param name="transactionID"></param>
+        /// <returns>A list of TicketIDs.</returns>
+        private IEnumerable<int> FindTicketsByTransactionID(int transactionID)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<int>($"SELECT TicketsToTransactions.TicketID From TicketsToTransactions WHERE TicketsToTransactions.TransactionID = {transactionID}");
+            }
+        }
+        /// <summary>
         /// Methods that updates an existing Ticket in the Ticket database table.
         /// Only SeatID can be changed, method also checks that the seat number
         /// one tries to change into actually exists for the specific ticketeventdate.
@@ -570,14 +582,14 @@ namespace TicketSystem.DatabaseRepository
                 connection.Query("UPDATE TicketEvents SET [SeatID] = @SeatID WHERE [TicketID] = @TicketID; ", new { SeatID = seatID, TicketID = ticketID });
             }
         }
-            /// <summary>
-            /// Method used to delete a ticket from Ticket table in database.
-            /// Ticket can only be deleted once the transaction connected to 
-            /// the ticket has been deleted as well as the ticket to transaction
-            /// row in tickestotransactions table.
-            /// </summary>
-            /// <param name="ticketID"></param>
-            public void DeleteTicket(int ticketID)
+        /// <summary>
+        /// Method used to delete a ticket from Ticket table in database.
+        /// Ticket can only be deleted once the transaction connected to 
+        /// the ticket has been deleted as well as the ticket to transaction
+        /// row in tickestotransactions table.
+        /// </summary>
+        /// <param name="ticketID"></param>
+        public void DeleteTicket(int ticketID)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
@@ -677,7 +689,7 @@ namespace TicketSystem.DatabaseRepository
             {
                 connection.Open();
 
-                connection.Query("UPDATE TicketTransactions SET TicketTransactions.PaymentStatus = @Status WHERE TransactionID = @TransactionID", 
+                connection.Query("UPDATE TicketTransactions SET TicketTransactions.PaymentStatus = @Status WHERE TransactionID = @TransactionID",
                     new { Status = status, TransactionID = transactionID });
             }
         }
