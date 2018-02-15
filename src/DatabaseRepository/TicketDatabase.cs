@@ -407,15 +407,6 @@ namespace TicketSystem.DatabaseRepository
                 };
                 int transactionId = connection.ExecuteScalar<int>(query, transactionParams);
 
-                /*
-                 *  var seatQuery = "INSERT INTO SeatsAtEventDate([TicketEventDateID]) VALUES(@ID)";
-                var parameters = new { ID = createdEventID };
-                for (int i = 0; i < numberOfSeats; i++)
-                {
-                    connection.Query(seatQuery, parameters);
-                }
-                 */
-
                 foreach (int tID in ticketIDs)
                 {
                     connection.Execute($"INSERT INTO TicketsToTransactions (TicketID, TransactionID) VALUES ({tID}, {transactionId});");
@@ -551,6 +542,20 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        public IEnumerable<Ticket> GetAllTickets()
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<Ticket>("SELECT Tickets.*, Venues.VenueName AS VenueName, TicketEventDates.EventStartDateTime AS EventStartDateTime, " +
+                    "TicketEvents.TicketEventPrice AS TicketEventPrice, TicketEvents.EventName AS EventName " +
+                    "FROM Tickets " +
+                    "INNER JOIN SeatsAtEventDate ON SeatsAtEventDate.SeatID = Tickets.SeatID " +
+                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID " +
+                    "INNER JOIN TicketEvents ON TicketEvents.TicketEventID = TicketEventDates.TicketEventID " +
+                    "INNER JOIN Venues on Venues.VenueID = TicketEventDates.VenueID ");
+            }
+        }
         /// <summary>
         /// Method that finds all ticketIDs that are connected to one specific order (tickettransaction).
         /// </summary>

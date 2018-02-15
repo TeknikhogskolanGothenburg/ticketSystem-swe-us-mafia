@@ -17,6 +17,10 @@ namespace RESTapi.Controllers
     {
         TicketDatabase ticketDB = new TicketDatabase();
 
+        /// <summary>
+        /// Method that gets all customer orders (TicketTransactions).
+        /// </summary>
+        /// <returns>A list of Orders.</returns>
         // GET: /order
         [HttpGet]
         public IEnumerable<Order> GetAllCustomerOrders()
@@ -24,6 +28,12 @@ namespace RESTapi.Controllers
             return ticketDB.FindAllCustomerOrder();
         }
 
+        /// <summary>
+        /// Method that searches for customer orders (TicketTransactions)
+        /// based on BuyerFirstName, BuyerLastName or BuyerEmailAddress
+        /// </summary>
+        /// <param name="query">The value that we want to use for filtering out customer orders.</param>
+        /// <returns>A list of customer order based on our query.</returns>
         // GET: order/customername
         [HttpGet("search/{query}")]
         public IEnumerable<Order> FindCustomerOrders(string query)
@@ -31,6 +41,12 @@ namespace RESTapi.Controllers
             return ticketDB.FindCustomerOrders(query);
         }
 
+        /// <summary>
+        /// Method that gets a specific order (TicketTransaction)
+        /// based on the provided transactionID.
+        /// </summary>
+        /// <param name="id">TransactionID of the order we want to get information on.</param>
+        /// <returns>An Order object.</returns>
         // GET: order/5
         [HttpGet("{id}")]
         public Order GetSpecificOrder(int id)
@@ -61,6 +77,11 @@ namespace RESTapi.Controllers
             }
         }
 
+        /// <summary>
+        /// Method that updates the information in an order based on provided parameter values.
+        /// </summary>
+        /// <param name="id">The TransactionID of the order that we want to update.</param>
+        /// <param name="order">The Order object which's value we want to update.</param>
         // PUT: order/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]Order order)
@@ -73,7 +94,13 @@ namespace RESTapi.Controllers
             ticketDB.UpdateCustomerOrder(id, order.BuyerLastName, order.BuyerFirstName, order.BuyerAddress, order.BuyerCity);
         }
 
-        // DELETE: api/ApiWithActions/5
+        /// <summary>
+        /// Method that deletes an order (TicketTransaction).
+        /// If transactionID (orderID) can't be found, returns 404 error,
+        /// else we delete the transaction from TicketTransactions table.
+        /// </summary>
+        /// <param name="id">TransactionID of the order we want to delete.</param>
+        // DELETE: order/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
