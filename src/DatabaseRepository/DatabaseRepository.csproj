@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PaymentProvider\PaymentProvider.csproj" />
     <ProjectReference Include="..\TicketSystemEngine\TicketSystemEngine.csproj" />
   </ItemGroup>
 

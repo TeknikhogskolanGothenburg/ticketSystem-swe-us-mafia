@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using TicketSystem.DatabaseRepository;
 using Newtonsoft.Json;
 using TicketSystemEngine;
-
+using TicketSystem.PaymentProvider;
 
 namespace RESTapi.Controllers
 {
@@ -16,45 +16,54 @@ namespace RESTapi.Controllers
     public class OrderController : Controller
     {
         TicketDatabase ticketDB = new TicketDatabase();
- 
-        // GET: api/Ticket
+        Payment payment;
+        PaymentProvider paymentProvider;
+
+        // GET: /order
         [HttpGet]
         public IEnumerable<Order> GetAllCustomerOrders()
         {
             return ticketDB.FindAllCustomerOrder();
         }
 
-        // GET: Ticket/customername
+        // GET: order/customername
         [HttpGet("search/{query}")]
         public IEnumerable<Order> FindCustomerOrders(string query)
         {
             return ticketDB.FindCustomerOrders(query);
         }
 
-        // GET: orderadministration/5
+        // GET: order/5
         [HttpGet("{id}")]
         public Order GetSpecificOrder(int id)
         {
             return ticketDB.FindCustomerOrderByID(id);
         }
-        
-        // PUT: orderadministration/5
+
+        // POST: /order
+        [HttpPost]
+        public int CreateOrder([FromBody] Order order)
+        {
+            return ticketDB.AddCustomerOrder(order.BuyerFirstName, order.BuyerLastName, order.BuyerAddress, order.BuyerCity, order.PaymentStatus, order.PaymentReferenceID, order.TicketID, order.BuyerEmailAddress);
+        }
+
+        // PUT: order/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]Order order)
         {
-            if (ticketDB.FindEventByID(id) == null)
+            if (ticketDB.FindCustomerOrderByID(id) == null)
             {
                 Response.StatusCode = 404;
                 return;
             }
             ticketDB.UpdateCustomerOrder(id, order.PaymentStatus, order.BuyerLastName, order.BuyerFirstName, order.BuyerAddress, order.BuyerCity);
         }
-        
+
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            if(ticketDB.FindCustomerOrderByID(id) == null)
+            if (ticketDB.FindCustomerOrderByID(id) == null)
             {
                 Response.StatusCode = 404;
                 return;

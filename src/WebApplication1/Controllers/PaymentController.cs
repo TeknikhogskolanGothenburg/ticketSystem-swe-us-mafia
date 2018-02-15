@@ -9,7 +9,7 @@ namespace RESTapi.Controllers
 {
     [Produces("application/json")]
     [Route("api/Ticket")]
-    public class TicketTransactionController : Controller
+    public class PaymentController : Controller
     {
         // GET: api/Ticket
         [HttpGet]
@@ -18,7 +18,7 @@ namespace RESTapi.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/Ticket/5
+        // GET: payment/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
