@@ -26,7 +26,21 @@ namespace BackofficeWeb.Controllers
             }
         }
 
-        public IActionResult Customer()
+        public IActionResult Venues()
+        {
+            List<Venue> venueList = new List<Venue> { };
+            venueList = venueApi.VenueGet();
+            if (User.Identity.IsAuthenticated)
+            {
+                return View(venueList);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
+        public IActionResult Events()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -37,7 +51,19 @@ namespace BackofficeWeb.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
-        
+
+        public IActionResult Orders()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
         public IActionResult VenueAdd()
         {
             Venue venue = new Venue();
