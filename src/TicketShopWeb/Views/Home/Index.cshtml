@@ -1,4 +1,7 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
+﻿@using TicketSystemEngine;
+@model List<TicketEvent>
+
+@using Microsoft.AspNetCore.Mvc.Localization;
 @inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Home Page";
@@ -18,8 +21,27 @@
     <div class="container" id="container">
         <h2>@Localizer["Tickets"]</h2>
 
-
-        <div class="col-lg-3 col-md-8 mb-4">
+        @if (Model != null)
+    {
+        foreach (TicketEvent ticketevent in Model)
+        {
+            <div class="col-lg-3 col-md-8 mb-4">
+                <div class="ticket">
+                    <img class="ticket-img-top" src="~/images/skarri.png" alt="" />
+                    <div class="ticket-body">
+                        <h4 class="ticket-title">@ticketevent.EventName</h4>
+                        <p class="ticket-info">@ticketevent.EventHtmlDescription</p>
+                        <p class="ticket-price">Price @ticketevent.TicketEventPrice</p>
+                    </div>
+                    <div class="ticket-footer">
+                        <a href="" id="btn-cart" class="btn-cart">Buy</a>
+                    </div>
+                </div>
+            </div>
+    }
+}
+        
+        @*<div class="col-lg-3 col-md-8 mb-4">
             <div class="ticket">
                 <img class="ticket-img-top" src="~/images/skarri.png" alt="" />
                 <div class="ticket-body">
@@ -143,7 +165,7 @@
                     <a href="" id="btn-cart" class="btn-cart">Add to cart</a>
                 </div>
             </div>
-        </div>
+        </div>*@
 
 
 
