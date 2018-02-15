@@ -7,8 +7,8 @@ namespace TicketSystem.DatabaseRepositoryTestclient
     {
         static void Main(string[] args)
         {
-            ITicketDatabase ticketDatabase = new TicketDatabase();
-            var tevent = ticketDatabase.EventAdd("Event1", "Some desciption");
+            TicketDatabase ticketDatabase = new TicketDatabase();
+            var tevent = ticketDatabase.EventAdd("Event1", "Some desciption", 500);
             Console.WriteLine("TicketEventId: " + tevent.TicketEventId);
             var venue = ticketDatabase.VenueAdd("venue1", "Some address", "city1","country1");
             Console.WriteLine("VenueId: " + venue.VenueId);
