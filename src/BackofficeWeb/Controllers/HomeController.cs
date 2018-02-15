@@ -12,6 +12,7 @@ namespace BackofficeWeb.Controllers
     public class HomeController : Controller
     {
         VenueApi venueApi = new VenueApi();
+        EventApi eventApi = new EventApi();
         public IActionResult Index()
         {
             List<Venue> venueList = new List<Venue> { };
@@ -42,9 +43,12 @@ namespace BackofficeWeb.Controllers
 
         public IActionResult Events()
         {
+            List<TicketEvent> eventList = new List<TicketEvent> { };
+            eventList = eventApi.GetAllEvents();
+
             if (User.Identity.IsAuthenticated)
             {
-                return View();
+                return View(eventList);
             }
             else
             {
@@ -70,6 +74,19 @@ namespace BackofficeWeb.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 return View(venue);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
+        public IActionResult EventAdd()
+        {
+           TicketEvent ticketevent = new TicketEvent();
+            if (User.Identity.IsAuthenticated)
+            {
+                return View(ticketevent);
             }
             else
             {

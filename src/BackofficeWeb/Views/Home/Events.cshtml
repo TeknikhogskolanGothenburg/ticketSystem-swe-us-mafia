@@ -1,29 +1,29 @@
 ﻿@using TicketSystemEngine;
-@model List<Venue>
+@model List<TicketEvent>
 @{
     ViewData["Title"] = "Events List";
 }
 <h2>Events List</h2>
 
-<button type="button" class="btn btn-default" onclick="location.href='/Home/VenueAdd'">Add Venue(s)</button>
+<button type="button" class="btn btn-default" onclick="location.href='/Home/EventAdd'">Add Event(s)</button>
 
 
 <div class="col-md-venues" column-count="3">
     @if (Model != null)
     {
-        foreach (Venue venue in Model)
+        foreach (TicketEvent ticketEvent in Model)
         {
             <div class="col-md-test">
                 <section>
                     <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="get">
                         <div class="form-group">
-                            <label>@venue.VenueName</label>
+                            <label>@ticketEvent.EventName</label>
                             <div class="picture">
                                 <img class="venueimg" src="https://i.pinimg.com/736x/54/72/b6/5472b6c2b81b0a25daed044db5646b77--sloth-humor-sloth-memes.jpg">
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-default">View/Edit Venue</button>
+                            <button type="submit" class="btn btn-default">View/Edit Events</button>
                         </div>
                     </form>
                 </section>

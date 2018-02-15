@@ -1,5 +1,5 @@
 ﻿@using TicketSystemEngine;
-@model Venue
+@model TicketEvent
 @{
     ViewData["Title"] = "Enter Event Details";
 }
@@ -8,18 +8,18 @@
 <div class="row">
     <div class="col-md-4">
         <section>
-            <form id="addvenue" method="post">
+            <form id="addevent" method="post">
                 <div class="form-group" method="post">
                     <label>Name</label>
                     <input class="form-control" id="EventNameTxt" required />
                 </div>
                 <div class="form-group" method="post">
-                    <label>Address</label>
+                    <label>Description</label>
                     <input class="form-control" id="DescriptionTxt" required />
                 </div>
 
                 <div class="form-group" method="post">
-                    <label>City</label>
+                    <label>Price</label>
                     <input class="form-control" id="PriceTxt" required />
                 </div>
               
@@ -36,27 +36,26 @@
             var dataType = 'application/json'
 
             var datalist = {
-                EventName: $("#NameTxt").val(),
-                EventHtmlDescription: $("#AddressTxt").val(),
-                City: $("#CityTxt").val(),
-                Country: $("#CountryTxt").val()
+                EventName: $("#EventNameTxt").val(),
+                EventHtmlDescription: $("#DescriptionTxt").val(),
+                TicketEventPrice: $("#PriceTxt").val()
             }
 
             $.ajax({
                 type: "POST",
-                url: "http://localhost:51775/venue/",
+                url: "http://localhost:51775/Event/",
                 dataType: 'application/json',
                 contentType: dataType,
                 data: JSON.stringify(datalist),
                 success: alertFunction()
             });
 
-            document.getElementById("addvenue").reset();
+            document.getElementById("addevent").reset();
         };
 </script>
 <script>
         function alertFunction() {
-            alert("Venue Created");
+            alert("Event Created");
         }
 </script>
 }
