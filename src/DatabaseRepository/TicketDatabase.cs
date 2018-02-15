@@ -316,16 +316,17 @@ namespace TicketSystem.DatabaseRepository
         /// <param name="buyerFirstName"></param>
         /// <param name="buyerAddress"></param>
         /// <param name="buyerCity"></param>
-        public void UpdateCustomerOrder(int transactionID, string paymentStatus, string buyerLastName,
+        public void UpdateCustomerOrder(int transactionID, string buyerLastName,
             string buyerFirstName, string buyerAddress, string buyerCity)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                if (paymentStatus != null)
+               /* if (paymentStatus != null)
                 {
                     connection.Query("Update TicketTransactions SET [PaymentStatus] = @PaymentStatus WHERE [TransactionID] = @TransactionID; ", new { PaymentStatus = paymentStatus, TransactionID = transactionID, });
                 }
+                */
                 if (buyerLastName != null)
                 {
                     connection.Query("UPDATE TicketTransactions SET [BuyerLastName] = @BuyerLastName WHERE [TransactionID] = @TransactionID; ", new { BuyerLastName = buyerLastName, TransactionID = transactionID });
@@ -398,7 +399,7 @@ namespace TicketSystem.DatabaseRepository
         /// <param name="ticketID"></param>
         /// <param name="buyerEmailAddress"></param>
         /// <returns>A transactionID that represents a customerOrder</returns>
-        public int AddCustomerOrder(string buyerFirstName, string buyerLastName, string buyerAddress, string buyerCity, string paymentStatus, string paymentReferenceID,
+        public int AddCustomerOrder(string buyerFirstName, string buyerLastName, string buyerAddress, string buyerCity, PaymentStatus paymentStatus, string paymentReferenceID,
                                       int ticketID, string buyerEmailAddress)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -418,6 +419,15 @@ namespace TicketSystem.DatabaseRepository
                     refid = paymentReferenceID
                 };
                 int transactionId = connection.ExecuteScalar<int>(query, transactionParams);
+
+                /*
+                 *  var seatQuery = "INSERT INTO SeatsAtEventDate([TicketEventDateID]) VALUES(@ID)";
+                var parameters = new { ID = createdEventID };
+                for (int i = 0; i < numberOfSeats; i++)
+                {
+                    connection.Query(seatQuery, parameters);
+                }
+                 */
                 var ticketParams = new
                 {
                     ticket = ticketID,
@@ -427,6 +437,8 @@ namespace TicketSystem.DatabaseRepository
                 return transactionId;
             }
         }
+
+
         /// <summary>
         /// Method used to add a new TicketEventDate and seats for that ticketeventdate.
         /// </summary>
