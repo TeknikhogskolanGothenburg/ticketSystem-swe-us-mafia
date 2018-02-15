@@ -1,4 +1,5 @@
-﻿
+﻿@using TicketSystemEngine;
+@model List<Order>
 @{
     ViewData["Title"] = "Orders";
 }
@@ -43,21 +44,29 @@
             <th>BuyerEmailAddress</th>
             <th>EventStartDateTime</th>
             <th>EventName</th>
-        </tr>
-        <tr>
-            <td>a</td>
-            <td>b</td>
-            <td>s</td>
-            <td>w</td>
-            <td>e</td>
-            <td>t</td>
-            <td>f</td>
-            <td>g</td>
-            <td>h</td>
-            <td>u</td>
-            <td>o</td>
-        </tr>
+       </tr>
+
+        @if (Model != null)
+         {
+            foreach (Order order in Model)
+            {  
+                <tr>
+                    <td>@order.TransactionID</td>
+                    <td>@order.BuyerLastName</td>
+                    <td>@order.BuyerFirstName</td>
+                    <td>@order.BuyerAddress</td>
+                    <td>@order.BuyerCity</td>
+                    <td>@order.PaymentStatus</td>
+                    <td>@order.PaymentReferenceID</td>
+                    <td>@order.TicketID</td>
+                    <td>@order.BuyerEmailAddress</td>
+                    <td>@order.EventStartDateTime</td>
+                    <td>@order.EventName</td>
+                </tr>
+            }
+         }
     </table>
+    
 </body>
 </html>
 

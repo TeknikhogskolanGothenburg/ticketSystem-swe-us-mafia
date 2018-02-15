@@ -59,9 +59,12 @@ namespace BackofficeWeb.Controllers
 
         public IActionResult Orders()
         {
+            List<Order> orderList = new List<Order> { };
+            orderList = orderApi.GetAllOrders();
+
             if (User.Identity.IsAuthenticated)
             {
-                return View();
+                return View(orderList);
             }
             else
             {
