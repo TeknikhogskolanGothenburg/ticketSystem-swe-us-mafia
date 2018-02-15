@@ -44,7 +44,11 @@ namespace RESTapi.Controllers
         [HttpPost]
         public int CreateOrder([FromBody] Order order)
         {
-            return ticketDB.AddCustomerOrder(order.BuyerFirstName, order.BuyerLastName, order.BuyerAddress, order.BuyerCity, order.PaymentStatus, order.PaymentReferenceID, order.TicketID, order.BuyerEmailAddress);
+            PaymentProvider paymentProvider = new PaymentProvider();
+            var payment = paymentProvider.Pay(0, "SEK", order.TransactionID.ToString());
+            var paymentStatus = payment.PaymentStatus;
+            var paymentReferenceID = payment.PaymentReference;
+            return ticketDB.AddCustomerOrder(order.BuyerFirstName, order.BuyerLastName, order.BuyerAddress, order.BuyerCity, paymentStatus, paymentReferenceID, order.TicketID, order.BuyerEmailAddress);
         }
 
         // PUT: order/5
@@ -56,7 +60,7 @@ namespace RESTapi.Controllers
                 Response.StatusCode = 404;
                 return;
             }
-            ticketDB.UpdateCustomerOrder(id, order.PaymentStatus, order.BuyerLastName, order.BuyerFirstName, order.BuyerAddress, order.BuyerCity);
+            ticketDB.UpdateCustomerOrder(id, order.BuyerLastName, order.BuyerFirstName, order.BuyerAddress, order.BuyerCity);
         }
 
         // DELETE: api/ApiWithActions/5
