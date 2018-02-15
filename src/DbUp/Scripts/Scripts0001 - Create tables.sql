@@ -41,8 +41,10 @@ CREATE TABLE TicketTransactions (
     BuyerAddress varchar(255),
     BuyerCity varchar(255),
 	PaymentStatus varchar(255),
-	PaymentReferenceId varchar(255)
+	PaymentReferenceId varchar(255),
+
 );
+
 
 CREATE TABLE TicketsToTransactions (
     TicketID INT  NOT NULL   FOREIGN KEY REFERENCES Tickets(TicketID),
