@@ -16,11 +16,11 @@ namespace BackofficeWeb.Controllers
         OrderAdministratorApi orderApi = new OrderAdministratorApi();
         public IActionResult Index()
         {
-            List<Venue> venueList = new List<Venue> { };
-            venueList = venueApi.VenueGet();
+        //    List<Venue> venueList = new List<Venue> { };
+        //    venueList = venueApi.VenueGet();
             if (User.Identity.IsAuthenticated)
             {
-                return View(venueList);
+                return RedirectToAction("Venues");
             }
             else
             {
