@@ -42,8 +42,6 @@
             <th>PaymentReferenceID</th>
             <th>TicketID</th>
             <th>BuyerEmailAddress</th>
-            <th>EventStartDateTime</th>
-            <th>EventName</th>
        </tr>
 
         @if (Model != null)
@@ -58,10 +56,8 @@
                     <td>@order.BuyerCity</td>
                     <td>@order.PaymentStatus</td>
                     <td>@order.PaymentReferenceID</td>
-                    <td>@order.TicketID</td>
+                    <td>@order.TicketIDs</td>
                     <td>@order.BuyerEmailAddress</td>
-                    <td>@order.EventStartDateTime</td>
-                    <td>@order.EventName</td>
                 </tr>
             }
          }
