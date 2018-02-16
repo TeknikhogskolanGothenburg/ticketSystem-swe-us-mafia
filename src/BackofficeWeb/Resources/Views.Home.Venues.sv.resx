@@ -117,16 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Contact" xml:space="preserve">
-    <value>Kontakta oss</value>
+  <data name="Add Venue(s)" xml:space="preserve">
+    <value>Lägg till Arena</value>
   </data>
-  <data name="Marketing:" xml:space="preserve">
-    <value>Marknadsföring:</value>
+  <data name="Delete Venue" xml:space="preserve">
+    <value>Radera Arena</value>
   </data>
-  <data name="Phone" xml:space="preserve">
-    <value>Telefon</value>
-  </data>
-  <data name="Your contact page." xml:space="preserve">
-    <value>Din kontaktsida.</value>
+  <data name="Venues List" xml:space="preserve">
+    <value>Arena Lista</value>
   </data>
 </root>

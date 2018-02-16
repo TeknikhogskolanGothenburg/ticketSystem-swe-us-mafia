@@ -1,11 +1,13 @@
 ﻿@using TicketSystemEngine;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model List<Venue>
 @{
     ViewData["Title"] = "Venues List";
 }
-<h2>Venues List</h2>
+<h2>@Localizer["Venues List"]</h2>
 
-<button type="button" class="btn btn-default" onclick="location.href='/Home/VenueAdd'">Add Venue(s)</button>
+<button type="button" class="btn btn-default" onclick="location.href='/Home/VenueAdd'">@Localizer["Add Venue(s)"]</button>
 
 
 <div class="col-md-venues" column-count="3">
@@ -23,7 +25,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-default" onclick="myFunction(@venue.VenueId)">Delete Venue</button>
+                            <button type="submit" class="btn btn-default" onclick="myFunction(@venue.VenueId)">@Localizer["Delete Venue"]</button>
                         </div>
                     </form>
                 </section>
@@ -38,7 +40,7 @@
         var dataType = 'application/json'
 
         var datalist = {
-            
+
         }
 
         $.ajax({
