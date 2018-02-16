@@ -1,5 +1,5 @@
 ﻿@using TicketSystemEngine;
-@model TicketEvent
+@model List<Venue>
 @{
     ViewData["Title"] = "Enter Event Details";
 }
@@ -22,6 +22,24 @@
                     <label>Price</label>
                     <input class="form-control" id="PriceTxt" required />
                 </div>
+
+                <div class="form-group" method="post">
+                    <label>Date and Time</label>
+                    <input class="form-control" id="EventTimeDateTime" type="datetime-local" />
+                </div>
+
+                <div class="form-group" method="post">
+                    <label>Venues</label>
+                    <select name="venues">
+                        @{
+                            foreach (Venue venue in Model)
+                            {
+                                <option value="@venue.VenueId">@venue.VenueName.ToString()</option>
+
+                            }
+                        }                 
+                    </select>
+                </div>
               
                 <div class="form-group" method="post">
                     <button type="button" class="AddEventBtn" id="AddEventBtn" name="AddEventBtn" onclick="myFunction()">Add Event</button>
@@ -35,20 +53,46 @@
         function myFunction() {
             var dataType = 'application/json'
 
-            var datalist = {
+            var datalist1 = {
                 EventName: $("#EventNameTxt").val(),
                 EventHtmlDescription: $("#DescriptionTxt").val(),
-                TicketEventPrice: $("#PriceTxt").val()
+                TicketEventPrice: $("#PriceTxt").val(),                              
             }
+            var datalist2 = {
+                EventStartDateTime: $("#EventTimeDateTime").val(),
+                VenueId: $("#venues").val()
+            }
+            //var datalist3 = {
+            //    VenueId: $("#venues").val(),
+            //}
 
             $.ajax({
                 type: "POST",
                 url: "http://localhost:51775/Event/",
                 dataType: 'application/json',
                 contentType: dataType,
-                data: JSON.stringify(datalist),
+                data: JSON.stringify(datalist1),
                 success: alertFunction()
             });
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:51775/TicketEventDate/",
+                dataType: 'application/json',
+                contentType: dataType,
+                data: JSON.stringify(datalist2),
+                success: alertFunction()
+            });
+
+            //$.ajax({
+            //    type: "POST",
+            //    url: "http://localhost:51775/TicketEventDate/",
+            //    dataType: 'application/json',
+            //    contentType: dataType,
+            //    data: JSON.stringify(datalist3),
+            //    success: alertFunction()
+            //});
+            
 
             document.getElementById("addevent").reset();
         };
