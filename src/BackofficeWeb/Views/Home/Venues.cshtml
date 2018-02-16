@@ -23,7 +23,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-default">View/Edit Venue</button>
+                            <button type="submit" class="btn btn-default" onclick="myFunction(@venue.VenueId)">Delete Venue</button>
                         </div>
                     </form>
                 </section>
@@ -32,3 +32,28 @@
         }
     }
 </div>
+
+<script>
+    function myFunction(venueId) {
+        var dataType = 'application/json'
+
+        var datalist = {
+            
+        }
+
+        $.ajax({
+            type: "DELETE",
+            url: "http://localhost:51775/venue/" + venueId,
+            dataType: 'application/json',
+            contentType: dataType,
+            data: JSON.stringify(datalist),
+            success: alertFunction()
+        });
+    };
+</script>
+<script>
+    function alertFunction() {
+        alert("Venue Deleted");
+    }
+</script>
+
