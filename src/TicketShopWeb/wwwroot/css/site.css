@@ -169,6 +169,7 @@ footer {
     padding: 1.25rem 1.25rem;
     background-color: rgba(0, 0, 0, 0.03);
     border-top: 1px solid rgba(0, 0, 0, 0.125);
+    text-align: center;
 }
 
 .ticket-footer:last-child{
@@ -207,6 +208,13 @@ footer {
     background-color: #3e8e41;
 }
 
+#qt{
+    width: 45px;
+}
+.qtlabel{
+    padding-right:10px;
+    padding-left:15px;
+}
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {

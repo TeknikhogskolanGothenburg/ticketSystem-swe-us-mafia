@@ -21,7 +21,7 @@
     <div class="container" id="container">
         <h2>@Localizer["Tickets"]</h2>
 
-        @if (Model != null)
+   @if (Model != null)
     {
         foreach (TicketEvent ticketevent in Model)
         {
@@ -34,12 +34,12 @@
                         <p class="ticket-price">Price @ticketevent.TicketEventPrice</p>
                     </div>
                     <div class="ticket-footer">
-                        <a href="" id="btn-cart" class="btn-cart">Buy</a>
+                        <a href="" id="btn-cart" class="btn-cart">Buy</a><label class="qtlabel" for="qt">Quantity: </label><input id="qt" type="number" min="1" max="5" value="0" />
                     </div>
                 </div>
             </div>
+        }
     }
-}
     </div>
 
 </body>
