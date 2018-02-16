@@ -57,7 +57,7 @@ namespace BackofficeWeb.Controllers
             }
         }
 
-        public IActionResult Orders()
+        public IActionResult Order()
         {
             List<Order> orderList = new List<Order> { };
             orderList = orderApi.GetAllOrders();

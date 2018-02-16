@@ -256,11 +256,17 @@ namespace TicketSystem.DatabaseRepository
         /// <summary>
         /// Method that fetches all customer orders from the database table TicketTransactions.
         /// </summary>
-        /// <returns>A list of all customer orders.</returns>
-        public IEnumerable<Order> FindAllCustomerOrder()
+        /// <returns>A list of all customer orders.</returns>     
+
+        public List<Order> FindAllCustomerOrder()
         {
-            return FindOrdersSuchThat("1 = 1", new { });
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<Order>("SELECT * FROM TicketTransactions").ToList();
+            }
         }
+
 
         /// <summary>
         /// Metod that is used to return Orders (tickettransactions) from the
