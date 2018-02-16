@@ -11,26 +11,23 @@
             <form id="addevent" method="post">
                 <div class="form-group" method="post">
                     <label>Venue</label>
-                    <select name="venues">
+                    <select>
                         @{
                             foreach (Venue venue in Model.venues)
                             {
-                                <option value="@venue.VenueId">@venue.VenueName.ToString()</option>
-
+                                <option value="@venue.VenueId" id="venues">@venue.VenueName.ToString()</option>
                             }
                         }
                     </select>
                 </div>
                 <div class="form-group" method="post">
                     <label>Event</label>
-                    <select name="events">
-                        @{
-                            foreach (TicketEvent tEvent in Model.events)
-                            {
-                                <option value="@tEvent.TicketEventId">@tEvent.EventName.ToString()</option>
-
-                            }
-                        }
+                    <select>
+                        @foreach (TicketEvent tEvent in Model.events)
+                         {
+                         <option value="@tEvent.TicketEventId" id="events">@tEvent.EventName.ToString()</option>
+                         }
+                        
                     </select>
                  </div>
 
@@ -41,11 +38,11 @@
 
                     <div class="form-group" method="post">
                         <label>Date and Time</label>
-                        <input class="form-control" id="EventTimeDateTime" type="datetime-local" />
+                        <input class="form-control" id="EventTimeDateTime" type="datetime-local" required/>
                     </div>
 
                     <div class="form-group" method="post">
-                        <button type="button" class="AddDateBtn" id="AddDateBtn" name="AddEventBtn" onclick="myFunction()">Add Event</button>
+                        <button type="button" class="AddDateBtn" id="AddDateBtn" name="AddDateBtn" onclick="myFunction()">Add Event</button>
                     </div>
 </form>
         </section>
@@ -57,10 +54,10 @@
             var dataType = 'application/json'
             
             var datalist = {
-                TicketEventId: $("#events").val(),
+                TicketEventID: $("#events").val(),
                 VenueId: $("#venues").val(),
                 EventStartDateTime: $("#EventTimeDateTime").val(),
-                numberOfSeats: $("SeatsTxt").val()
+                NumberOfSeats: $("#SeatsTxt").val()
             }
             //var datalist3 = {
             //    VenueId: $("#venues").val(),
