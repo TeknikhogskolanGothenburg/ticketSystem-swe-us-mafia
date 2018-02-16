@@ -58,13 +58,6 @@
                 EventHtmlDescription: $("#DescriptionTxt").val(),
                 TicketEventPrice: $("#PriceTxt").val(),                              
             }
-            var datalist2 = {
-                EventStartDateTime: $("#EventTimeDateTime").val(),
-                VenueId: $("#venues").val()
-            }
-            //var datalist3 = {
-            //    VenueId: $("#venues").val(),
-            //}
 
             $.ajax({
                 type: "POST",
@@ -74,26 +67,7 @@
                 data: JSON.stringify(datalist1),
                 success: alertFunction()
             });
-
-            $.ajax({
-                type: "POST",
-                url: "http://localhost:51775/TicketEventDate/",
-                dataType: 'application/json',
-                contentType: dataType,
-                data: JSON.stringify(datalist2),
-                success: alertFunction()
-            });
-
-            //$.ajax({
-            //    type: "POST",
-            //    url: "http://localhost:51775/TicketEventDate/",
-            //    dataType: 'application/json',
-            //    contentType: dataType,
-            //    data: JSON.stringify(datalist3),
-            //    success: alertFunction()
-            //});
             
-
             document.getElementById("addevent").reset();
         };
 </script>

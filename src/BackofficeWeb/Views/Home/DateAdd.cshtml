@@ -1,0 +1,86 @@
+﻿@using TicketSystemEngine;
+@model VenueEventModel
+@{
+    ViewData["Title"] = "Enter Date/Event Details";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form id="addevent" method="post">
+                <div class="form-group" method="post">
+                    <label>Venue</label>
+                    <select name="venues">
+                        @{
+                            foreach (Venue venue in Model.venues)
+                            {
+                                <option value="@venue.VenueId">@venue.VenueName.ToString()</option>
+
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group" method="post">
+                    <label>Event</label>
+                    <select name="events">
+                        @{
+                            foreach (TicketEvent tEvent in Model.events)
+                            {
+                                <option value="@tEvent.TicketEventId">@tEvent.EventName.ToString()</option>
+
+                            }
+                        }
+                    </select>
+                 </div>
+
+                    <div class="form-group" method="post">
+                        <label>Number of Seats</label>
+                        <input class="form-control" id="SeatsTxt" required />
+                    </div>
+
+                    <div class="form-group" method="post">
+                        <label>Date and Time</label>
+                        <input class="form-control" id="EventTimeDateTime" type="datetime-local" />
+                    </div>
+
+                    <div class="form-group" method="post">
+                        <button type="button" class="AddDateBtn" id="AddDateBtn" name="AddEventBtn" onclick="myFunction()">Add Event</button>
+                    </div>
+</form>
+        </section>
+    </div>
+</div>
+
+<script>
+        function myFunction() {
+            var dataType = 'application/json'
+            
+            var datalist = {
+                TicketEventId: $("#events").val(),
+                VenueId: $("#venues").val(),
+                EventStartDateTime: $("#EventTimeDateTime").val(),
+                numberOfSeats: $("SeatsTxt").val()
+            }
+            //var datalist3 = {
+            //    VenueId: $("#venues").val(),
+            //}
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:51775/Event/",
+                dataType: 'application/json',
+                contentType: dataType,
+                data: JSON.stringify(datalist),
+                success: alertFunction()
+            });
+            
+            document.getElementById("addevent").reset();
+        };
+</script>
+<script>
+        function alertFunction() {
+            alert("Event Created");
+        }
+</script>
+
