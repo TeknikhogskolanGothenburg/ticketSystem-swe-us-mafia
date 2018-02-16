@@ -260,11 +260,7 @@ namespace TicketSystem.DatabaseRepository
 
         public List<Order> FindAllCustomerOrder()
         {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                connection.Open();
-                return connection.Query<Order>("SELECT * FROM TicketTransactions").ToList();
-            }
+            return FindOrdersSuchThat("1 = 1", new { }).ToList();
         }
 
 
