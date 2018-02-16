@@ -2,11 +2,13 @@
 @using System.Linq
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Http.Authentication
+@using Microsoft.AspNetCore.Mvc.Localization
 @model LoginViewModel
 @inject SignInManager<ApplicationUser> SignInManager
+@inject IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = @Localizer["Log in"];
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -16,30 +18,30 @@
         <section>
             <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                 <div class="form-group">
-                    <input asp-for="Email" class="form-control" placeholder="Enter Email"/>
+                    <input asp-for="Email" class="form-control" placeholder=@Localizer["Enter Email"] />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input asp-for="Password" class="form-control" placeholder="Enter Password"/>
+                    <input asp-for="Password" class="form-control" placeholder=@Localizer["Enter Password"] />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <div class="checkbox">
                         <label asp-for="RememberMe">
-                            <input asp-for="RememberMe" />
+                            <input asp-for="RememberMe"/>
                             @Html.DisplayNameFor(m => m.RememberMe)
                         </label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-default">Log in</button>
+                    <button type="submit" class="btn btn-default">@Localizer["Log in"]</button>
                 </div>
                 <div class="form-group">
                     <p>
-                        <a asp-action="ForgotPassword">Forgot your password?</a>
+                        <a asp-action="ForgotPassword">@Localizer["Forgot your password?"]</a>
                     </p>
                     <p>
-                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user?</a>
+                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">@Localizer["Register as a new user?"]</a>
                     </p>
                 </div>
             </form>

@@ -1,6 +1,8 @@
-﻿@model RegisterViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model RegisterViewModel
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = Localizer["Register"];
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -9,22 +11,22 @@
     <div class="col-md-4">
         <img src="~/images/skarri.png" />
         <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-            <h4>Create a new account.</h4>
+            <h4>@Localizer["Create a new account."]</h4>
             <div asp-validation-summary="All" class="text-danger"></div>
             <hr />
             <div class="form-group">
-                <input asp-for="Email" class="form-control" placeholder="Enter Email" />
+                <input asp-for="Email" class="form-control" placeholder=@Localizer["Enter Email"] />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="Password" class="form-control" placeholder="Enter Password" />
+                <input asp-for="Password" class="form-control" placeholder=@Localizer["Enter Password"] />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="ConfirmPassword" class="form-control" placeholder="ConfirmPassword" />
+                <input asp-for="ConfirmPassword" class="form-control" placeholder=@Localizer["ConfirmPassword"] />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-default">Register</button>
+            <button type="submit" class="btn btn-default">@Localizer["Register"]</button>
         </form>
     </div>
 </div>

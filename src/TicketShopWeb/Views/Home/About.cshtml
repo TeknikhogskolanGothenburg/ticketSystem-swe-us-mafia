@@ -1,12 +1,14 @@
-﻿@{
-    ViewData["Title"] = "About";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = @Localizer["About"];
 }
 <h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+<h3>@Localizer["The amazing ticket shop- search for culture events made easy."]</h3>
 
 <p>
-    Welcome to amazing ticket shop, here you can find tickets for 10000s of events in Scandinavia.<br />
-    We want to provide a user-friendly experience for all you culture lovers out there, something <br />
-    we are able to accomplish through a clean user interface with intuitive design, all to make it easy<br />
-    for you as a customer to find the events you want to go to.
+    @Localizer["Welcome to amazing ticket shop, here you can find tickets for 10000s of events in Scandinavia."]<br />
+    @Localizer["We want to provide a user-friendly experience for all you culture lovers out there, something"]<br />
+    @Localizer["we are able to accomplish through a clean user interface with intuitive design, all to make it easy"]<br />
+    @Localizer["for you as a customer to find the events you want to go to."]
 </p>
