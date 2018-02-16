@@ -311,11 +311,7 @@ namespace TicketSystem.DatabaseRepository
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                /* if (paymentStatus != null)
-                 {
-                     connection.Query("Update TicketTransactions SET [PaymentStatus] = @PaymentStatus WHERE [TransactionID] = @TransactionID; ", new { PaymentStatus = paymentStatus, TransactionID = transactionID, });
-                 }
-                 */
+
                 if (buyerLastName != null)
                 {
                     connection.Query("UPDATE TicketTransactions SET [BuyerLastName] = @BuyerLastName WHERE [TransactionID] = @TransactionID; ", new { BuyerLastName = buyerLastName, TransactionID = transactionID });
@@ -571,6 +567,8 @@ namespace TicketSystem.DatabaseRepository
                 return connection.Query<int>($"SELECT TicketsToTransactions.TicketID From TicketsToTransactions WHERE TicketsToTransactions.TransactionID = {transactionID}");
             }
         }
+
+        //public IEnumerable<int>GetAvailableSeatsAtTicketEventDate ()
         /// <summary>
         /// Methods that updates an existing Ticket in the Ticket database table.
         /// Only SeatID can be changed, method also checks that the seat number

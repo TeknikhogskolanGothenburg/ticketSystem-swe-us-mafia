@@ -36,9 +36,9 @@ namespace RestApplication.Controllers
 
         // POST /events
         [HttpPost]
-        public void Post([FromBody]TicketEvent ticketEvent)
+        public TicketEvent CreateTicketEvent([FromBody]TicketEvent ticketEvent)
         {      
-            ticketDb.EventAdd(ticketEvent.EventName, ticketEvent.EventHtmlDescription, ticketEvent.TicketEventPrice);
+            return ticketDb.EventAdd(ticketEvent.EventName, ticketEvent.EventHtmlDescription, ticketEvent.TicketEventPrice);
         }
 
         // PUT /events/5

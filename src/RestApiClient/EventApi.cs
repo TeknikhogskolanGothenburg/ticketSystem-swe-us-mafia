@@ -18,6 +18,49 @@ namespace TicketSystem.RestApiClient
             return response.Data;
         }
 
+        /*OBS (added by Sofia): Example method on how to use methods in restapi
+         * to create event with eventdates
+         /*
+        public ActionResult CreateAnEventWithMultipleDates(string eventName, string description, int eventPrice, int venueID)
+        {
+            // Get these dates from user or wherever; probably easier to add dates one at a time...
+            TicketEventDate[] dummyDates = {
+                new TicketEventDate
+                {
+                    VenueId = venueID,
+                    EventStartDateTime = DateTime.Parse("2018-03-01 20:00"),
+                    NumberOfSeats = 100
+                },
+                new TicketEventDate
+                {
+                    VenueId = venueID,ws
+                    EventStartDateTime = DateTime.Parse("2018-04-01 20:00"),
+                    NumberOfSeats = 100
+                }
+                // ...
+            };
+
+            var client = new RestClient("http://localhost:51775/");
+
+            // Create the event
+            var request = new RestRequest("event", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(new { EventName = eventName, EventHtmlDescription = description, TicketEventPrice = eventPrice });
+            var theEvent = client.Execute<TicketEvent>(request);
+
+            // Add some dates
+            foreach (var date in dummyDates)
+            {
+                var req = new RestRequest("ticketeventdate", Method.POST);
+                req.RequestFormat = DataFormat.Json;
+                req.AddBody(date);
+                client.Execute(request);
+            }
+
+            return null; // Return some appropriate view here
+        }
+        */
+
         public TicketEvent GetEventByQuery(string query)
         {
             var client = new RestClient("http://localhost:51775/");
