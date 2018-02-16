@@ -44,7 +44,6 @@ namespace TicketShopWeb.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "The amazing ticket shop- search for culture events made easy.";
 
             return View();
         }
