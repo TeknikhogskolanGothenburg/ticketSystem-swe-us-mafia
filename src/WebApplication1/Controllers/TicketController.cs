@@ -41,14 +41,17 @@ namespace RESTapi.Controllers
         }
         
         /// <summary>
-        /// Method that creates a Ticket (A row in database table Tickets).
+        /// Method that creates a ticket in Ticket table in database
+        /// based on given TicketEventDateID. Assigns a random available
+        /// seat for the ticket.
         /// </summary>
-        /// <param name="id">ID of the seat that the created ticket is connected to.</param>
+        /// <param name="id">TicketEventDateID that we weant to create a ticket for.</param>
+        /// <returns>A Ticket object.</returns>
         // POST: /ticket
         [HttpPost("{id}")]
-        public void CreateTicket(int id)
+        public Ticket CreateTicket(int id)
         {
-            db.CreateTicket(id);
+            return db.CreateTicket(id);
         }
         
       /* Don't know if we even need this method?
