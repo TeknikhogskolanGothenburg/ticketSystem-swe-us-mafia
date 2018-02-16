@@ -9,11 +9,13 @@
   <ItemGroup>
     <None Remove="Scripts\Scripts0001 - Create tables.sql" />
     <None Remove="Scripts\scripts0002.sql" />
+    <None Remove="Scripts\Scripts0003.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Scripts0001 - Create tables.sql" />
     <EmbeddedResource Include="Scripts\scripts0002.sql" />
+    <EmbeddedResource Include="Scripts\Scripts0003.sql" />
   </ItemGroup>
 
   <ItemGroup>
