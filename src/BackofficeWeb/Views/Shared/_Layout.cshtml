@@ -1,6 +1,4 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -32,11 +30,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Venues">@Localizer["Venues"]</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Events">@Localizer["Events"]</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Order">@Localizer["Orders"]</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">@Localizer["About"]</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">@Localizer["Contact"]</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Venues">Venues</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Events">Events</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Order">Orders</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
