@@ -98,6 +98,21 @@ namespace BackofficeWeb.Controllers
                 return RedirectToAction("Login", "Account");
             }
         }
+
+        public IActionResult DateAdd()
+        {
+            VenueEventModel hybrid = new VenueEventModel();
+            hybrid.venues = venueApi.VenueGet();
+            hybrid.events = eventApi.GetAllEvents();
+            if (User.Identity.IsAuthenticated)
+            {
+                return View(hybrid);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
         //[HttpPost]
         //public IActionResult Venue(VenueModel ven)
         //{
