@@ -54,7 +54,7 @@ namespace TicketSystem.RestApiClient
                 var req = new RestRequest("ticketeventdate", Method.POST);
                 req.RequestFormat = DataFormat.Json;
                 req.AddBody(date);
-                client.Execute(request);
+                client.Execute(req);
             }
 
             return null; // Return some appropriate view here

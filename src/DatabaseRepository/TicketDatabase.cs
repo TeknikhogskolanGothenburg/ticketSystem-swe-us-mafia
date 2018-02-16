@@ -222,6 +222,15 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
+        public int GetTicketEventID(string query)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Execute("SELECT TicketEvents.TicketEventID From TicketEvents WHERE EventName like @Query ", new { Query = $"%{query}" });
+            }
+        }
+
         /// <summary>
         /// Separate method used to get an event from the database based on a specific ID.
         /// </summary>
@@ -277,7 +286,7 @@ namespace TicketSystem.DatabaseRepository
             {
                 connection.Open();
                 var tempOrders = connection.Query<Order>("SELECT TicketTransactions.* FROM TicketTransactions WHERE " + wherePart, parameters);
-                foreach(var order in tempOrders)
+                foreach (var order in tempOrders)
                 {
                     order.TicketIDs = FindTicketsByTransactionID(order.TransactionID).ToArray();
                 }
@@ -506,40 +515,36 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
-        /*public List<int> GetAvailableSeatsAtTicketEventDate(int ticketEventDateID)
-        {
-            List<int> seatIDs = new List<int>();
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                connection.Open();
-                var seatAtEventQuery = connection.ExecuteScalar("SELECT SeatsAtEventDate.SeatID FROM SeatsAtEventDate " +
-                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID" +
-                    "WHERE TicketEventDates.TicketEventDateID = 1");
-                
-                foreach (int s in seatAtEventQuery)
-                {
-                    seatIDs.Add(s);
-                }
-                
-            }
-        }*/
         /// <summary>
         /// Method that is just used to create a Ticket in the database table Tickets.
         /// </summary>
-        /// <param name="seatID"></param>
+        /// <param name="ticketEventDateID"></param>
         /// <returns>A ticket from the database with a ticketid and a seatid.</returns>
-        public Ticket CreateTicket(int seatID)
+        public Ticket CreateTicket(int ticketEventDateID)
         {
+
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
+                var availableSeat = FindOneAvailableSeatAtTicketEventDate(ticketEventDateID);
 
-                var ticketID = connection.ExecuteScalar<int>("INSERT INTO Tickets VALUES (@SeatID); SElECT SCOPE_IDENTITY();", new { SeatID = seatID });
-
+                var ticketID = connection.ExecuteScalar<int>("INSERT INTO Tickets (Tickets.SeatID) VALUES (@AvSeat); SELECT SCOPE_IDENTITY() ", new { AvSeat = availableSeat });
                 return FindTicketByTicketID(ticketID);
             }
         }
 
+        private bool AreThereAnyFreeSeatsAtEventDate(int ticketEventDateID)
+        {
+            IEnumerable<int> seats = GetAvailableSeatsAtTicketEventDate(ticketEventDateID);
+            if (seats.Count() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public IEnumerable<Ticket> GetAllTickets()
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -568,7 +573,90 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
-        //public IEnumerable<int>GetAvailableSeatsAtTicketEventDate ()
+        /// <summary>
+        /// Method that fetches a list of all seatids connected to a specific ticketeventdate in the ticketEventDate 
+        /// database table.
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns>A list of seatIDs for the specified datetime</returns>
+        public IEnumerable<int> GetSeatsAtTicketEventDate(int ticketEventDateID)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<int>("SELECT SeatsAtEventDate.SeatID From SeatsAtEventDate INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = " +
+                    "SeatsAtEventDate.TicketEventDateID " +
+                    "WHERE(TicketEventDates.TicketEventDateID) = @TicketEventDID; ", new { TicketEventDID = ticketEventDateID });
+            }
+        }
+
+        /// <summary>
+        /// Gets the number of seats for a specific ticketeventdate, based on the ticketeventdateid sent in to the method.
+        /// </summary>
+        /// <param name="ticketEventDateID">The ticketeventdateid for which we want to return the number of seats for.</param>
+        /// <returns>A list of all seats at a ticketeventdate.</returns>
+        public int GetNumberOfSeatsAtTicketEventDate(int ticketEventDateID)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<int>("SELECT COUNT(SeatsAtEventDate.SeatID) AS NumberOfSeats From SeatsAtEventDate " +
+                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = " +
+                    "SeatsAtEventDate.TicketEventDateID " +
+                    "WHERE(TicketEventDates.TicketEventDateID) = @TicketEventDID; ", new { TicketEventDID = ticketEventDateID }).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Method that returns a list of seatids of available seats at a specific eventdateTime.
+        /// </summary>
+        /// <param name="dateTime">The ticketeventid that we want to return the available seats for.</param>
+        /// <returns>A list of seatids that are available for a specific ticketeventdate.</returns>
+        public IEnumerable<int> GetAvailableSeatsAtTicketEventDate(int ticketEventDateID)
+        {
+            // TODO: skriv klart detta
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<int>("SELECT SeatsatEventDate.SeatID  From SeatsAtEventDate " +
+                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID " +
+                    "WHERE(TicketEventDates.TicketEventDateID) = @TicketEventDID " +
+                    "AND SeatsAtEventDate.SeatID NOT IN(SELECT Tickets.SeatID From Tickets); ", new { TicketEventDID = ticketEventDateID });
+            }
+        }
+
+        /// <summary>
+        /// Method that returns a seatid that are available on a specific ticketeventdate.
+        /// </summary>
+        /// <param name="ticketEventDateID">The id of the ticketeventdate that we want to get a seat for.</param>
+        /// <returns>A free seatid for the specified ticketeventdate.</returns>
+        private int FindOneAvailableSeatAtTicketEventDate(int ticketEventDateID)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<int>("SELECT TOP 1 SeatsatEventDate.SeatID  From SeatsAtEventDate " +
+                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID " +
+                    "WHERE(TicketEventDates.TicketEventDateID) = @TicketEventDID " +
+                    "AND SeatsAtEventDate.SeatID NOT IN(SELECT Tickets.SeatID From Tickets); ", new { TicketEventDID = ticketEventDateID }).FirstOrDefault();
+            }
+        }
+        /// <summary>
+        /// Method that returns the number of available seats at a specific ticketeventdates eventdatetime.
+        /// </summary>
+        /// <param name="dateTime">the ticketeventdateID that we want to check for how many seats that are available.</param>
+        /// <returns>The number of available seats</returns>
+        public int GetNROfAvailableSeatsAtTicketEventDate(int ticketEventDateID)
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<int>("SELECT COUNT(SeatsatEventDate.SeatID) AS NumberOfAvailableSeats " +
+                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID WHERE(TicketEventDates.TicketEventDateID = @TicketEventDID " +
+                    "AND SeatsAtEventDate.SeatID NOT IN(SELECT Tickets.SeatID From Tickets); ", new { TicketEventDID = ticketEventDateID }).FirstOrDefault();
+            }
+        }
+
         /// <summary>
         /// Methods that updates an existing Ticket in the Ticket database table.
         /// Only SeatID can be changed, method also checks that the seat number
@@ -587,6 +675,7 @@ namespace TicketSystem.DatabaseRepository
                 connection.Query("UPDATE TicketEvents SET [SeatID] = @SeatID WHERE [TicketID] = @TicketID; ", new { SeatID = seatID, TicketID = ticketID });
             }
         }
+
         /// <summary>
         /// Method used to delete a ticket from Ticket table in database.
         /// Ticket can only be deleted once the transaction connected to 
@@ -602,24 +691,6 @@ namespace TicketSystem.DatabaseRepository
                 connection.Query("DELETE FROM [Tickets] WHERE TicketID = @ID", new { ID = ticketID });
             }
         }
-        /*public IEnumerable<Ticket> FindTickets(string query)
-        {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                connection.Open();
-                connection.Open();
-                int id = -1;
-                int.TryParse(query, out id);
-                return connection.Query<Ticket>(("SELECT Tickets.*, Venues.VenueName AS VenueName, TicketEventDates.EventStartDateTime AS EventStartDateTime, " +
-                    "TicketEvents.TicketEventPrice AS TicketEventPrice, TicketEvents.EventName AS EventName " +
-                    "FROM Tickets " +
-                    "INNER JOIN SeatsAtEventDate ON SeatsAtEventDate.SeatID = Tickets.SeatID " +
-                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID " +
-                    "INNER JOIN TicketEvents ON TicketEvents.TicketEventID = TicketEventDates.TicketEventID " +
-                    "INNER JOIN Venues on Venues.VenueID = TicketEventDates.VenueID " +
-                    "WHERE Tickets.ticketID = @Query OR TicketTransactions.BuyerEmailAddress = @Query"), new { Query = query });
-            }
-        }*/
 
         /// <summary>
         /// Method used to search for a specific TicketEventDate 
@@ -685,17 +756,6 @@ namespace TicketSystem.DatabaseRepository
                 connection.Open();
                 connection.Query("DELETE FROM SeatsAtEventDate WHERE TicketEventDateID = @ID", new { ID = id }).FirstOrDefault();
                 connection.Query<TicketEventDate>("DELETE FROM [TicketEventDates] WHERE TicketEventDateID = @ID", new { ID = id }).FirstOrDefault();
-            }
-        }
-
-        public void UpdatePaymentStatus(int transactionID, PaymentStatus status)
-        {
-            using (var connection = new SqlConnection(CONNECTION_STRING))
-            {
-                connection.Open();
-
-                connection.Query("UPDATE TicketTransactions SET TicketTransactions.PaymentStatus = @Status WHERE TransactionID = @TransactionID",
-                    new { Status = status, TransactionID = transactionID });
             }
         }
     }
