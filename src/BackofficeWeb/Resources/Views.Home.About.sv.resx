@@ -117,16 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Contact" xml:space="preserve">
-    <value>Kontakta oss</value>
+  <data name="About" xml:space="preserve">
+    <value>Om oss</value>
   </data>
-  <data name="Marketing:" xml:space="preserve">
-    <value>Marknadsföring:</value>
+  <data name="This is the admin." xml:space="preserve">
+    <value>Det här är admin.</value>
   </data>
-  <data name="Phone" xml:space="preserve">
-    <value>Telefon</value>
-  </data>
-  <data name="Your contact page." xml:space="preserve">
-    <value>Din kontaktsida.</value>
+  <data name="Use this area to provide additional information." xml:space="preserve">
+    <value>Använd detta område för att ge ytterligare information.</value>
   </data>
 </root>
