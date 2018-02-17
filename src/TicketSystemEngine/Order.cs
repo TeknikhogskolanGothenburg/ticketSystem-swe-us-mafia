@@ -13,7 +13,9 @@ namespace TicketSystemEngine
         public string BuyerCity { get; set; }
         public string PaymentStatus { get; set; }
         public string PaymentReferenceID { get; set; }
-        public int[] TicketIDs { get; set; }
+        // this should really be int[], but RestClient gets confused when
+        // confronted with JSON objects with array fields
+        public string TicketIDs { get; set; }
         public string BuyerEmailAddress { get; set; }
     }
 }

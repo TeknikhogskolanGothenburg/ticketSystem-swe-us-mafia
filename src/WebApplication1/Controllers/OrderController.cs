@@ -69,7 +69,9 @@ namespace RESTapi.Controllers
             var payment = paymentProvider.Pay(150, "SEK", order.TransactionID.ToString());
             if (payment.PaymentStatus == PaymentStatus.PaymentApproved)
             {
-                return ticketDB.AddCustomerOrder(order.BuyerFirstName, order.BuyerLastName, order.BuyerAddress, order.BuyerCity, payment.PaymentStatus, payment.PaymentReference, order.TicketIDs, order.BuyerEmailAddress);
+                // TODO: maybe catch parse error here and give appropriate error, if ticket IDs are bad?
+                int[] ticketIDs = order.TicketIDs.Split(",").Select(int.Parse).ToArray();
+                return ticketDB.AddCustomerOrder(order.BuyerFirstName, order.BuyerLastName, order.BuyerAddress, order.BuyerCity, payment.PaymentStatus, payment.PaymentReference, ticketIDs, order.BuyerEmailAddress);
             }
             else
             {
