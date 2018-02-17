@@ -721,8 +721,9 @@ namespace TicketSystem.DatabaseRepository
         /// and also has a subquery that makes it possible to show how many
         /// seats a specific eventdate have.
         /// </summary>
-        /// <param name="query"></param>
-        /// <returns>A list of TicketEventDates, TicketEventName, VenueName and Number of seats.</returns>
+        /// <param name="query">The ticketeventdateid, ticketeventid, venueid, venuename or eventname 
+        /// that one want to see ticketeventdates for.</param>
+        /// <returns>A list of TicketEventDate objects.</returns>
         public IEnumerable<TicketEventDate> FindTicketEventDates(string query)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
@@ -741,6 +742,22 @@ namespace TicketSystem.DatabaseRepository
                     "WHERE TicketEventDates.TicketEventDateID = @ID OR TicketEvents.TicketEventID = @ID OR Venues.VenueID = @ID OR Venues.VenueName LIKE @Query OR TicketEvents.EventName LIKE @Query;",
                     new { ID = id, Query = $"%{query}%" }
                 );
+            }
+        }
+
+        /// <summary>
+        /// Method that gets all ticketeventdates from database table TicketEventDates
+        /// represented as a list of TicketEventDate objects.
+        /// </summary>
+        /// <returns>A list of ticketEventDate objects.</returns>
+        public List<TicketEventDate> GetAllTicketEventDates()
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<TicketEventDate>("SELECT TicketEventDates.*,innerTable.seats AS NumberOfSeats FROM TicketEventDates " +
+                    "INNER JOIN (SELECT SeatsAtEventDate.TicketEventDateID AS id, COUNT(*) AS seats FROM SeatsAtEventDate GROUP BY " +
+                    "SeatsAtEventDate.TicketEventDateID) innerTable ON TicketEventDates.TicketEventDateID = innerTable.id ").ToList();
             }
         }
 

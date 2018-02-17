@@ -13,6 +13,12 @@ namespace RestApplication.Controllers
     public class EventController : Controller
     {
         TicketDatabase ticketDb = new TicketDatabase();
+        
+        /// <summary>
+        /// Method that get All TicketEvents as a list (IEnumrable) from the 
+        /// database table TicketEvents.
+        /// </summary>
+        /// <returns>A list (IEnumerable) of TicketEvent objects.</returns>
         // GET /event
         [HttpGet]
         public IEnumerable<TicketEvent> GetAllEvents()
@@ -20,6 +26,13 @@ namespace RestApplication.Controllers
             return ticketDb.FindAllEvents();
         }
 
+        /// <summary>
+        /// Method that searches for TicketEvents based on
+        /// either TicketEventID or EventName (also part of 
+        /// EventName works).
+        /// </summary>
+        /// <param name="query">The search criteria sent in to method.</param>
+        /// <returns>A list (IEnumerable) of TicketEvents.</returns>
         // GET event/search/ark
         [HttpGet("search/{query}")]
         public IEnumerable<TicketEvent> FindEvents (string query)
@@ -27,14 +40,13 @@ namespace RestApplication.Controllers
             return ticketDb.FindEvents(query);
         }
 
-        // GET event/search/ark
-       /* [HttpGet("{query}")]
-        public int GetTicketEventID(string query)
-        {
-            return ticketDb.GetTicketEventID(query);
-        }*/
-
-        // GET events/5
+        /// <summary>
+        /// Method that gets a specific TicketEvent from database table
+        /// TicketEvents based on ticketeventid sent in to method.
+        /// </summary>
+        /// <param name="id">The TicketEventID of the TicketEvent we want to get data on.</param>
+        /// <returns>A TicketEvent object.</returns>
+        // GET event/5
         [HttpGet("{id}")]
         public TicketEvent GetSpecificEvent(int id)
         {
@@ -42,11 +54,11 @@ namespace RestApplication.Controllers
         }
 
         /// <summary>
-        /// Method that creates a TicketEvent in ticketevents database table.
+        /// Method that creates a TicketEvent in TicketEvents database table.
         /// </summary>
-        /// <param name="ticketEvent"></param>
-        /// <returns></returns>
-        // POST /events
+        /// <param name="ticketEvent">The properties sent in to method are properties of a TicketEvent object.</param>
+        /// <returns>A TicketEvent object.</returns>
+        // POST /event
         [HttpPost]
         public TicketEvent CreateTicketEvent([FromBody]TicketEvent ticketEvent)
         {      
@@ -54,12 +66,12 @@ namespace RestApplication.Controllers
         }
 
         /// <summary>
-        /// Changes attributes of the ticketevent found
+        /// Method that changes attributes of the TicketEvent found
         /// through parameter id (ticketeventID).
         /// </summary>
-        /// <param name="id">The id of the ticketevent to be updated.</param>
+        /// <param name="id">The id of the TicketEvent to be updated.</param>
         /// <param name="ticketEvent">TicketEvent object that we are updating values for.</param>
-        // PUT /events/5
+        // PUT /event/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]TicketEvent ticketEvent)
         {
@@ -81,7 +93,7 @@ namespace RestApplication.Controllers
         /// connected.
         /// </summary>
         /// <param name="id">The ticketeventId for the event to be deleted.</param>
-        // DELETE /events/5
+        // DELETE /event/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

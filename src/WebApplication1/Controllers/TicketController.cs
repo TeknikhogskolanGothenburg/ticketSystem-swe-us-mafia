@@ -43,11 +43,11 @@ namespace RESTapi.Controllers
         /// <summary>
         /// Method that creates a ticket in Ticket table in database
         /// based on given TicketEventDateID. Assigns a random available
-        /// seat for the ticket.
+        /// seat for the ticket. To use this method write: /ticket/*TicketEventDateID*
         /// </summary>
         /// <param name="id">TicketEventDateID that we weant to create a ticket for.</param>
         /// <returns>A Ticket object.</returns>
-        // POST: /ticket
+        // POST: /ticket/17
         [HttpPost("{id}")]
         public Ticket CreateTicket(int id)
         {
