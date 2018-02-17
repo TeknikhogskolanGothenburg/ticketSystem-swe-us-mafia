@@ -9,22 +9,25 @@ using TicketSystemEngine;
 
 namespace RESTapi.Controllers
 {
-    /// <summary>
-    /// Här får vi hantera att lägga in ett event på ett specifikt datum och en specifik venue tror jag.
-    /// </summary>
     [Produces("application/json")]
     [Route("[controller]")]
     public class TicketEventDateController : Controller
     {
         TicketDatabase ticketDb = new TicketDatabase();
 
+        /// <summary>
+        /// Method that gets all TicketEventDates from database table TicketEventDates
+        /// as well as number of seats for each TicketEventDate from SeatsAtEventDate 
+        /// table.
+        /// </summary>
+        /// <returns>A List of TicketEventDate objects.</returns>
         public List<TicketEventDate> GetAllTicketEventDates()
         {
             return ticketDb.GetAllTicketEventDates();
         }
 
         /// <summary>
-        /// Method that gets all ticketeventdates basedd on the query sent in
+        /// Method that gets all TicketEventDates based on the query sent in
         /// when calling the method.
         /// </summary>
         /// <param name="query"></param>
@@ -90,6 +93,8 @@ namespace RESTapi.Controllers
 
         /// <summary>
         /// Method that Deletes a TicketEventDate from the database based on TicketEventDateID sent in to method.
+        /// TicketEventDate can't be deleted if it has seats connected to it, then you first need to delete 
+        /// the Tickets connected to the TicketEventDate.
         /// </summary>
         /// <param name="id">ID of the TicketEventDate we want to delete.</param>
         // DELETE: /ticketeventdates/5
