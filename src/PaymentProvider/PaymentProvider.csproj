@@ -5,4 +5,8 @@
     <RootNamespace>TicketSystem.PaymentProvider</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Seq.Extensions.Logging" Version="4.0.0" />
+  </ItemGroup>
+
 </Project>
