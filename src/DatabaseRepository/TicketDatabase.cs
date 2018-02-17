@@ -268,8 +268,8 @@ namespace TicketSystem.DatabaseRepository
         /// <returns>A list of all customer orders.</returns>     
 
         public List<Order> FindAllCustomerOrder()
-        {
-            return FindOrdersSuchThat("1 = 1", new { }).ToList();
+        {            
+            return FindOrdersSuchThat("1 = 1", new { }).ToList();          
         }
 
 
@@ -280,17 +280,19 @@ namespace TicketSystem.DatabaseRepository
         /// <param name="wherePart"></param>
         /// <param name="parameters"></param>
         /// <returns>A list of Orders.</returns>
-        private List<Order> FindOrdersSuchThat(string wherePart, object parameters)
+        public IEnumerable<Order> FindOrdersSuchThat(string wherePart, object parameters)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                var tempOrders = connection.Query<Order>("SELECT TicketTransactions.* FROM TicketTransactions WHERE " + wherePart, parameters).ToList();
-                foreach (var order in tempOrders)
+                List<Order> orderList = new List<Order>();
+                var temp = connection.Query<Order>("SELECT *  FROM TicketTransactions WHERE " + wherePart, parameters);
+                orderList = connection.Query<Order>("SELECT *  FROM TicketTransactions WHERE " + wherePart, parameters).ToList();
+                foreach (Order order in orderList)
                 {
                     order.TicketIDs = FindTicketsByTransactionID(order.TransactionID).ToArray();
                 }
-                return tempOrders;
+                return temp;
             }
         }
 
