@@ -13,6 +13,7 @@ namespace BackofficeWeb.Controllers
     {
         VenueApi venueApi = new VenueApi();
         EventApi eventApi = new EventApi();
+        TicketEventDateApi dateAPI = new TicketEventDateApi();
         OrderAdministratorApi orderApi = new OrderAdministratorApi();
         public IActionResult Index()
         {
@@ -107,6 +108,25 @@ namespace BackofficeWeb.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 return View(hybrid);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
+        public IActionResult EditEvent()
+        {
+            OverviewModel overview = new OverviewModel();
+            overview.venues = venueApi.VenueGet();
+            overview.events = eventApi.GetAllEvents();
+            foreach(Venue venue in overview.venues)
+            {
+                overview.dates.Add(dateAPI.GetTicketEventDates(Convert.ToString(venue.VenueId)));
+            }
+            if (User.Identity.IsAuthenticated)
+            {
+                return View(overview);
             }
             else
             {

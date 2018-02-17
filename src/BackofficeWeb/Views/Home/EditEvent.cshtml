@@ -1,0 +1,78 @@
+﻿@using TicketSystemEngine;
+@model OverviewModel
+@{
+    ViewData["Title"] = "Event Overview";
+}
+<html>
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            background-color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Event Dates</h2>
+
+    <table>
+        <tr>
+            <th>EventName</th>
+            <th>EventHtmlDescription</th>
+            <th>TicketEventPrice</th>
+            <th>EventStartDateTime</th>
+            <th>NumberOfSeats</th>
+            <th>VenueName</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>Country</th>
+        </tr>
+
+        @if (Model != null)
+         {
+            <tr>
+                @foreach (TicketEventDate date in Model.dates)
+                 {
+                    @foreach (TicketEvent tEvent in Model.events)
+                     {
+                        @if (tEvent.TicketEventId == date.TicketEventDateID)
+                         {
+                            @foreach (Venue venue in Model.venues)
+                             {
+                                @if (venue.VenueId == date.VenueId)
+                                 {
+                                    <td>@tEvent.EventName</td>
+                                    <td>@tEvent.EventHtmlDescription</td>
+                                    <td>@venue.VenueName</td>
+                                    <td>@venue.Address</td>
+                                    <td>@venue.City</td>
+                                    <td>@venue.Country</td>
+                                    <td>@date.NumberOfSeats</td>
+                                    <td>@date.EventStartDateTime</td>
+                                    <td>@tEvent.TicketEventPrice</td>
+                                 }
+                             }
+                         }
+                     }
+                 }
+            </tr>
+         }
+    </table>
+
+</body>
+</html>
