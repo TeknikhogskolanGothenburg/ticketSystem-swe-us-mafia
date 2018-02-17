@@ -721,8 +721,9 @@ namespace TicketSystem.DatabaseRepository
         /// and also has a subquery that makes it possible to show how many
         /// seats a specific eventdate have.
         /// </summary>
-        /// <param name="query"></param>
-        /// <returns>A list of TicketEventDates, TicketEventName, VenueName and Number of seats.</returns>
+        /// <param name="query">The ticketeventdateid, ticketeventid, venueid, venuename or eventname 
+        /// that one want to see ticketeventdates for.</param>
+        /// <returns>A list of TicketEventDate objects.</returns>
         public IEnumerable<TicketEventDate> FindTicketEventDates(string query)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
