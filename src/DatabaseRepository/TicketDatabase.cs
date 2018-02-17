@@ -280,12 +280,12 @@ namespace TicketSystem.DatabaseRepository
         /// <param name="wherePart"></param>
         /// <param name="parameters"></param>
         /// <returns>A list of Orders.</returns>
-        private IEnumerable<Order> FindOrdersSuchThat(string wherePart, object parameters)
+        private List<Order> FindOrdersSuchThat(string wherePart, object parameters)
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                var tempOrders = connection.Query<Order>("SELECT TicketTransactions.* FROM TicketTransactions WHERE " + wherePart, parameters);
+                var tempOrders = connection.Query<Order>("SELECT TicketTransactions.* FROM TicketTransactions WHERE " + wherePart, parameters).ToList();
                 foreach (var order in tempOrders)
                 {
                     order.TicketIDs = FindTicketsByTransactionID(order.TransactionID).ToArray();
