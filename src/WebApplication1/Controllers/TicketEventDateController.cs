@@ -17,13 +17,31 @@ namespace RESTapi.Controllers
     public class TicketEventDateController : Controller
     {
         TicketDatabase ticketDb = new TicketDatabase();
-        // GET: api/TicketEventDate
+
+        public List<TicketEventDate> GetAllTicketEventDates()
+        {
+            return ticketDb.GetAllTicketEventDates();
+        }
+
+        /// <summary>
+        /// Method that gets all ticketeventdates basedd on the query sent in
+        /// when calling the method.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>A list (IEnumberable) of TicketEventDate objects.</returns>
+        // GET: /ticketeventdate
         [HttpGet("search/{query}")]
         public IEnumerable<TicketEventDate> FindTicketEventDates(string query)
         {
             return ticketDb.FindTicketEventDates(query);
         }
 
+        /// <summary>
+        /// Method that gets a specific ticketeventdate based on the
+        /// ticketeventdateid sent in to the method.
+        /// </summary>
+        /// <param name="id">Ticketeventdate of the ticketevent we want to get data on.</param>
+        /// <returns>A TicketEventDate object.</returns>
         // GET: api/TicketEventDate/5
         [HttpGet("{id}")]
         public TicketEventDate GetSpecificEventDate(int id)
@@ -31,6 +49,10 @@ namespace RESTapi.Controllers
             return ticketDb.FindTicketEventDateByID(id);
         }
 
+        /// <summary>
+        /// Method that adds a new TicketEventDate to the database.
+        /// </summary>
+        /// <param name="ticketEventDate">Defining that it is a TicketEventDate object's values we are posting.</param>
         // POST: /ticketEventDates
         [HttpPost]
         public void AddNewTicketEventDate([FromBody]TicketEventDate ticketEventDate)
@@ -45,6 +67,12 @@ namespace RESTapi.Controllers
             }
         }
 
+        /// <summary>
+        /// Method that updates a TicketEventDate in the database table TicketEventDates
+        /// based on the TicketEventDateID sent in to the method.
+        /// </summary>
+        /// <param name="id">ID of the TicketEventDate we want to update.</param>
+        /// <param name="ticketEventDate">Defining that it is a TicketEventDate object's values we want to update.</param>
         // PUT: /ticketeventdate/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]TicketEventDate ticketEventDate)
@@ -60,6 +88,10 @@ namespace RESTapi.Controllers
             }
         }
 
+        /// <summary>
+        /// Method that Deletes a TicketEventDate from the database based on TicketEventDateID sent in to method.
+        /// </summary>
+        /// <param name="id">ID of the TicketEventDate we want to delete.</param>
         // DELETE: /ticketeventdates/5
         [HttpDelete("{id}")]
         public void Delete(int id)

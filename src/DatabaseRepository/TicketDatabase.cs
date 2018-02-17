@@ -745,6 +745,22 @@ namespace TicketSystem.DatabaseRepository
         }
 
         /// <summary>
+        /// Method that gets all ticketeventdates from database table TicketEventDates
+        /// represented as a list of TicketEventDate objects.
+        /// </summary>
+        /// <returns>A list of ticketEventDate objects.</returns>
+        public List<TicketEventDate> GetAllTicketEventDates()
+        {
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<TicketEventDate>("SELECT TicketEventDates.*,innerTable.seats AS NumberOfSeats FROM TicketEventDates " +
+                    "INNER JOIN (SELECT SeatsAtEventDate.TicketEventDateID AS id, COUNT(*) AS seats FROM SeatsAtEventDate GROUP BY " +
+                    "SeatsAtEventDate.TicketEventDateID) innerTable ON TicketEventDates.TicketEventDateID = innerTable.id ").ToList();
+            }
+        }
+
+        /// <summary>
         /// Method that deletes a specific TicketEventDate. First we need to delete the seats
         /// connected to the TicketEventDateID in table SeatsAtEventDate.
         /// </summary>

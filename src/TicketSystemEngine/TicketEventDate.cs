@@ -9,6 +9,5 @@ namespace TicketSystemEngine
         public int VenueId{get;set; }
         public DateTime EventStartDateTime { get; set; }
         public int NumberOfSeats { get; set; }
-        public string EventName { get; set; }
     }
 }
