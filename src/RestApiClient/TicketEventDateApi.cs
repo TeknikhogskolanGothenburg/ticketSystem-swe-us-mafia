@@ -8,6 +8,14 @@ namespace TicketSystem.RestApiClient
 {
     public class TicketEventDateApi
     {
+        public List<TicketEventDate> GetAllTicketEventDate()
+        {
+            var client = new RestClient("http://localhost:51775/");
+            var request = new RestRequest("TicketEventDate", Method.GET);
+            var response = client.Execute<List<TicketEventDate>>(request);
+            return response.Data;
+        }
+
         public TicketEventDate GetTicketEventDates(string query)
         {
             var client = new RestClient("http://localhost:51775/");

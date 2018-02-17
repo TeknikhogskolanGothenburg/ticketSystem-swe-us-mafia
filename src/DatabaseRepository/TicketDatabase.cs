@@ -269,7 +269,12 @@ namespace TicketSystem.DatabaseRepository
 
         public List<Order> FindAllCustomerOrder()
         {
-            return FindOrdersSuchThat("1 = 1", new { }).ToList();
+            using (var connection = new SqlConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+                return connection.Query<Order>("SELECT * FROM TicketTransactions").ToList();
+            }
+            //return FindOrdersSuchThat("1 = 1", new { }).ToList();
         }
 
 
@@ -755,9 +760,11 @@ namespace TicketSystem.DatabaseRepository
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                return connection.Query<TicketEventDate>("SELECT TicketEventDates.*,innerTable.seats AS NumberOfSeats FROM TicketEventDates " +
-                    "INNER JOIN (SELECT SeatsAtEventDate.TicketEventDateID AS id, COUNT(*) AS seats FROM SeatsAtEventDate GROUP BY " +
-                    "SeatsAtEventDate.TicketEventDateID) innerTable ON TicketEventDates.TicketEventDateID = innerTable.id ").ToList();
+                //return connection.Query<TicketEventDate>("SELECT TicketEventDates.*,innerTable.seats AS NumberOfSeats FROM TicketEventDates " +
+                //    "INNER JOIN (SELECT SeatsAtEventDate.TicketEventDateID AS id, COUNT(*) AS seats FROM SeatsAtEventDate GROUP BY " +
+                //    "SeatsAtEventDate.TicketEventDateID) innerTable ON TicketEventDates.TicketEventDateID = innerTable.id ").ToList();
+                return connection.Query<TicketEventDate>("SELECT * FROM TicketEventDates").ToList();
+
             }
         }
 

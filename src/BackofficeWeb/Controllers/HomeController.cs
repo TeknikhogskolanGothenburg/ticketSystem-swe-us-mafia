@@ -13,7 +13,7 @@ namespace BackofficeWeb.Controllers
     {
         VenueApi venueApi = new VenueApi();
         EventApi eventApi = new EventApi();
-        TicketEventDateApi dateAPI = new TicketEventDateApi();
+        TicketEventDateApi dateApi = new TicketEventDateApi();
         OrderAdministratorApi orderApi = new OrderAdministratorApi();
         public IActionResult Index()
         {
@@ -120,10 +120,7 @@ namespace BackofficeWeb.Controllers
             OverviewModel overview = new OverviewModel();
             overview.venues = venueApi.VenueGet();
             overview.events = eventApi.GetAllEvents();
-            foreach(Venue venue in overview.venues)
-            {
-                overview.dates.Add(dateAPI.GetTicketEventDates(Convert.ToString(venue.VenueId)));
-            }
+            overview.dates = dateApi.GetAllTicketEventDate();
             if (User.Identity.IsAuthenticated)
             {
                 return View(overview);

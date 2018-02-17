@@ -31,13 +31,10 @@
                 <div class="form-group" method="post">
                     <label>Venues</label>
                     <select name="venues">
-                        @{
-                            foreach (Venue venue in Model)
-                            {
+                        @foreach (Venue venue in Model)
+                         {
                                 <option value="@venue.VenueId">@venue.VenueName.ToString()</option>
-
-                            }
-                        }                 
+                         }         
                     </select>
                 </div>
               

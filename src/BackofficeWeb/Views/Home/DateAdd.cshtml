@@ -9,42 +9,40 @@
     <div class="col-md-4">
         <section>
             <form id="addevent" method="post">
-                <div class="form-group" method="post">
+                <div class="form-group">
                     <label>Venue</label>
-                    <select>
-                        @{
-                            foreach (Venue venue in Model.venues)
-                            {
-                                <option value="@venue.VenueId" id="venues">@venue.VenueName.ToString()</option>
-                            }
-                        }
+                    <select id="venues">
+                        @foreach (Venue venue in Model.venues)
+                         {
+                                <option value="@venue.VenueId">@venue.VenueName.ToString()</option>
+                         }
                     </select>
                 </div>
-                <div class="form-group" method="post">
+                <div class="form-group">
                     <label>Event</label>
-                    <select>
+                    <select id="events">
                         @foreach (TicketEvent tEvent in Model.events)
                          {
-                         <option value="@tEvent.TicketEventId" id="events">@tEvent.EventName.ToString()</option>
+                         <option value="@tEvent.TicketEventId">@tEvent.EventName.ToString()</option>
                          }
                         
                     </select>
                  </div>
 
-                    <div class="form-group" method="post">
+                    <div class="form-group">
                         <label>Number of Seats</label>
                         <input class="form-control" id="SeatsTxt" required />
                     </div>
 
-                    <div class="form-group" method="post">
+                    <div class="form-group">
                         <label>Date and Time</label>
                         <input class="form-control" id="EventTimeDateTime" type="datetime-local" required/>
                     </div>
 
-                    <div class="form-group" method="post">
-                        <button type="button" class="AddDateBtn" id="AddDateBtn" name="AddDateBtn" onclick="myFunction()">Add Event</button>
+                    <div class="form-group">
+                        <button type="submit" class="AddDateBtn" id="AddDateBtn" name="AddDateBtn" onclick="myFunction()">Add Event</button>
                     </div>
-</form>
+            </form>
         </section>
     </div>
 </div>
@@ -54,14 +52,11 @@
             var dataType = 'application/json'
             
             var datalist = {
-                TicketEventID: $("#events").val(),
-                VenueId: $("#venues").val(),
+                TicketEventID: $("#events option:selected").val(),
+                VenueId: $("#venues option:selected").val(),
                 EventStartDateTime: $("#EventTimeDateTime").val(),
                 NumberOfSeats: $("#SeatsTxt").val()
             }
-            //var datalist3 = {
-            //    VenueId: $("#venues").val(),
-            //}
 
             $.ajax({
                 type: "POST",
