@@ -14,14 +14,20 @@ namespace TicketShopWeb.Controllers
     public class HomeController : Controller
     {
         EventApi eventapi = new EventApi();
+        VenueApi venueapi = new VenueApi();
+        TicketEventDateApi dateapi = new TicketEventDateApi();
+        Ticket customerTicket = new Ticket();
+
         public IActionResult Index()
-        {       
-            List<TicketEvent> listEvent = new List<TicketEvent> { };
-            listEvent = eventapi.GetAllEvents();
+        {
+            CustomerModel customer = new CustomerModel();
+            customer.tEvent = eventapi.GetAllEvents();
+            customer.dates = dateapi.GetAllTicketEventDate();
+            customer.venues = venueapi.VenueGet();
 
             if (User.Identity.IsAuthenticated) 
             {
-                return View(listEvent);
+                return View(customer);
             }
             else
             {
