@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TicketSystem.DatabaseRepository;
 using TicketSystemEngine;
-
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 namespace RESTapi.Controllers
 {
     [Produces("application/json")]
@@ -15,6 +16,12 @@ namespace RESTapi.Controllers
     public class VenueController : Controller
     {
         TicketDatabase database = new TicketDatabase();
+        readonly ILogger<VenueController> _logger;
+
+        public VenueController(ILogger<VenueController> logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         /// Method that gets all Venues from database table Venues.
@@ -23,7 +30,8 @@ namespace RESTapi.Controllers
         // GET: /venue
         [HttpGet]
         public IEnumerable<Venue> GetAllVenues()
-        {           
+        {
+            _logger.LogInformation("Entered GetAllVenues in RestApi Venues Controller");
             return database.AllVenues();
         }
 
@@ -38,6 +46,7 @@ namespace RESTapi.Controllers
         [HttpGet("search/{query}")]
         public IEnumerable<Venue> FindVenues (string query)
         {
+            _logger.LogInformation("Entered FindVenues in RestApi Venues Controller");
             return database.VenuesFind(query);
         }
 
@@ -51,6 +60,7 @@ namespace RESTapi.Controllers
         [HttpGet("{id}")]
         public Venue GetSpecificVenue(int id)
         {
+            _logger.LogInformation("Entered GetSecificVenues in RestApi Venues Controller");
             return database.FindVenueByID(id);
         }
 
@@ -63,6 +73,7 @@ namespace RESTapi.Controllers
         [HttpPost]
         public void AddNewVenue([FromBody]Venue venue)
         {
+            _logger.LogInformation("Entered AddNewVenue in RestApi Venues Controller");
             database.VenueAdd(venue.VenueName, venue.Address, venue.City, venue.Country);
         }
         
@@ -77,6 +88,7 @@ namespace RESTapi.Controllers
         [HttpPut("{id}")]
         public void UpdateVenue(int id, [FromBody]Venue venue)
         {
+            _logger.LogInformation("Entered UpdateVenue in RestApi Venues Controller");
             if (database.FindVenueByID(id) == null)
             {
                 Response.StatusCode = 404;
@@ -96,6 +108,7 @@ namespace RESTapi.Controllers
         [HttpDelete("{id}")]
         public void DeleteVenue(int id)
         {
+            _logger.LogInformation("Entered DeleteVenue in RestApi Venues Controller");
             if (database.FindVenueByID(id) == null)
             {
                 Response.StatusCode = 404;
