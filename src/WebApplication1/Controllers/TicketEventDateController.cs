@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -48,8 +49,12 @@ namespace RESTapi.Controllers
         /// <param name="id">TicketEventDateID of the TicketEventDate to show available seats for.</param>
         /// <returns>A number representing the number of available seats at a specific TicketEventDate.</returns>
         [HttpGet("available/{id}")]
-        public int GetNrOfAvailableSeatsAtTicketEventDate (int id)
+        public int GetNrOfAvailableSeatsAtTicketEventDate(int id)
         {
+            if (ticketDb.FindTicketEventDateByID(id) == null)
+            {
+                Response.StatusCode = 404;
+            }
             return ticketDb.GetNROfAvailableSeatsAtTicketEventDate(id);
         }
 
@@ -61,8 +66,12 @@ namespace RESTapi.Controllers
         /// <returns>A TicketEventDate object.</returns>
         // GET: api/TicketEventDate/5
         [HttpGet("{id}")]
-        public TicketEventDate GetSpecificEventDate(int id)
+        public TicketEventDate GetSpecificTicketEventDate(int id)
         {
+            if (ticketDb.FindTicketEventDateByID(id) == null)
+            {
+                Response.StatusCode = 404;
+            }
             return ticketDb.FindTicketEventDateByID(id);
         }
 
@@ -74,13 +83,24 @@ namespace RESTapi.Controllers
         [HttpPost]
         public void AddNewTicketEventDate([FromBody]TicketEventDate ticketEventDate)
         {
-            try
+            if (!ModelState.IsValid || ticketEventDate.VenueId <= 0)
             {
-                ticketDb.AddTicketEventDate(ticketEventDate.TicketEventID, ticketEventDate.VenueId, ticketEventDate.EventStartDateTime, ticketEventDate.NumberOfSeats);
+                Response.StatusCode = 400;
             }
-            catch(ArgumentException e)
+            else
             {
-                Response.StatusCode = 403;
+                try
+                {
+                    ticketDb.AddTicketEventDate(ticketEventDate.TicketEventID, ticketEventDate.VenueId, ticketEventDate.EventStartDateTime, ticketEventDate.NumberOfSeats);
+                }
+                catch (ArgumentException)
+                {
+                    Response.StatusCode = 400;
+                }
+                catch(SqlException)
+                {
+                    Response.StatusCode = 400;
+                }
             }
         }
 

@@ -72,7 +72,7 @@ namespace RESTapi.Controllers
         [HttpPost]
         public int CreateOrder([FromBody] Order order)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && order.TicketIDs != "")
             {
                 Response.StatusCode = 200;
 
@@ -81,8 +81,16 @@ namespace RESTapi.Controllers
                 if (payment.PaymentStatus == PaymentStatus.PaymentApproved)
                 {
                     // TODO: maybe catch parse error here and give appropriate error, if ticket IDs are bad?
-                    int[] ticketIDs = order.TicketIDs.Split(",").Select(int.Parse).ToArray();
-                    return ticketDB.AddCustomerOrder(order.BuyerFirstName, order.BuyerLastName, order.BuyerAddress, order.BuyerCity, payment.PaymentStatus, payment.PaymentReference, ticketIDs, order.BuyerEmailAddress);
+                    try
+                    {
+                        int[] ticketIDs = order.TicketIDs.Split(",").Select(int.Parse).ToArray();
+                        return ticketDB.AddCustomerOrder(order.BuyerFirstName, order.BuyerLastName, order.BuyerAddress, order.BuyerCity, payment.PaymentStatus, payment.PaymentReference, ticketIDs, order.BuyerEmailAddress);
+                    }
+                    catch (FormatException)
+                    {
+                        Response.StatusCode = 400;
+                        return 0;
+                    }
                 }
                 else
                 {
@@ -92,7 +100,8 @@ namespace RESTapi.Controllers
             }
             else
             {
-                return  Response.StatusCode = 400;
+                Response.StatusCode = 400;
+                return 0;
             }
         }
 

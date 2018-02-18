@@ -9,6 +9,8 @@ using TicketSystem.DatabaseRepository;
 using TicketSystemEngine;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using System.Net;
+
 namespace RESTapi.Controllers
 {
     [Produces("application/json")]
@@ -61,6 +63,10 @@ namespace RESTapi.Controllers
         public Venue GetSpecificVenue(int id)
         {
             _logger.LogInformation("Entered GetSecificVenues in RestApi Venues Controller");
+            if(database.FindVenueByID(id) == null)
+            {
+                    Response.StatusCode = 404;
+            }
             return database.FindVenueByID(id);
         }
 
@@ -74,7 +80,14 @@ namespace RESTapi.Controllers
         public void AddNewVenue([FromBody]Venue venue)
         {
             _logger.LogInformation("Entered AddNewVenue in RestApi Venues Controller");
-            database.VenueAdd(venue.VenueName, venue.Address, venue.City, venue.Country);
+            if (ModelState.IsValid)
+            {
+                database.VenueAdd(venue.VenueName, venue.Address, venue.City, venue.Country);
+            }
+            else
+            {
+                Response.StatusCode = 400;
+            }
         }
         
         /// <summary>
