@@ -117,10 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Add to Cart" xml:space="preserve">
+    <value>Lägg i Kundvagn</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adress</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Stad</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Land</value>
+  </data>
   <data name="Price" xml:space="preserve">
     <value>Pris</value>
   </data>
+  <data name="Qt" xml:space="preserve">
+    <value>Antal</value>
+  </data>
   <data name="Tickets" xml:space="preserve">
     <value>Biljetter</value>
+  </data>
+  <data name="Venue" xml:space="preserve">
+    <value>Arena</value>
   </data>
 </root>
