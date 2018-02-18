@@ -50,7 +50,6 @@ namespace TicketShopWeb.Controllers
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Contact page for Amazing ticketshop.";
 
             return View();
         }
