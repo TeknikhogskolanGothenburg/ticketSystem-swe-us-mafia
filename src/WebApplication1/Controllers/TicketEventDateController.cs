@@ -40,10 +40,24 @@ namespace RESTapi.Controllers
         }
 
         /// <summary>
+        /// This method returns the number of available seats at at specific TicketEventDate,
+        /// based on the TicketEventDateID sent in to method. To be used for showing customers
+        /// how many available seats there are at the moment (after tickets have been sold
+        /// already).
+        /// </summary>
+        /// <param name="id">TicketEventDateID of the TicketEventDate to show available seats for.</param>
+        /// <returns>A number representing the number of available seats at a specific TicketEventDate.</returns>
+        [HttpGet("available/{id}")]
+        public int GetNrOfAvailableSeatsAtTicketEventDate (int id)
+        {
+            return ticketDb.GetNROfAvailableSeatsAtTicketEventDate(id);
+        }
+
+        /// <summary>
         /// Method that gets a specific ticketeventdate based on the
         /// ticketeventdateid sent in to the method.
         /// </summary>
-        /// <param name="id">Ticketeventdate of the ticketevent we want to get data on.</param>
+        /// <param name="id">TicketEventDateID of the TicketEventDate to get data on.</param>
         /// <returns>A TicketEventDate object.</returns>
         // GET: api/TicketEventDate/5
         [HttpGet("{id}")]
