@@ -58,11 +58,17 @@ namespace BackofficeWeb.Controllers
             }
         }
 
-        public IActionResult Order()
+        public IActionResult Order(string query)
         {
             List<Order> orderList = new List<Order> { };
-            orderList = orderApi.GetAllOrders();
-
+            if (String.IsNullOrEmpty(query) || query == "query")
+            {              
+                orderList = orderApi.GetAllOrders();
+            }
+            else
+            {
+                orderList = orderApi.GetOrdersByQuery(query);
+            }
             if (User.Identity.IsAuthenticated)
             {
                 return View(orderList);
