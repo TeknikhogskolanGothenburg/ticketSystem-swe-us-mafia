@@ -79,22 +79,6 @@ namespace BackofficeWeb.Controllers
             }
         }
 
-        public IActionResult OrderQuery(string query)
-        {
-            List<Order> orderList = new List<Order> { };
-            orderList = orderApi.GetOrdersByQuery(query);
-
-            if (User.Identity.IsAuthenticated)
-            {
-                return View("Order", orderList);
-            }
-            else
-            {
-                return RedirectToAction("Login", "Account");
-            }
-        }
-
-
         public IActionResult VenueAdd()
         {
             Venue venue = new Venue();
