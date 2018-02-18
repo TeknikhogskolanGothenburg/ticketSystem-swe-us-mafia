@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using TicketSystem.DatabaseRepository;
 using TicketSystemEngine;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace RestApplication.Controllers
 {
@@ -50,6 +51,10 @@ namespace RestApplication.Controllers
         [HttpGet("{id}")]
         public TicketEvent GetSpecificEvent(int id)
         {
+            if(ticketDb.FindEventByID(id) == null)
+            {
+                Response.StatusCode = 404;
+            }
             return ticketDb.FindEventByID(id);
         }
 
@@ -61,8 +66,17 @@ namespace RestApplication.Controllers
         // POST /event
         [HttpPost]
         public TicketEvent CreateTicketEvent([FromBody]TicketEvent ticketEvent)
-        {      
-            return ticketDb.EventAdd(ticketEvent.EventName, ticketEvent.EventHtmlDescription, ticketEvent.TicketEventPrice);
+        {
+            if (ModelState.IsValid)
+            {
+                Response.StatusCode = 200;
+                return ticketDb.EventAdd(ticketEvent.EventName, ticketEvent.EventHtmlDescription, ticketEvent.TicketEventPrice);
+            }
+            else
+            {
+                Response.StatusCode = 400;
+                return null;
+            }            
         }
 
         /// <summary>

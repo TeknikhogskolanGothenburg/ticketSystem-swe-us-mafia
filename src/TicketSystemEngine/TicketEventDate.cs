@@ -6,7 +6,7 @@ namespace TicketSystemEngine
     {
         public int TicketEventDateID { get; set; }
         public int TicketEventID { get; set; }
-        public int VenueId{get;set; }
+        public int VenueId{ get;set; }
         public DateTime EventStartDateTime { get; set; }
         public int NumberOfSeats { get; set; }
     }
