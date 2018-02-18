@@ -51,7 +51,15 @@ namespace RESTapi.Controllers
         [HttpPost("{id}")]
         public Ticket CreateTicket(int id)
         {
-            return db.CreateTicket(id);
+            if(db.FindTicketEventDateByID(id) != null)
+            {
+                return db.CreateTicket(id);
+            }
+            else
+            {
+                Response.StatusCode = 404;
+                return null;
+            }                  
         }
         
       /* Don't know if we even need this method?

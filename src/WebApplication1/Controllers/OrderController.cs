@@ -8,6 +8,8 @@ using TicketSystem.DatabaseRepository;
 using Newtonsoft.Json;
 using TicketSystemEngine;
 using TicketSystem.PaymentProvider;
+using System.Net.Http;
+using System.Net;
 
 namespace RESTapi.Controllers
 {
@@ -51,7 +53,12 @@ namespace RESTapi.Controllers
         [HttpGet("{id}")]
         public Order GetSpecificOrder(int id)
         {
-            return ticketDB.FindCustomerOrderByID(id);
+            if(ticketDB.FindCustomerOrderByID(id) == null)
+            {
+                Response.StatusCode = 404;
+            }
+            //Response.StatusCode = 200;
+            return ticketDB.FindCustomerOrderByID(id);           
         }
 
         /// <summary>
@@ -65,18 +72,27 @@ namespace RESTapi.Controllers
         [HttpPost]
         public int CreateOrder([FromBody] Order order)
         {
-            PaymentProvider paymentProvider = new PaymentProvider();
-            var payment = paymentProvider.Pay(150, "SEK", order.TransactionID.ToString());
-            if (payment.PaymentStatus == PaymentStatus.PaymentApproved)
+            if (ModelState.IsValid)
             {
-                // TODO: maybe catch parse error here and give appropriate error, if ticket IDs are bad?
-                int[] ticketIDs = order.TicketIDs.Split(",").Select(int.Parse).ToArray();
-                return ticketDB.AddCustomerOrder(order.BuyerFirstName, order.BuyerLastName, order.BuyerAddress, order.BuyerCity, payment.PaymentStatus, payment.PaymentReference, ticketIDs, order.BuyerEmailAddress);
+                Response.StatusCode = 200;
+
+                PaymentProvider paymentProvider = new PaymentProvider();
+                var payment = paymentProvider.Pay(150, "SEK", order.TransactionID.ToString());
+                if (payment.PaymentStatus == PaymentStatus.PaymentApproved)
+                {
+                    // TODO: maybe catch parse error here and give appropriate error, if ticket IDs are bad?
+                    int[] ticketIDs = order.TicketIDs.Split(",").Select(int.Parse).ToArray();
+                    return ticketDB.AddCustomerOrder(order.BuyerFirstName, order.BuyerLastName, order.BuyerAddress, order.BuyerCity, payment.PaymentStatus, payment.PaymentReference, ticketIDs, order.BuyerEmailAddress);
+                }
+                else
+                {
+                    Response.StatusCode = 403;
+                    return -(int)payment.PaymentStatus;
+                }
             }
             else
             {
-                Response.StatusCode = 403;
-                return -(int)payment.PaymentStatus;
+                return  Response.StatusCode = 400;
             }
         }
 
@@ -95,6 +111,7 @@ namespace RESTapi.Controllers
                 return;
             }
             ticketDB.UpdateCustomerOrder(id, order.BuyerLastName, order.BuyerFirstName, order.BuyerAddress, order.BuyerCity);
+            Response.StatusCode = 200;
         }
 
         /// <summary>
@@ -113,6 +130,7 @@ namespace RESTapi.Controllers
                 return;
             }
             ticketDB.DeleteCustomerOrder(id);
+            Response.StatusCode = 200;
         }
     }
 }

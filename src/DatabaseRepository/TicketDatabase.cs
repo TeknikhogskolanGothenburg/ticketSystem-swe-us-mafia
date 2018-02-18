@@ -529,7 +529,6 @@ namespace TicketSystem.DatabaseRepository
         /// <returns>A ticket from the database with a ticketid and a seatid.</returns>
         public Ticket CreateTicket(int ticketEventDateID)
         {
-
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
@@ -552,6 +551,7 @@ namespace TicketSystem.DatabaseRepository
                 return false;
             }
         }
+
         public IEnumerable<Ticket> GetAllTickets()
         {
             using (var connection = new SqlConnection(CONNECTION_STRING))
