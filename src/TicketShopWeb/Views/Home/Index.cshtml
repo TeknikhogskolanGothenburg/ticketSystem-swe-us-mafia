@@ -39,19 +39,19 @@
                                     <div class="ticket-body">
                                         <h4 class="ticket-title">Event: @ticketevent.EventName</h4>
                                         <p class="ticket-info">Info: @ticketevent.EventHtmlDescription</p>
-                                        <p>Venue: @venue.VenueName</p>
-                                        <p>Address: @venue.Address</p>
-                                        <p>City: @venue.City</p>
-                                        <p>Country: @venue.Country</p>
-                                        <p class="ticket-price">Price @ticketevent.TicketEventPrice</p>
+                                        <p>@Localizer["Venue"]: @venue.VenueName</p>
+                                        <p>@Localizer["Address"]: @venue.Address</p>
+                                        <p>@Localizer["City"]: @venue.City</p>
+                                        <p>@Localizer["Country"]: @venue.Country</p>
+                                        <p class="ticket-price">@Localizer["Price"]: @ticketevent.TicketEventPrice</p>
                                     </div>
                                     <div class="ticket-footer">
                                         <a href="" id="btn-cart" class="btn-cart" onclick="myFunction(
                                         @if (ticketevent.TicketEventId == eventDate.TicketEventID)
                                          {
                                              @eventDate.TicketEventDateID;
-                                         })">Add to Cart</a>
-                                        <label class="qtlabel" for="qt">Qt: </label>
+                                         })">@Localizer["Add to Cart"]</a>
+                                        <label class="qtlabel" for="qt">@Localizer["Qt"]: </label>
                                         @*<input id="qt" type="number" min="1" max="5" value="selected" />*@
                                         <select name="quantity" id="qt" >
                                             {
