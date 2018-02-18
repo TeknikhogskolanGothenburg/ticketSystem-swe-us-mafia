@@ -117,16 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Hello" xml:space="preserve">
-    <value>Hej</value>
+  <data name="Contact" xml:space="preserve">
+    <value>Kontakta oss</value>
   </data>
-  <data name="Log in" xml:space="preserve">
-    <value>Logga in</value>
+  <data name="Contact page for Amazing ticketshop." xml:space="preserve">
+    <value>Kontakt sidan för Amazing ticketshop.</value>
   </data>
-  <data name="Log out" xml:space="preserve">
-    <value>Logga ut</value>
+  <data name="Phone:" xml:space="preserve">
+    <value>Telefon:</value>
   </data>
-  <data name="Register" xml:space="preserve">
-    <value>Registrera</value>
+  <data name="Questions about payment:" xml:space="preserve">
+    <value>Frågor om betalning:</value>
   </data>
 </root>

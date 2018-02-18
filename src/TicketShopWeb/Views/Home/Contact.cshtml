@@ -1,17 +1,19 @@
-﻿@{
-    ViewData["Title"] = "Contact";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = @Localizer["Contact"];
 }
 <h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+<h3>@Localizer["Contact page for Amazing ticketshop."]</h3>
 
 <address>
     Heavenly way 1b<br />
     Heavenstown, 25532 Sweden<br />
-    <abbr title="Phone">P:</abbr>
+    <abbr title="Phone">@Localizer["Phone:"]</abbr>
     000769017616
 </address>
 
 <address>
     <strong>Support:</strong> <a href="mailto:Support@amazingticketshop.com">Support@amazingticketshop.com</a><br />
-    <strong>Questions about payment:</strong> <a href="mailto:Payment@amazingticketshop.com">Payment@amazingticketshop.com</a>
+    <strong>@Localizer["Questions about payment:"]</strong> <a href="mailto:Payment@amazingticketshop.com">Payment@amazingticketshop.com</a>
 </address>
