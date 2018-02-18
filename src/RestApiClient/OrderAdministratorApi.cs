@@ -15,12 +15,12 @@ namespace TicketSystem.RestApiClient
             return response.Data;
         }
 
-        public Order GetOrderByQuery(string query)
+        public List<Order> GetOrdersByQuery(string query)
         {
             var client = new RestClient("http://localhost:51775/");
-            var request = new RestRequest("Order/{query}", Method.GET);
+            var request = new RestRequest("Order/search/{query}", Method.GET);
             request.AddUrlSegment("query", query);
-            var response = client.Execute<Order>(request);
+            var response = client.Execute<List<Order>>(request);
 
             if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
