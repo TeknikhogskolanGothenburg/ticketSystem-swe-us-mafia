@@ -389,9 +389,6 @@ namespace TicketSystem.DatabaseRepository
             }
         }
 
-
-        // TODO: dokumentera att returvärdet är ett transaktions-ID!
-        // TODO: flera tickets per order i mån av tid?
         /// <summary>
         /// Method that returns a transactionID that represents a customer order.
         /// </summary>
@@ -432,7 +429,6 @@ namespace TicketSystem.DatabaseRepository
                 return transactionId;
             }
         }
-
 
         /// <summary>
         /// Method used to add a new TicketEventDate and seats for that ticketeventdate.
@@ -662,8 +658,9 @@ namespace TicketSystem.DatabaseRepository
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                return connection.Query<int>("SELECT COUNT(SeatsatEventDate.SeatID) AS NumberOfAvailableSeats " +
-                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID WHERE(TicketEventDates.TicketEventDateID = @TicketEventDID " +
+                return connection.Query<int>("SELECT COUNT(SeatsatEventDate.SeatID) AS NumberOfAvailableSeats From SeatsAtEventDate " +
+                    "INNER JOIN TicketEventDates ON TicketEventDates.TicketEventDateID = SeatsAtEventDate.TicketEventDateID " +
+                    "WHERE(TicketEventDates.TicketEventDateID) = @TicketEventDID " +
                     "AND SeatsAtEventDate.SeatID NOT IN(SELECT Tickets.SeatID From Tickets); ", new { TicketEventDID = ticketEventDateID }).FirstOrDefault();
             }
         }
