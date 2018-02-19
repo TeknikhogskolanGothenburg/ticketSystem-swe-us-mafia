@@ -46,6 +46,18 @@ namespace TicketShopWeb.Controllers
             
         }
 
+        public IActionResult OrderAdd()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+        }
+
         public IActionResult About()
         {
 

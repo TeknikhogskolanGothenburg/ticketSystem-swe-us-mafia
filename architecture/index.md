@@ -168,7 +168,6 @@ This can be said to be the main controller of our BackofficeWeb application. The
 with a list of existing Venues. If not, the user is redirected to the Login view again. To be able to show the different menu pages and let users interact with them the 
 following actionresult methods were created: Events, Order, DateAdd, EditEvent, EventAdd, VenueAdd.
 
-
 ####Views
 In views we have three separate folders: Account, Manage and Home. The Account and Manage views are handling the views connected to login, management of user accounts and the like.
 The Home folder contains ten separate view classes that each handles separate aspects of what to show to the user according to a specific request-response scenario.
@@ -180,7 +179,61 @@ that we got through the EventApi. The Delete-action for TicketEvents in Event vi
 directly, to remove the TicketEvent from the database.
 
 
+##TicketShop Solution
+This solution contains one ASP .NET Core web application called: TicketShop and two classlibraries: TicketSystemEngine and RESTApiClient. 
 
+###RestApiClient
+This classlibrary is used to call the CRUD-methods in the RESTApi solution. We have created invididual Api classes to divide
+the operations in to different responsibility areas: EventApi, TicketApi, OrderAdministrationApi, TicketEventDateApi and 
+VenueApi. In each of these classes the relevante CRUD-functions in RestAPI is called so we can handle the request sent from
+the webbrowser and give back the correct (expected response). 
+
+###TicketSystemEngine
+Here we are including the TicketSystemEngine class library that was created in the RestAPI solution, to be able to refer back
+to the same model when using the CRUD-functions as we did when creating them. 
+
+###TicketShopWeb
+
+####Models
+
+#####ApplicationUser 
+This class is automatically generated when including the Microsoft.AspNetCore.Identity into the project. It is used for handling 
+User logins in the application.
+
+#####CustomerModel
+Class that contains four properties: each of them are a list that is to contain- TicketEvent objects, TicketEventDate objects, Venue objects and Ticket objects. This class
+uses the models found in TicketSystemEngine and adapts them to how we want to show the data to users.
+
+#####CartModel
+Thi class is used to represent a cart in the TicketShop, it only contains one propert: A list that is to contain Ticket objects.
+
+#####CustomerSession
+At the moment this model class is not in use. The purpose with the class is to handle CustomerSession objects: representing one customers interaction with the TicketShop. 
+
+####Controllers
+
+#####AccountController
+This controller handles the login requests and requests for creating user accounts by users in the BackOffice webapplication. 
+
+#####ManageController
+Controller generated when including the Microsoft.AspNetCore Authentication, Authorization and Identity. This controller is
+used for managing user accounts. For example if a user wants to change her password, logins and then clicks on "Password",
+enters a new password and clicks on the button "Update password" the IActionResult method "ChangePassword" is called.
+
+#####HomeController
+This can be said to be the main controller class of the TicketShopWeb application. For example the "Index" IActionResult method returns a view that shows all available
+TicketEventDates to the user when the user has successfully logged in. The actionresult method "Cart" are handling the showing of the view of the cart, where the Tickets
+the customer has decided to buy should be shown. 
+
+####Views
+In views we have three separate folders: Account, Manage and Home. The Account and Manage views are handling the views connected to login, management of user accounts and the like.
+The Home folder contains ten separate view classes that each handles separate aspects of what to show to the user according to a specific request-response scenario. For example:
+In "Index" view we are handling what to show to the user on the first page after user has successfully logged in and starts interacting with the webpage. To get data on Venues,
+TicketEvents and TicketEventDates that each holds the data connected to Events that we want to show the user, the IActionResult method "Index" in HomeController constructs
+lists of TicketEvents, TicketEventDates and Venues by calling the RestAPI GET-methods on an eventapi, venuapi and dateapi object. Each list are then used in the "Index" view to show
+the result to the user (List of Events that user can buy tickets for). To let the user add a ticket to their cart an Ajax script is used. Likewise an Ajax script is used to create a 
+Ticket in the database when user clicks on the "Add to cart" button, in this script the RestApi's POST-method for Tickets are directly called and data on a Ticket is put in to the 
+database.
 
 
 
