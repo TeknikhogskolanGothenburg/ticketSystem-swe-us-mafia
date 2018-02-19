@@ -112,16 +112,16 @@
     }
 </script>
 <script>
-    function addTicket(data) {
+    function addTicket(Tdata) {
         $.ajax({
             type: "POST",
             url: "/Home/AddTicket",
             dataType: "json",
-            contentType: "application/json",
-            data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+            data: Tdata,
             async: false,
-            success: function () {
-                console.log("ticket added to model")
+            success: function (data) {
+                console.log(data)
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log("failed xml:" + XMLHttpRequest + " text:" + textStatus + " error:" + errorThrown)
