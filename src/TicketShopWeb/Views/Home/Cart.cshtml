@@ -57,15 +57,18 @@
              }
          }
         <tr>
-            <th colspan="3"><span class="pull-right">Sub Total:</span></th>
-            <th></th>
-        </tr>
-        <tr>
-            <th colspan="3"><span class="pull-right">Tax 30%:</span></th>
-            <th></th>
-        </tr>
-        <tr>
-            <th colspan="3"><span class="pull-right">Total Price:</span></th>
+            @{
+                int result = 0;
+                foreach (Ticket ticket in Model.tickets)
+                {
+
+                    result += ticket.TicketEventPrice;
+                }
+
+            }
+            <th colspan="3"><span class="pull-right">Total Price: @result.ToString()
+
+               </span></th>
             <th></th>
         </tr>
         <tr>
