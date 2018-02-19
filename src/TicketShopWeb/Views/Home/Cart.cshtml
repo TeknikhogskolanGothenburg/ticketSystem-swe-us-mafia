@@ -1,6 +1,7 @@
-﻿
+﻿@using TicketSystemEngine;
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@model CustomerModel
 @{
     ViewData["Title"] = "Cart";
 }
@@ -35,18 +36,19 @@
     <table>
         <tr>
             <th>Ticket</th>
-            <th>Info</th>
+            <th>TicketID</th>
             <th>Price</th>
             <th class="text-center">Delete Ticket</th>
         </tr>
-        @*start loop here*@
+        
+        @foreach (Ticket ticket in Model.tickets){
         <tr>
-            <td>Ghost</td>
-            <td>This is a swedish band</td>
-            <td>40 <a href="#">kr</a></td>
+            <td>@ticket.EventName</td>
+            <td>@ticket.TicketID</td>
+            <td>@ticket.TicketEventPrice<a href="#">kr</a></td>
             <td><button type="submit" class="center-block btn btn-danger">Delete</button></td>
         </tr>
-        @*end of loop*@
+        }
         <tr>
             <th colspan="3"><span class="pull-right">Sub Total:</span></th>
             <th>50kr</th>
