@@ -73,8 +73,29 @@
         </tr>
         <tr>
             <td><a href="Index" class="btn btn-primary">Continue Shopping</a></td>
-            <td colspan="3"><button class="pull-right btn btn-success" onclick="location.href='@Url.Action("OrderAdd", "Home")'"  type="submit">Checkout</button></td>
+
+            @{ 
+                string combinedTicketsString = "";
+                foreach (Ticket ticket in Model.tickets)
+                {
+                    if (ticket.TicketID.ToString() != Model.tickets.Last<Ticket>().ToString())
+                    {
+
+                        combinedTicketsString += ticket.TicketID.ToString() + ",";
+                    }
+                    else
+                    {
+                        combinedTicketsString += ticket.TicketID.ToString();
+                    }
+                }
+
+
+
+
+                <td colspan="3"><button class="pull-right btn btn-success" onclick="location.href='@Url.Action("OrderAdd", "Home", new {combinedTicketsString = @combinedTicketsString})'"  type="submit">Checkout</button></td>
+            }
         </tr>
+
     </table>
 </body>
 </html>

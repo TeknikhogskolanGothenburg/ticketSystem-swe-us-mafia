@@ -62,6 +62,7 @@
             BuyerCity: $("#CityTxt").val(),
             PaymentStatus: $("#PaymentStatusTxt").val(),
             PaymentReferenceID: $("#PaymentReferenceIDTxt").val(),
+            TicketIDs: '@Model.TicketIDs.TrimEnd(',')'
         }
 
         $.ajax({
