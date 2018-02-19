@@ -94,11 +94,11 @@ namespace BackofficeWeb.Controllers
 
         public IActionResult EventAdd()
         {
-            List<Venue> venueList = new List<Venue> { };
-            venueList = venueApi.VenueGet();
+            TicketEvent ticketevent = new TicketEvent();
+            
             if (User.Identity.IsAuthenticated)
             {
-                return View(venueList);
+                return View(ticketevent);
             }
             else
             {

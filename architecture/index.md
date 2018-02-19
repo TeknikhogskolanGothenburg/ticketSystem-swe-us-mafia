@@ -122,7 +122,63 @@ when an administrator wants to add a new Venue. Also for the model class Venue i
 this is checked through ModelState IsValid, if so we insert data on a new Venue in database table Venues, otherwise Response StatusCode is set to 400. For the 
 Delete-method "DeleteVenue" we have to check if the Venue that the user tries to delete actually exists in the database. This is accomplished by checking the 
 result of calling the method "FindVenueByID". If the VenueID isn't found in the database Response StatusCode is set to 404, otherwise the Venue is deleted.
- 
+
+
+##BackOffice Solution
+This solution contains one .Net Core Application project: BackOfficeWeb and two class libraries: RestApiClient and TicketSystemEngine. 
+
+###RestApiClient
+This classlibrary is used to call the CRUD-methods in the RESTApi solution. We have created invididual Api classes to divide
+the operations in to different responsibility areas: EventApi, TicketApi, OrderAdministrationApi, TicketEventDateApi and 
+VenueApi. In each of these classes the relevante CRUD-functions in RestAPI is called so we can handle the request sent from
+the webbrowser and give back the correct (expected response). 
+
+###TicketSystemEngine
+Here we are including the TicketSystemEngine class library that was created in the RestAPI solution, to be able to refer back
+to the same model when using the CRUD-functions as we did when creating them. 
+
+###BackOfficeWeb
+
+####Models
+
+#####ApplicationUser 
+This class is automatically generated when including the Microsoft.AspNetCore.Identity into the project. It is used for handling 
+User logins in the application.
+
+#####OverviewModel
+Class used to represent the objects we are representing in BackOffice as lists, contains a list of Venue objects, list of TicketEvent
+objects and list of TicketEventDates. 
+
+#####VenueEventModel
+Class that contains two properties: A list that is to contain Venue objects and a list that is to contain TicketEvents. This class
+is similar to OverviewModel; it uses the models found in TicketSystemEngine and adapts them to how we want to show the data to users.
+
+####Controllers
+
+#####AccountController
+This controller handles the login requests and requests for creating user accounts by users in the BackOffice webapplication. 
+
+#####ManageController
+Controller generated when including the Microsoft.AspNetCore Authentication, Authorization and Identity. This controller is
+used for managing user accounts. For example if a user wants to change her password, logins and then clicks on "Password",
+enters a new password and clicks on the button "Update password" the IActionResult method "ChangePassword" is called.
+
+#####HomeController
+This can be said to be the main controller of our BackofficeWeb application. The method "Index" checks if the user is authenticated correctly, if so returns the view
+with a list of existing Venues. If not, the user is redirected to the Login view again. To be able to show the different menu pages and let users interact with them the 
+following actionresult methods were created: Events, Order, DateAdd, EditEvent, EventAdd, VenueAdd.
+
+
+####Views
+In views we have three separate folders: Account, Manage and Home. The Account and Manage views are handling the views connected to login, management of user accounts and the like.
+The Home folder contains ten separate view classes that each handles separate aspects of what to show to the user according to a specific request-response scenario.
+For example: VenueAdd view handles what to show to the user and how to handle the data that the user put in when adding a venue. In this view an Ajax script is used to send the values 
+entered by the user in th web GUI to the RESTApi method AddVenue (the latter also inserts the data in to the database table Venues). In the other views we are similarly using Ajax scripts
+to communicate with the RestAPI and it's methods. For some views we are handling some of the requests through the HomeController instead, for example in "Event" view when we want to show 
+a list of existing TicketEvents, that is handled through the HomeController method "Events", to fill the list of TicketEvents we are then looping through a list of existing TicketEvent objects
+that we got through the EventApi. The Delete-action for TicketEvents in Event view is handled through an Ajax script though, in the Ajax script we are calling the Delete-method in the RESTApi 
+directly, to remove the TicketEvent from the database.
+
 
 
 
