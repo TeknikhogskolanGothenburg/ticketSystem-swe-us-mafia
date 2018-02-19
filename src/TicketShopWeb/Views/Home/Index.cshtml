@@ -47,16 +47,6 @@
                                         <p class="ticket-price">@Localizer["Price"]: @ticketevent.TicketEventPrice kr</p>
                                     </div>
                                     <div class="ticket-footer">
-                                        <label for="qt">@Localizer["Qt"]: </label>
-                                        <select name="quantity" id="qt">
-                                            {
-                                            <option value="1" selected="selected">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            }
-                                        </select>
                                         <br />
                                         <br />
                                         <button type="button" id="btn-cart" class="btn-cart" onclick="myFunction(
@@ -81,13 +71,13 @@
 <script>
     function myFunction(ticketEventDateID) {
         
-        var x = $("#qt option:selected").val();
-        for (var i = 0; i < x; i++)
-        {
-            runAjax(ticketEventDateID);
-        }
+        //var x = $("#"+ticketEventDateID+"option:selected").val();
+        //for (var i = 0; i < x; i++)
+        //{
+        runAjax(ticketEventDateID);
+        //}
         alert("Added to cart");
-        document.getElementById("qt").value = document.getElementById("qt").defaultValue;
+        //document.getElementById("qt" + ticketEventDateID).value = document.getElementById("qt" + ticketEventDateID).defaultValue;
     };
 </script>
 <script>

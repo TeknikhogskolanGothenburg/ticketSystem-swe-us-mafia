@@ -16,6 +16,7 @@ namespace TicketShopWeb.Controllers
         EventApi eventapi = new EventApi();
         VenueApi venueapi = new VenueApi();
         TicketEventDateApi dateapi = new TicketEventDateApi();
+        OrderAdministratorApi orderapi = new OrderAdministratorApi();
         public static CustomerModel customer = new CustomerModel();
 
         public IActionResult Index()
@@ -60,6 +61,10 @@ namespace TicketShopWeb.Controllers
             }
         }
 
+        public IActionResult SeeOrders()
+        {
+
+        }
         public IActionResult About()
         {
 
