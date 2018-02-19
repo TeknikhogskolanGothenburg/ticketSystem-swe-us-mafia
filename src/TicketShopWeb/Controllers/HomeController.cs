@@ -75,13 +75,14 @@ namespace TicketShopWeb.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [Produces("application/json")]
         [HttpPost]
-        public JsonResult AddTicket([FromBody] Ticket ticket)
+        public JsonResult AddTicket(Ticket ticket)
         {
+            Ticket ticket2 = ticket;
             customer.tickets.Add(ticket);
             return Json(ticket);
         }
-
-        //new Ticket(TicketID, SeatID, VenueName, EventName, TicketEventPrice, EventStartDateTime)
+        
     }
 }
