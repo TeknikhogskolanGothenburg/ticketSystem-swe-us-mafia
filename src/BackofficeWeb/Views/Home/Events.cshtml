@@ -1,11 +1,13 @@
-﻿@using TicketSystemEngine;
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using TicketSystemEngine;
+@inject IViewLocalizer Localizer
 @model List<TicketEvent>
 @{
     ViewData["Title"] = "Events List";
 }
-<h2>Events List</h2>
+<h2>@Localizer["Events List"]</h2>
 
-<button type="button" class="btn btn-default" onclick="location.href='/Home/EventAdd'">Add Event(s)</button>
+<button type="button" class="btn btn-default" onclick="location.href='/Home/EventAdd'">@Localizer["Add Event(s)"]</button>
 
 
 <div class="col-md-venues" column-count="3">
@@ -23,7 +25,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-default" onclick="myFunction(@ticketEvent.TicketEventId)">Delete Event</button>
+                            <button type="submit" class="btn btn-default" onclick="myFunction(@ticketEvent.TicketEventId)">@Localizer["Delete Event"]</button>
                         </div>
                     </form>
                 </section>

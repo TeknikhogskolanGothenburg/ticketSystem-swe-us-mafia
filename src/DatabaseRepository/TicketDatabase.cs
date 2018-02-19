@@ -363,22 +363,6 @@ namespace TicketSystem.DatabaseRepository
             using (var connection = new SqlConnection(CONNECTION_STRING))
             {
                 connection.Open();
-                /*
-                var seatIDsThatAreChangedToAvailable = connection.Query("SELECT Tickets.SeatID From Tickets " +
-                    "INNER JOIN TicketsToTransactions ON TicketsToTransactions.TicketID = Tickets.TicketID " +
-                    "INNER JOIN TicketTransactions ON TicketTransactions.TransactionID = TicketsToTransactions.TransactionID " +
-                    "WHERE TicketTransactions.TransactionID =  @TransactionID", new { TransactionID = transactionID }).FirstOrDefault();
-
-                var orderTicketID = connection.Query("SELECT Tickets.TicketID From Tickets " +
-                    "INNER JOIN TicketsToTransactions ON TicketsToTransactions.TicketID = Tickets.TicketID " +
-                    "INNER JOIN TicketTransactions ON TicketTransactions.TransactionID = TicketsToTransactions.TransactionID " +
-                    "WHERE TicketTransactions.TransactionID = @TransactionID", new { TransactionID = transactionID }).FirstOrDefault();
-
-                var orderTicketEventDateID = connection.ExecuteScalar<int>("Select TicketEventDates.TicketEventDateID From TicketEventDates " +
-                    "INNER JOIN SeatsAtEventDate ON SeatsAtEventDate.TicketEventDateID = TicketEventDates.TicketEventDateID " +
-                    "INNER JOIN Tickets ON Tickets.SeatID = SeatsAtEventDate.SeatID " +
-                    "INNER JOIN TicketsToTransactions ON TicketsToTransactions.TicketID = Tickets.TicketID WHERE TicketID = @TicketID", new { TicketID = orderTicketID });
-                */
                 var tickets = connection.Query<int>("SELECT TicketsToTransactions.TicketID FROM TicketsToTransactions WHERE TicketsToTransactions.TransactionID = @ID", new { ID = transactionID });
                 connection.Execute("DELETE FROM TicketsToTransactions WHERE TicketsToTransactions.TransactionID = @ID", new { ID = transactionID });
                 connection.Execute("DELETE FROM TicketTransactions WHERE TransactionID = @ID ", new { ID = transactionID });

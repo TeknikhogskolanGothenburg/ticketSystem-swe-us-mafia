@@ -1,7 +1,9 @@
 ﻿@using TicketSystemEngine;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model VenueEventModel
 @{
-    ViewData["Title"] = "Enter Date/Event Details";
+    ViewData["Title"] = @Localizer["Enter Date/Event Details"];
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -10,7 +12,7 @@
         <section>
             <form id="addevent" method="post">
                 <div class="form-group">
-                    <label>Venue</label>
+                    <label>@Localizer["Venue"]</label>
                     <select id="venues">
                         @foreach (Venue venue in Model.venues)
                          {
@@ -30,17 +32,17 @@
                  </div>
 
                     <div class="form-group">
-                        <label>Number of Seats</label>
+                        <label>@Localizer["Number of Seats"]</label>
                         <input class="form-control" id="SeatsTxt" required />
                     </div>
 
                     <div class="form-group">
-                        <label>Date and Time</label>
+                        <label>@Localizer["Date and Time"]</label>
                         <input class="form-control" id="EventTimeDateTime" type="datetime-local" required/>
                     </div>
 
                     <div class="form-group">
-                        <button type="submit" class="AddDateBtn" id="AddDateBtn" name="AddDateBtn" onclick="myFunction()">Add Event</button>
+                        <button type="submit" class="AddDateBtn" id="AddDateBtn" name="AddDateBtn" onclick="myFunction()">@Localizer["Add Event"]</button>
                     </div>
             </form>
         </section>
