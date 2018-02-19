@@ -16,21 +16,15 @@ namespace TicketShopWeb.Controllers
         EventApi eventapi = new EventApi();
         VenueApi venueapi = new VenueApi();
         TicketEventDateApi dateapi = new TicketEventDateApi();
-        Ticket customerTicket = new Ticket();
-        private static Random idGenerator = new Random();
-        private static Dictionary<int, CustomerSession> CustomerSessions = new Dictionary<int, CustomerSession>();
+        public static CustomerModel customer = new CustomerModel();
 
         public IActionResult Index()
         {
-            
-
             if (User.Identity.IsAuthenticated) 
-            { 
-                CustomerModel customer = new CustomerModel();
+            {
                 customer.tEvent = eventapi.GetAllEvents();
                 customer.dates = dateapi.GetAllTicketEventDate();
                 customer.venues = venueapi.VenueGet();
-                HttpContext.Session.SetString("customer");
                 return View(customer);
             }
             else
@@ -68,5 +62,23 @@ namespace TicketShopWeb.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpPost]
+        public ActionResult CreateTicket(string jsonObj)
+        {
+            string[] jsonArray = jsonObj.Split();
+            Ticket ticket = new Ticket();
+            ticket.TicketID = Convert.ToInt32(jsonArray[0]);
+            ticket.SeatID = Convert.ToInt32(jsonArray[1]);
+            ticket.VenueName = jsonArray[2];
+            ticket.EventName = jsonArray[3];
+            ticket.TicketEventPrice = Convert.ToInt32(jsonArray[4]);
+            ticket.EventStartDateTime = Convert.ToDateTime(jsonArray[5]);
+            customer.tickets.Add(ticket);
+            return View("Index");
+        }
+
+
+        //new Ticket(TicketID, SeatID, VenueName, EventName, TicketEventPrice, EventStartDateTime)
     }
 }

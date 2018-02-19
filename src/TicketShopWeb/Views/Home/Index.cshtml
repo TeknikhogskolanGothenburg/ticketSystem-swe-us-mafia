@@ -49,7 +49,7 @@
                                         <button type="button" id="btn-cart" class="btn-cart" onclick="myFunction('@if (ticketevent.TicketEventId == eventDate.TicketEventID)
                                                  {
                                                     @eventDate.TicketEventDateID 
-                                                 }', '@Model')">@Localizer["Add to Cart"]</button>
+                                                 }')">@Localizer["Add to Cart"]</button>
                                         <label for="qt">@Localizer["Qt"] </label>
                                         <select name="quantity" id="qt" >
                                             {
@@ -75,20 +75,21 @@
 </html>
 
 <script>
-    function myFunction(ticketEventDateID, model) {
+    function myFunction(ticketEventDateID) {
         
         var x = $("#qt option:selected").val();
         for (var i = 0; i < x; i++)
         {
-            runAjax(ticketEventDateID, model);
+            runAjax(ticketEventDateID);
         }
-        //alert("Added to cart");
+        alert("Added to cart");
         document.getElementById("qt").value = document.getElementById("qt").defaultValue;
     };
 </script>
 <script>
-    function runAjax(ticketEventDateID, model)
+    function runAjax(ticketEventDateID)
     {
+        var view_data;
         var dataType = 'application/json'
         $.ajax({
             type: "POST",
@@ -96,15 +97,31 @@
             dataType: 'application/json',
             contentType: dataType,
             async: false,
-            success: function (response) {
-                var TicketID = response.TicketID;
-                var SeatID = response.SeatID;
-                var VenueName = response.VenueName;
-                var EventName = response.EventName;
-                var TicketEventPrice = response.TicketEventPrice;
-                var EventStartDateTime = response.EventStartDateTime;
-                return model.tickets.Add(new Ticket(TicketID, SeatID, VenueName, EventName, TicketEventPrice, EventStartDateTime));
+            success: function (data) {
+                view_data = data.view_data;
+                console.log(view_data);
+                doWork(view_data);
             }
         });
+    }
+</script>
+<script>
+    function doWork(data) {
+        $.ajax({
+            type: "POST",
+            url: '/Home/CreateTicket/' + data,
+            dataType: 'application/json',
+            contentType: dataType,
+            data: data,
+            async: false
+        })
+        //var parsed = JSON.parse(data);
+        //var TicketID = parsed.TicketID;
+        //var SeatID = parsed.SeatID;
+        //var VenueName = parsed.VenueName;
+        //var EventName = parsed.EventName;
+        //var TicketEventPrice = parsed.TicketEventPrice;
+        //var EventStartDateTime = parsed.EventStartDateTime;
+        //Model.tickets.Add(new Ticket(TicketID, SeatID, VenueName, EventName, TicketEventPrice, EventStartDateTime));
     }
 </script>
