@@ -22,7 +22,7 @@
         <h2>@Localizer["Tickets"]</h2>
 
    @if (Model != null)
-    {
+   {
        foreach (TicketEventDate eventDate in Model.dates)
        {
            foreach (TicketEvent ticketevent in Model.tEvent)
@@ -35,7 +35,7 @@
                        {
                            <div class="col-lg-3 col-md-8 mb-4">
                                 <div class="ticket">
-                                    <img class="ticket-img-top" src="~/images/ticket-clipart-purge-clipart-ticket-85041.jpg" alt="" />
+                                    <img class="ticket-img-top" src="~/images/skarri.png" alt="" />
                                     <div class="ticket-body">
                                         <h4 class="ticket-title">Event: @ticketevent.EventName</h4>
                                         <p class="ticket-info">Info: @ticketevent.EventHtmlDescription</p>
@@ -43,11 +43,14 @@
                                         <p>@Localizer["Address"]: @venue.Address</p>
                                         <p>@Localizer["City"]: @venue.City</p>
                                         <p>@Localizer["Country"]: @venue.Country</p>
-                                        <p class="ticket-price">@Localizer["Price"]: @ticketevent.TicketEventPrice kr</p>
+                                        <p class="ticket-price">@Localizer["Price"]: @ticketevent.TicketEventPrice</p>
                                     </div>
                                     <div class="ticket-footer">
-                                        <label class="qtlabel" for="qt">@Localizer["Qt"]: </label>
-                                        @*<input id="qt" type="number" min="1" max="5" value="selected" />*@
+                                        <button type="button" id="btn-cart" class="btn-cart" onclick="myFunction('@if (ticketevent.TicketEventId == eventDate.TicketEventID)
+                                                 {
+                                                    @eventDate.TicketEventDateID 
+                                                 }', '@Model')">@Localizer["Add to Cart"]</button>
+                                        <label for="qt">@Localizer["Qt"] </label>
                                         <select name="quantity" id="qt" >
                                             {
                                                 <option value="1" selected="selected">1</option>
@@ -57,13 +60,6 @@
                                                 <option value="5">5</option>
                                             }
                                         </select>
-                                        <br />
-                                        <br />
-                                        <a href="" id="btn-cart" class="btn-cart" onclick="myFunction(
-                                        @if (ticketevent.TicketEventId == eventDate.TicketEventID)
-                                         {
-                                             @eventDate.TicketEventDateID;
-                                         })">@Localizer["Add to Cart"]</a>
                                     </div>
                                 </div>
                             </div>
@@ -79,36 +75,36 @@
 </html>
 
 <script>
-    function myFunction(ticketEventDateID) {
+    function myFunction(ticketEventDateID, model) {
         
         var x = $("#qt option:selected").val();
         for (var i = 0; i < x; i++)
         {
-            runAjax(ticketEventDateID);
+            runAjax(ticketEventDateID, model);
         }
-        alert("Added to cart");
-        document.getElementById("qt").reset();
+        //alert("Added to cart");
+        document.getElementById("qt").value = document.getElementById("qt").defaultValue;
     };
 </script>
 <script>
-    function runAjax(ticketEventDateID)
+    function runAjax(ticketEventDateID, model)
     {
         var dataType = 'application/json'
-        var datalist = {
-
-        }
         $.ajax({
             type: "POST",
             url: "http://localhost:51775/Ticket/" + ticketEventDateID,
             dataType: 'application/json',
             contentType: dataType,
-            data: datalist,
-            async: false
+            async: false,
+            success: function (response) {
+                var TicketID = response.TicketID;
+                var SeatID = response.SeatID;
+                var VenueName = response.VenueName;
+                var EventName = response.EventName;
+                var TicketEventPrice = response.TicketEventPrice;
+                var EventStartDateTime = response.EventStartDateTime;
+                return model.tickets.Add(new Ticket(TicketID, SeatID, VenueName, EventName, TicketEventPrice, EventStartDateTime));
+            }
         });
-        
-
     }
 </script>
-
-
-

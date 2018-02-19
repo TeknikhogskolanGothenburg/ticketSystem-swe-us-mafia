@@ -17,16 +17,20 @@ namespace TicketShopWeb.Controllers
         VenueApi venueapi = new VenueApi();
         TicketEventDateApi dateapi = new TicketEventDateApi();
         Ticket customerTicket = new Ticket();
+        private static Random idGenerator = new Random();
+        private static Dictionary<int, CustomerSession> CustomerSessions = new Dictionary<int, CustomerSession>();
 
         public IActionResult Index()
         {
-            CustomerModel customer = new CustomerModel();
-            customer.tEvent = eventapi.GetAllEvents();
-            customer.dates = dateapi.GetAllTicketEventDate();
-            customer.venues = venueapi.VenueGet();
+            
 
             if (User.Identity.IsAuthenticated) 
-            {
+            { 
+                CustomerModel customer = new CustomerModel();
+                customer.tEvent = eventapi.GetAllEvents();
+                customer.dates = dateapi.GetAllTicketEventDate();
+                customer.venues = venueapi.VenueGet();
+                HttpContext.Session.SetString("customer");
                 return View(customer);
             }
             else
