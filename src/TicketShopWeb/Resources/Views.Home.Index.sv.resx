@@ -129,6 +129,9 @@
   <data name="Country" xml:space="preserve">
     <value>Land</value>
   </data>
+  <data name="Date and Time" xml:space="preserve">
+    <value>Datum och Tid</value>
+  </data>
   <data name="Price" xml:space="preserve">
     <value>Pris</value>
   </data>
