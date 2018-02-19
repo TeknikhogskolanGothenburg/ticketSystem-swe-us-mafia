@@ -1,0 +1,62 @@
+﻿@using TicketSystemEngine;
+@model List<Order>
+@{
+    ViewData["Title"] = "SeeOrders";
+}
+
+<html>
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            background-color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Order Overview</h2>
+
+    <table>
+        <tr>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>TicketID</th>
+            <th>TransactionID</th>
+        </tr>
+        @if (Model != null)
+        {
+            @foreach (Order order in Model)
+            {
+                <tr>
+                    <th>@order.BuyerFirstName</th>
+                    <th>@order.BuyerLastName</th>
+                    <th>@order.BuyerAddress</th>
+                    <th>@order.BuyerCity</th>
+                    <th>@order.TicketIDs</th>
+                    <th>@order.TransactionID</th>
+                </tr>
+            }
+        }
+    </table>
+</body>
+</html>
+
+
+
