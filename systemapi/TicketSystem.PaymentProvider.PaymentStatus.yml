@@ -19,7 +19,7 @@ items:
     remote:
       path: src/PaymentProvider/PaymentStatus.cs
       branch: master
-      repo: https://github.com/skjohansen/AssignmentTicketSystem.git
+      repo: https://github.com/SofiaZaid/ticketSystem-swe-us-mafia.git
     id: PaymentStatus
     path: src/PaymentProvider/PaymentStatus.cs
     startLine: 2
@@ -50,7 +50,7 @@ items:
     remote:
       path: src/PaymentProvider/PaymentStatus.cs
       branch: master
-      repo: https://github.com/skjohansen/AssignmentTicketSystem.git
+      repo: https://github.com/SofiaZaid/ticketSystem-swe-us-mafia.git
     id: PaymentApproved
     path: src/PaymentProvider/PaymentStatus.cs
     startLine: 4
@@ -82,7 +82,7 @@ items:
     remote:
       path: src/PaymentProvider/PaymentStatus.cs
       branch: master
-      repo: https://github.com/skjohansen/AssignmentTicketSystem.git
+      repo: https://github.com/SofiaZaid/ticketSystem-swe-us-mafia.git
     id: PaymentRejected
     path: src/PaymentProvider/PaymentStatus.cs
     startLine: 5
@@ -114,7 +114,7 @@ items:
     remote:
       path: src/PaymentProvider/PaymentStatus.cs
       branch: master
-      repo: https://github.com/skjohansen/AssignmentTicketSystem.git
+      repo: https://github.com/SofiaZaid/ticketSystem-swe-us-mafia.git
     id: UnknownError
     path: src/PaymentProvider/PaymentStatus.cs
     startLine: 6

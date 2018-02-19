@@ -4,8 +4,12 @@ items:
   commentId: N:TicketSystem.RestApiClient
   id: TicketSystem.RestApiClient
   children:
+  - TicketSystem.RestApiClient.EventApi
   - TicketSystem.RestApiClient.ITicketApi
+  - TicketSystem.RestApiClient.OrderAdministratorApi
   - TicketSystem.RestApiClient.TicketApi
+  - TicketSystem.RestApiClient.TicketEventDateApi
+  - TicketSystem.RestApiClient.VenueApi
   langs:
   - csharp
   - vb
@@ -16,6 +20,12 @@ items:
   assemblies:
   - RestApiClient
 references:
+- uid: TicketSystem.RestApiClient.EventApi
+  commentId: T:TicketSystem.RestApiClient.EventApi
+  isExternal: false
+  name: EventApi
+  nameWithType: EventApi
+  fullName: TicketSystem.RestApiClient.EventApi
 - uid: TicketSystem.RestApiClient.ITicketApi
   commentId: T:TicketSystem.RestApiClient.ITicketApi
   parent: TicketSystem.RestApiClient
@@ -23,12 +33,30 @@ references:
   name: ITicketApi
   nameWithType: ITicketApi
   fullName: TicketSystem.RestApiClient.ITicketApi
+- uid: TicketSystem.RestApiClient.OrderAdministratorApi
+  commentId: T:TicketSystem.RestApiClient.OrderAdministratorApi
+  isExternal: false
+  name: OrderAdministratorApi
+  nameWithType: OrderAdministratorApi
+  fullName: TicketSystem.RestApiClient.OrderAdministratorApi
 - uid: TicketSystem.RestApiClient.TicketApi
   commentId: T:TicketSystem.RestApiClient.TicketApi
   isExternal: false
   name: TicketApi
   nameWithType: TicketApi
   fullName: TicketSystem.RestApiClient.TicketApi
+- uid: TicketSystem.RestApiClient.TicketEventDateApi
+  commentId: T:TicketSystem.RestApiClient.TicketEventDateApi
+  isExternal: false
+  name: TicketEventDateApi
+  nameWithType: TicketEventDateApi
+  fullName: TicketSystem.RestApiClient.TicketEventDateApi
+- uid: TicketSystem.RestApiClient.VenueApi
+  commentId: T:TicketSystem.RestApiClient.VenueApi
+  isExternal: false
+  name: VenueApi
+  nameWithType: VenueApi
+  fullName: TicketSystem.RestApiClient.VenueApi
 - uid: TicketSystem.RestApiClient
   commentId: N:TicketSystem.RestApiClient
   isExternal: false

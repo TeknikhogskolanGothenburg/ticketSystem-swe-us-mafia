@@ -54,20 +54,17 @@ Ticket with the same SeatID we did the following: constructed a method in Ticket
 SeatIDs for the specified TicketEventDateID that are not already present in Tickets table, this method is then called within the "CreateTicket" method so a 
 free SeatID is assigned to the new Ticket.
 
-####
-TicketEvent
+####TicketEvent
 Class that defines objects of the type TicketEvent. This class represents a TicketEvent, containing properties that match each column in the TicketEvent table.
 We added one column to the TicketEvent table: TicketEventPrice since we think that every Event should have a specific price.
 
-####
-TicketEventDate
+####TicketEventDate
 This class is connected to the TicketEvent class since you can't create a TicketEventDate object if you haven't first created a TicketEvent object, that since the
 corresponding tables in the database for these classes have a relationship to eachother. A TicketEventDate object contains a TicketEventID, which means that the
 ID assigned to this property of a TicketEventDate object needs to be found in the database. For example to list all TicketEventDates to a customer in the TicketShop
 there is a method in the TicketDatabase class that selects all TicketEventDates from the database and returns it as a list of TicketEventDate objects.
 
-####
-Venue
+####Venue
 Class that defines objects of the type Venue, it matches the database table Venues and its columns exactly with it's properties: VenueID, VenueName, Address, City
 and Country. This class is used to create Venue objects representing database data for example when someone wants to get a list of all existing Venues in the TicketSystem.
 The database method for creating a new Venue inserts the Venue data in the database and also returns a Venue object, constructed from the parameters sent in to the method.
@@ -97,8 +94,7 @@ and return a TransactionID if successfull. If something goes wrong in these two 
 something other than PaymentApproved we are returning the PaymentStatus we got and Response StatusCode is set to 403 (Forbidden). If instead something went wrong already 
 in the if statement where we check that ModelState IsValid and that TicketID's are not an empty string we return 0 and set Response StatusCode to 400 (Bad Request).
 
-####
-TicketController
+####TicketController
 This controller handels all the operations connected to Tickets. We didn't include an Update method in this controller since we didn't think this
 was an essential use case. Since a Ticket only consists of a TicketID and a SeatID and we decided that every Ticket gets a random SeatID from available Seats
 at the specific TicketEventDate there isn't much data that one could want to update on a Ticket. The POST-method in this controller (CreateTicket) takes a 
@@ -107,8 +103,7 @@ If this is not null, method calls TicketDatabase method "CreateTicket" and retur
 If the TicketEventDateID wasn't found in the database we instead return null and Response StatusCode is set to 404 (not found). The "CreateTicket" method is used
 when a customer in TicketShop adds a Ticket to her cart. 
 
-####
-TicketEventDateController
+####TicketEventDateController
 The GET-methods  "GetAllTicketEventDates" and "FindTicketEventDates" are used to display existing TicketEventDates to customers in the TicketShop. POST-method 
 "AddNewTicketEventDate" is used in BackOffice to be able to add TicketEventDates connected to TicketEvents. In model class TicketEventDate we have defined that
 properties TicketEventID, VenueID, EventStartDateTime and NumberOfSeats requires values. This is checked in the POST-method, if ModelState is not valid or the

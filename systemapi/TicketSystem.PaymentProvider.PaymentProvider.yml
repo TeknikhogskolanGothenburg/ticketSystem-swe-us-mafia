@@ -17,7 +17,7 @@ items:
     remote:
       path: src/PaymentProvider/PaymentProvider.cs
       branch: master
-      repo: https://github.com/skjohansen/AssignmentTicketSystem.git
+      repo: https://github.com/SofiaZaid/ticketSystem-swe-us-mafia.git
     id: PaymentProvider
     path: src/PaymentProvider/PaymentProvider.cs
     startLine: 4
@@ -63,7 +63,7 @@ items:
     remote:
       path: src/PaymentProvider/PaymentProvider.cs
       branch: master
-      repo: https://github.com/skjohansen/AssignmentTicketSystem.git
+      repo: https://github.com/SofiaZaid/ticketSystem-swe-us-mafia.git
     id: Pay
     path: src/PaymentProvider/PaymentProvider.cs
     startLine: 15
