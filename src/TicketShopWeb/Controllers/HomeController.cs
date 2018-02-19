@@ -64,20 +64,11 @@ namespace TicketShopWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateTicket(string jsonObj)
+        public JsonResult AddTicket([FromBody] Ticket ticket)
         {
-            string[] jsonArray = jsonObj.Split();
-            Ticket ticket = new Ticket();
-            ticket.TicketID = Convert.ToInt32(jsonArray[0]);
-            ticket.SeatID = Convert.ToInt32(jsonArray[1]);
-            ticket.VenueName = jsonArray[2];
-            ticket.EventName = jsonArray[3];
-            ticket.TicketEventPrice = Convert.ToInt32(jsonArray[4]);
-            ticket.EventStartDateTime = Convert.ToDateTime(jsonArray[5]);
             customer.tickets.Add(ticket);
-            return View("Index");
+            return Json(ticket);
         }
-
 
         //new Ticket(TicketID, SeatID, VenueName, EventName, TicketEventPrice, EventStartDateTime)
     }
