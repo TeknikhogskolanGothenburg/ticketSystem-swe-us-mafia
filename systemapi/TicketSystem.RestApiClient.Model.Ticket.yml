@@ -17,7 +17,7 @@ items:
     remote:
       path: src/RestApiClient/Model/Ticket.cs
       branch: master
-      repo: https://github.com/skjohansen/AssignmentTicketSystem.git
+      repo: https://github.com/SofiaZaid/ticketSystem-swe-us-mafia.git
     id: Ticket
     path: src/RestApiClient/Model/Ticket.cs
     startLine: 2
@@ -58,7 +58,7 @@ items:
     remote:
       path: src/RestApiClient/Model/Ticket.cs
       branch: master
-      repo: https://github.com/skjohansen/AssignmentTicketSystem.git
+      repo: https://github.com/SofiaZaid/ticketSystem-swe-us-mafia.git
     id: TicketId
     path: src/RestApiClient/Model/Ticket.cs
     startLine: 4

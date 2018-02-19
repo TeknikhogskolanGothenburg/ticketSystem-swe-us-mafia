@@ -18,7 +18,7 @@ items:
     remote:
       path: src/RestApiClient/ITicketApi.cs
       branch: master
-      repo: https://github.com/skjohansen/AssignmentTicketSystem.git
+      repo: https://github.com/SofiaZaid/ticketSystem-swe-us-mafia.git
     id: ITicketApi
     path: src/RestApiClient/ITicketApi.cs
     startLine: 5
@@ -49,7 +49,7 @@ items:
     remote:
       path: src/RestApiClient/ITicketApi.cs
       branch: master
-      repo: https://github.com/skjohansen/AssignmentTicketSystem.git
+      repo: https://github.com/SofiaZaid/ticketSystem-swe-us-mafia.git
     id: TicketGet
     path: src/RestApiClient/ITicketApi.cs
     startLine: 11
@@ -61,7 +61,7 @@ items:
   syntax:
     content: List<Ticket> TicketGet()
     return:
-      type: System.Collections.Generic.List{TicketSystem.RestApiClient.Model.Ticket}
+      type: System.Collections.Generic.List{TicketSystemEngine.Ticket}
       description: ''
     content.vb: Function TicketGet As List(Of Ticket)
   overload: TicketSystem.RestApiClient.ITicketApi.TicketGet*
@@ -80,7 +80,7 @@ items:
     remote:
       path: src/RestApiClient/ITicketApi.cs
       branch: master
-      repo: https://github.com/skjohansen/AssignmentTicketSystem.git
+      repo: https://github.com/SofiaZaid/ticketSystem-swe-us-mafia.git
     id: TicketTicketIdGet
     path: src/RestApiClient/ITicketApi.cs
     startLine: 18
@@ -96,7 +96,7 @@ items:
       type: System.Int32
       description: ID of the ticket
     return:
-      type: TicketSystem.RestApiClient.Model.Ticket
+      type: TicketSystemEngine.Ticket
       description: ''
     content.vb: Function TicketTicketIdGet(ticketId As Integer) As Ticket
   overload: TicketSystem.RestApiClient.ITicketApi.TicketTicketIdGet*
@@ -113,15 +113,15 @@ references:
   name: TicketGet
   nameWithType: ITicketApi.TicketGet
   fullName: TicketSystem.RestApiClient.ITicketApi.TicketGet
-- uid: System.Collections.Generic.List{TicketSystem.RestApiClient.Model.Ticket}
-  commentId: T:System.Collections.Generic.List{TicketSystem.RestApiClient.Model.Ticket}
+- uid: System.Collections.Generic.List{TicketSystemEngine.Ticket}
+  commentId: T:System.Collections.Generic.List{TicketSystemEngine.Ticket}
   parent: System.Collections.Generic
   definition: System.Collections.Generic.List`1
   name: List<Ticket>
   nameWithType: List<Ticket>
-  fullName: System.Collections.Generic.List<TicketSystem.RestApiClient.Model.Ticket>
+  fullName: System.Collections.Generic.List<TicketSystemEngine.Ticket>
   nameWithType.vb: List(Of Ticket)
-  fullName.vb: System.Collections.Generic.List(Of TicketSystem.RestApiClient.Model.Ticket)
+  fullName.vb: System.Collections.Generic.List(Of TicketSystemEngine.Ticket)
   name.vb: List(Of Ticket)
   spec.csharp:
   - uid: System.Collections.Generic.List`1
@@ -132,10 +132,10 @@ references:
   - name: <
     nameWithType: <
     fullName: <
-  - uid: TicketSystem.RestApiClient.Model.Ticket
+  - uid: TicketSystemEngine.Ticket
     name: Ticket
     nameWithType: Ticket
-    fullName: TicketSystem.RestApiClient.Model.Ticket
+    fullName: TicketSystemEngine.Ticket
   - name: '>'
     nameWithType: '>'
     fullName: '>'
@@ -148,10 +148,10 @@ references:
   - name: '(Of '
     nameWithType: '(Of '
     fullName: '(Of '
-  - uid: TicketSystem.RestApiClient.Model.Ticket
+  - uid: TicketSystemEngine.Ticket
     name: Ticket
     nameWithType: Ticket
-    fullName: TicketSystem.RestApiClient.Model.Ticket
+    fullName: TicketSystemEngine.Ticket
   - name: )
     nameWithType: )
     fullName: )
@@ -213,22 +213,22 @@ references:
   name: Int32
   nameWithType: Int32
   fullName: System.Int32
-- uid: TicketSystem.RestApiClient.Model.Ticket
-  commentId: T:TicketSystem.RestApiClient.Model.Ticket
-  parent: TicketSystem.RestApiClient.Model
+- uid: TicketSystemEngine.Ticket
+  commentId: T:TicketSystemEngine.Ticket
+  parent: TicketSystemEngine
   isExternal: false
   name: Ticket
   nameWithType: Ticket
-  fullName: TicketSystem.RestApiClient.Model.Ticket
+  fullName: TicketSystemEngine.Ticket
 - uid: System
   commentId: N:System
   isExternal: false
   name: System
   nameWithType: System
   fullName: System
-- uid: TicketSystem.RestApiClient.Model
-  commentId: N:TicketSystem.RestApiClient.Model
+- uid: TicketSystemEngine
+  commentId: N:TicketSystemEngine
   isExternal: false
-  name: TicketSystem.RestApiClient.Model
-  nameWithType: TicketSystem.RestApiClient.Model
-  fullName: TicketSystem.RestApiClient.Model
+  name: TicketSystemEngine
+  nameWithType: TicketSystemEngine
+  fullName: TicketSystemEngine
