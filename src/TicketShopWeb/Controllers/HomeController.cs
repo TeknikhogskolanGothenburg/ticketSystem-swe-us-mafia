@@ -76,6 +76,26 @@ namespace TicketShopWeb.Controllers
         }
 
         [Produces("application/json")]
+        [HttpDelete]
+        public JsonResult DeleteTicket(int id)
+        {
+            if(customer.tickets.Count > 0)
+            {
+                foreach(Ticket ticket in customer.tickets)
+                {
+                    if(ticket.TicketID == id)
+                    {
+                        customer.tickets.Remove(ticket);
+                        break;
+                    }
+                }
+               
+            }
+            return Json(id);
+        }
+
+
+        [Produces("application/json")]
         [HttpPost]
         public JsonResult AddTicket(Ticket ticket)
         {

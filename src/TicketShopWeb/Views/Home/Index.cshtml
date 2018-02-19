@@ -103,7 +103,6 @@
             data: { id: ticketEventDateID },
             async: false,
             success: function (data) {
-                console.log(data);
                 addTicket(data);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -122,7 +121,7 @@
             data: Tdata,
             async: false,
             success: function (data) {
-                console.log(data)
+                console.log("Ticket Deleted")
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log("failed xml:" + XMLHttpRequest + " text:" + textStatus + " error:" + errorThrown)
