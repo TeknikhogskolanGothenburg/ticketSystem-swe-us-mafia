@@ -48,10 +48,12 @@ namespace TicketShopWeb.Controllers
             
         }
 
-        public IActionResult OrderAdd()
+        public IActionResult OrderAdd(string combinedTicketsString)
         {
+            
             Order order = new Order();
 
+            order.TicketIDs = combinedTicketsString;
             if (User.Identity.IsAuthenticated)
             {
                 return View(order);
