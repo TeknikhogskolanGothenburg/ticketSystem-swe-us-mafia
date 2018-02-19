@@ -11,7 +11,7 @@ namespace TicketShopWeb.Models
         public List<TicketEvent> tEvent = new List<TicketEvent>();
         public List<TicketEventDate> dates = new List<TicketEventDate>();
         public List<Venue> venues = new List<Venue>();
-        public List<Ticket> tickets = new List<Ticket>();
+        public List<Ticket> tickets = new List<Ticket> { };
     }
 
     
