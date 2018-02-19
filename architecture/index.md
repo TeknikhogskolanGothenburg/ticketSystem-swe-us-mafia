@@ -6,7 +6,7 @@
 The ticket system is based on three main solutions: RestApi, BackOffice and TicketShop. BackOffice and TicketShop are
 the client systems that are consuming the RestAPI. 
 
-##RestApi
+##RestApi Solution
 The RestApi Solution consist of a .NET Core Web API application and three separate class libraries used by this application.
 
 ###DatabaseRepository
@@ -33,8 +33,8 @@ Class library that contains all the model classes used to bind the database data
 ####Order 
 The table in the database that most closely resembles how we would define an order is TicketTransactions, therefore we used this
 table to define order objects in the application. We added one property to the model that is not to be found as a column in the 
-TicketTransactions table: TicketIDs. This was added since we saw the relevance in including this information in a customer order object. 
-To be able to create objects that contain data both on the properties connected to the TicketTransactions table and data on the property 
+TicketTransactions table: TicketIDs. This was added since we saw the relevance in including this data in a customer order object. 
+To be able to create objects that contain data both for the properties connected to the TicketTransactions table and data for
 TicketIDs we needed to construct database methods that let us match rows in the TicketTransactions table with rows in the TicketsToTransactions 
 table. This was accomplished through methods (in TicketDatabase class) like "FindTicketsByTransactionID", this method gets all tickets for a
 specific TicketTransaction. This method is called within the method "FindOrdersSuchThat", where we loop through the list of TicketIDs 
@@ -42,20 +42,86 @@ that we get as a result from the method "FindTicketsByTransactionID". For exampl
 matches a string query the method "FindOrdersSuchThat" is called within the method "FindCustomerOrders(string query)". 
 
 ####Ticket
-When handling Ticket objects in the application we needed to make a decision on how to handle the concept of Tickets. Are Tickets something that 
+When it comes to Ticket objects in the application we needed to make a decision on how to handle the concept of Tickets. Are Tickets something that 
 exist when an administrator creates a TicketEventDate? Or is a Ticket object created when a customer decides to buy a ticket for a specific TicketEventDate? 
-We decided to go for the latter option, to treat Tickets as something that is created when a customer adds a Ticket to their cart (decides they
-want to buy a ticket for a TicketEventDate). The table Tickets in the database contains the fields: TicketID and SeatID, which were translated into 
-properties of the Ticket class. In addition we added properties: VenueName, EventName, TicketEventPrice, EventStartDateTime, this since one can
-argue that a customer would probobly want to see some more data on their selected Tickets than just TicketID and SeatID. For example in the TicketDatabase
-method "FindTicketByTicketID" we therefore did a query that joins the Tickets table with other tables that contain the data on the properties which's data
-can't be fetched from the Tickets table itself. In contrast when creating a Ticket we don't need to handle data for the extra properties, then we just want 
-to insert a TicketID and a SeatID in the Tickets table. To prevent the case that two customers would get a Ticket with the same SeatID we did the following: 
-constructed a method in TicketDatabase class called "FindOneAvailableSeatAtTicketEventDate" that checks for SeatIDs for the specified TicketEventDateID that 
-are not already present in Tickets table, this method is then called within the "CreateTicket" method so that we can assign a free SeatID to the new Ticket.
+We decided to go for the latter option, to treat Tickets as something that is created when a customer adds a Ticket to their cart. The table Tickets in the 
+database contains the fields: TicketID and SeatID, which were translated into properties of the Ticket class. In addition we added properties: VenueName, 
+EventName, TicketEventPrice, EventStartDateTime, this since one can argue that a customer would probobly want to see some more data on their selected Tickets 
+than just TicketID and SeatID. For example in the TicketDatabase method "FindTicketByTicketID" we therefore did a query that joins the Tickets table with other 
+tables that contain the data on the properties which's data can't be fetched from the Tickets table itself. In contrast when creating a Ticket we don't need 
+to handle data for the extra properties, then we just insert a TicketID and a SeatID in the Tickets table. To prevent the case that two customers would get a 
+Ticket with the same SeatID we did the following: constructed a method in TicketDatabase class called "FindOneAvailableSeatAtTicketEventDate" that checks for 
+SeatIDs for the specified TicketEventDateID that are not already present in Tickets table, this method is then called within the "CreateTicket" method so a 
+free SeatID is assigned to the new Ticket.
+
+####
+TicketEvent
+Class that defines objects of the type TicketEvent. This class represents a TicketEvent, containing properties that match each column in the TicketEvent table.
+We added one column to the TicketEvent table: TicketEventPrice since we think that every Event should have a specific price.
+
+####
+TicketEventDate
+This class is connected to the TicketEvent class since you can't create a TicketEventDate object if you haven't first created a TicketEvent object, that since the
+corresponding tables in the database for these classes have a relationship to eachother. A TicketEventDate object contains a TicketEventID, which means that the
+ID assigned to this property of a TicketEventDate object needs to be found in the database. For example to list all TicketEventDates to a customer in the TicketShop
+there is a method in the TicketDatabase class that selects all TicketEventDates from the database and returns it as a list of TicketEventDate objects.
+
+####
+Venue
+Class that defines objects of the type Venue, it matches the database table Venues and its columns exactly with it's properties: VenueID, VenueName, Address, City
+and Country. This class is used to create Venue objects representing database data for example when someone wants to get a list of all existing Venues in the TicketSystem.
+The database method for creating a new Venue inserts the Venue data in the database and also returns a Venue object, constructed from the parameters sent in to the method.
 
 
+###RestAPI
+The RestAPI project contains five controller classes that handles all the CRUD-functions: Create, Read, Update and Delete. It is these methods that are called
+from within the applications: BackOffice and TicketShop to get the data needed and carry out the actions on the website that respective user (administrator and 
+customer) should be able to do.
 
+####EventController
+This controller calls the TicketDatabase methods that handles TicketEvents. An example of a method in this controller is the POST-method. In the model class 
+TicketEvent in TicketSystemEngine we have defined that the properties EventName and TicketEventPrice are required, the POST-method "CreateTicketEvent"
+therefore checks if ModelState IsValid according to this criteria. If so, data on a TicketEvent is sent in to database table TicketEvents by calling the 
+TicketDatabase method "EventAdd" and the POST-method returns a TicketEvent object.
+
+####OrderController
+Controller that calls TicketDatabase methods that works with data in database tables TicketTransactions, TicketsToTransactions and Tickets. For example GET-method
+"Public IEnumerable<Order>FindCustomerOrders(string query)" calls the TicketDatabase method "FindCustomerOrders(query)" and returns a list of Order objects 
+(TicketTransactions in database) based on the string value sent in to method, which can be either BuyerFirstName, BuyerLastName or BuyerEmailAddress. This method
+is constructed for the use case when an administrator working in BackOffice wants to look up orders connected to a specific customer. 
+Another example of a method in this class is the POST-method: "CreateOrder" that returns an int representing a TransactionID. Here we have use the built in input
+validation to check if required properties when constructing an Order object has been given values when calling the method. The method also controls that one or more
+TicketIDs are given. If the ModelState is valid and method got one or more TicketIDs it continues to Payment and if PaymentStatus is set to "PaymentApproved" method
+tries to parse the string of TicketIDs as whole numbers and assigning them to the array TicketIDs. After that it tries to call the TicketDatabase method "AddCustomerOrder"
+and return a TransactionID if successfull. If something goes wrong in these two last operations we return 0 and set Response StatusCode to 400. If PaymentStatus was set to 
+something other than PaymentApproved we are returning the PaymentStatus we got and Response StatusCode is set to 403 (Forbidden). If instead something went wrong already 
+in the if statement where we check that ModelState IsValid and that TicketID's are not an empty string we return 0 and set Response StatusCode to 400 (Bad Request).
+
+####
+TicketController
+This controller handels all the operations connected to Tickets. We didn't include an Update method in this controller since we didn't think this
+was an essential use case. Since a Ticket only consists of a TicketID and a SeatID and we decided that every Ticket gets a random SeatID from available Seats
+at the specific TicketEventDate there isn't much data that one could want to update on a Ticket. The POST-method in this controller (CreateTicket) takes a 
+TicketEventDateID as it's parameter. The method then checks if this TicketEventDateID exists in the database, by calling the TicketDatabase method "FindTicketEventDateByID".
+If this is not null, method calls TicketDatabase method "CreateTicket" and returns a Ticket object representing a Ticket connected to the specified TicketEventDateID.
+If the TicketEventDateID wasn't found in the database we instead return null and Response StatusCode is set to 404 (not found). The "CreateTicket" method is used
+when a customer in TicketShop adds a Ticket to her cart. 
+
+####
+TicketEventDateController
+The GET-methods  "GetAllTicketEventDates" and "FindTicketEventDates" are used to display existing TicketEventDates to customers in the TicketShop. POST-method 
+"AddNewTicketEventDate" is used in BackOffice to be able to add TicketEventDates connected to TicketEvents. In model class TicketEventDate we have defined that
+properties TicketEventID, VenueID, EventStartDateTime and NumberOfSeats requires values. This is checked in the POST-method, if ModelState is not valid or the
+VenueID provided is less or equal to 0 we set the Response StatusCode to 400. If ModelState is valid we try calling TicketDatabase method "AddTicketEventDate"
+to insert data into database table TicketEventDates. If something should be wrong in this, we catch either argumentexception or Sqlexception (depending on the
+error) and set Response StatusCode to 400. 
+
+####VenueController
+This controller is primarily used for operations connected to the administration of Venues in BackOffice webapplication. For example the POST-method is used
+when an administrator wants to add a new Venue. Also for the model class Venue in TicketSystemEngine we have defined properties as Required. In the POST-method
+this is checked through ModelState IsValid, if so we insert data on a new Venue in database table Venues, otherwise Response StatusCode is set to 400. For the 
+Delete-method "DeleteVenue" we have to check if the Venue that the user tries to delete actually exists in the database. This is accomplished by checking the 
+result of calling the method "FindVenueByID". If the VenueID isn't found in the database Response StatusCode is set to 404, otherwise the Venue is deleted.
  
 
 
