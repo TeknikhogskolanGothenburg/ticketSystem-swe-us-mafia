@@ -37,7 +37,7 @@ namespace TicketShopWeb.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return View();
+                return View(customer);
             }
             else
             {
@@ -79,7 +79,6 @@ namespace TicketShopWeb.Controllers
         [HttpPost]
         public JsonResult AddTicket(Ticket ticket)
         {
-            Ticket ticket2 = ticket;
             customer.tickets.Add(ticket);
             return Json(ticket);
         }
