@@ -117,25 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="About" xml:space="preserve">
-    <value>Om oss</value>
+  <data name="Add Event" xml:space="preserve">
+    <value>Lägg till Event</value>
   </data>
-  <data name="Contact" xml:space="preserve">
-    <value>Kontakta oss</value>
+  <data name="Date and Time" xml:space="preserve">
+    <value>Datum och Tid</value>
   </data>
-  <data name="Dates/Seats" xml:space="preserve">
-    <value>Datum/Sittplatser</value>
+  <data name="Enter Date/Event Details" xml:space="preserve">
+    <value>Ange Datum/Event Detaljer</value>
   </data>
-  <data name="Events" xml:space="preserve">
-    <value>Event</value>
+  <data name="Number of Seats" xml:space="preserve">
+    <value>Antal Platser</value>
   </data>
-  <data name="Orders" xml:space="preserve">
-    <value>Order</value>
-  </data>
-  <data name="Overview" xml:space="preserve">
-    <value>Översikt</value>
-  </data>
-  <data name="Venues" xml:space="preserve">
+  <data name="Venue" xml:space="preserve">
     <value>Arena</value>
   </data>
 </root>
