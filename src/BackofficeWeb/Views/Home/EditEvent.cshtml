@@ -1,4 +1,6 @@
 ﻿@using TicketSystemEngine;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model OverviewModel
 @{
     ViewData["Title"] = "Event Overview";
@@ -28,39 +30,39 @@
 </head>
 <body>
 
-    <h2>Event Dates</h2>
+    <h2>@Localizer["Event/Dates"]</h2>
 
     <table>
         <tr>
             <td>EventName</td>
             <td>Description</td>
             <td>Price</td>
-            <td>VenueName</td> 
-            <td>Address</td> 
-            <td>City</td> 
+            <td>VenueName</td>
+            <td>Address</td>
+            <td>City</td>
             <td>Country</td>
             <td>Seats</td>
             <td>Date/Time</td>
-            <th/>
+            <th />
         </tr>
-        
+
         @if (Model != null)
          {
-            @foreach(TicketEventDate date in Model.dates)
+            @foreach (TicketEventDate date in Model.dates)
              {
                 <tr>
                     @foreach (TicketEvent tEvent in Model.events)
                      {
-                        if(tEvent.TicketEventId == date.TicketEventID)
+                        if (tEvent.TicketEventId == date.TicketEventID)
                         {
                             <td>@tEvent.EventName</td>
                             <td>@tEvent.EventHtmlDescription</td>
                             <td>@tEvent.TicketEventPrice</td>
                         }
                      }
-                    @foreach(Venue venue in Model.venues)
+                    @foreach (Venue venue in Model.venues)
                      {
-                        if(venue.VenueId == date.VenueId)
+                        if (venue.VenueId == date.VenueId)
                         {
                             <td>@venue.VenueName</td>
                             <td>@venue.Address</td>
@@ -71,7 +73,7 @@
                      }
                     <td>@date.NumberOfSeats</td>
                     <td>@date.EventStartDateTime</td>
-                    <td><button type="submit" class="btn btn-default" onclick="myFunction(@date.TicketEventDateID)">"Delete Event/Date"</button></td>
+                    <td><button type="submit" class="btn btn-default" onclick="myFunction(@date.TicketEventDateID)">@Localizer["Delete Event/Date"]</button></td>
                 </tr>
 
              }
