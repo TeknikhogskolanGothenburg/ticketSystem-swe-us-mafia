@@ -52,7 +52,7 @@
                 <th>@ticket.SeatID</th>
                 <th>@ticket.EventStartDateTime</th>
                 <th>@ticket.TicketEventPrice kr</th>
-                <td><button type="submit" class="center-block btn btn-danger">Delete</button></td>
+                <td><button type="submit" class="center-block btn btn-danger" onclick="myFunction(@ticket.TicketID)">Delete</button></td>
             </tr>
              }
          }
@@ -75,6 +75,52 @@
     </table>
 </body>
 </html>
+
+<script>
+    function myFunction(TicketID) {
+        var dataType = 'application/json'
+
+        var datalist = {
+        }
+
+        $.ajax({
+            type: "DELETE",
+            url: "http://localhost:51775/Ticket/" + TicketID,
+            dataType: "json",
+            contentType: "application/json",
+            data: { id: TicketID },
+            async: false,
+            success: function () {
+                deleteTicket(TicketID);
+            },
+            error: function () {
+                deleteTicket(TicketID);
+                console.log("delete failed");
+            }
+        });
+
+    };
+</script>
+<script>
+    function deleteTicket(TicketID) {
+        $.ajax({
+            type: "DELETE",
+            url: "/Home/DeleteTicket/" + TicketID,
+            data: { id: TicketID },
+            async: false,
+            success: function (data) {
+                console.log(data);
+                console.log("ticket " + TicketID + " deleted");
+                alert("Ticket Deleted");
+                window.location.reload(true);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("failed xml:" + XMLHttpRequest + " text:" + textStatus + " error:" + errorThrown)
+            }
+        });
+
+    }
+</script>
 
 
 
