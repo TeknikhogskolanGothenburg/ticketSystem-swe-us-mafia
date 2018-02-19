@@ -48,9 +48,11 @@ namespace TicketShopWeb.Controllers
 
         public IActionResult OrderAdd()
         {
+            Order order = new Order();
+
             if (User.Identity.IsAuthenticated)
             {
-                return View();
+                return View(order);
             }
             else
             {
