@@ -22,7 +22,7 @@
         <h2>@Localizer["Tickets"]</h2>
 
    @if (Model != null)
-   {
+    {
        foreach (TicketEventDate eventDate in Model.dates)
        {
            foreach (TicketEvent ticketevent in Model.tEvent)
@@ -46,11 +46,6 @@
                                         <p class="ticket-price">@Localizer["Price"]: @ticketevent.TicketEventPrice</p>
                                     </div>
                                     <div class="ticket-footer">
-                                        <a href="" id="btn-cart" class="btn-cart" onclick="myFunction(
-                                        @if (ticketevent.TicketEventId == eventDate.TicketEventID)
-                                         {
-                                             @eventDate.TicketEventDateID;
-                                         })">@Localizer["Add to Cart"]</a>
                                         <label class="qtlabel" for="qt">@Localizer["Qt"]: </label>
                                         @*<input id="qt" type="number" min="1" max="5" value="selected" />*@
                                         <select name="quantity" id="qt" >
@@ -62,6 +57,13 @@
                                                 <option value="5">5</option>
                                             }
                                         </select>
+                                        <br />
+                                        <br />
+                                        <a href="" id="btn-cart" class="btn-cart" onclick="myFunction(
+                                        @if (ticketevent.TicketEventId == eventDate.TicketEventID)
+                                         {
+                                             @eventDate.TicketEventDateID;
+                                         })">@Localizer["Add to Cart"]</a>
                                     </div>
                                 </div>
                             </div>
