@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@using TicketSystemEngine;
 @inject IViewLocalizer Localizer
+@model Order
 @{
     ViewData["Title"] = "OrderAdd";
 }
@@ -9,7 +11,7 @@
 <div class="row">
     <div class="col-md-4">
         <section>
-            <form id="addvenue" method="post">
+            <form id="addorder" method="post">
                 <div class="form-group" method="post">
                     <label>@Localizer["First name"]</label>
                     <input class="form-control" id="FirstNameTxt" required />
@@ -41,10 +43,42 @@
                 </div>
                 @*----------------------------------------------*@
                 <div class="form-group" method="post">
-                    <button type="button" class="btn-success btn-sm" d id="AddOrderBtn" name="AddOrderBtn" onclick="myFunction()">@Localizer["Place Order"]</button>
+                    <button type="button" class="btn-success btn-sm" id="AddOrderBtn" name="AddOrderBtn" onclick="myFunction()">Add Order</button>
                 </div>
             </form>
         </section>
     </div>
 </div>
+
+<script>
+    function myFunction() {
+        var dataType = 'application/json'
+
+        var orderInput = {
+            BuyerFirstName: $("#FirstNameTxt").val(),
+            BuyerLastName: $("#LastNameTxt").val(),
+            BuyerEmailAddress: $("#EmailTxt").val(),
+            BuyerAddress: $("#AddressTxt").val(),
+            BuyerCity: $("#CityTxt").val(),
+            PaymentStatus: $("#PaymentStatusTxt").val(),
+            PaymentReferenceID: $("#PaymentReferenceIDTxt").val(),
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:51775/Order/",
+            dataType: 'application/json',
+            contentType: dataType,
+            data: JSON.stringify(orderInput),
+            success: alertFunction()
+        });
+
+        document.getElementById("addorder").reset();
+    };
+</script>
+<script>
+    function alertFunction() {
+        alert("Order Created");
+    }
+</script>
 
